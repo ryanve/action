@@ -240,13 +240,6 @@ add_action ('@main', function () {
     return $html;
 }, 20 );*/
 
-# 
-add_action ('@main', function () {
-    # codex.wordpress.org/Function_Reference/get_template_part
-    //get_template_part( 'loop', is_singular() ? 'singular' : 'index' ); #wp
-    get_template_part( 'loop' ); #wp
-});
-
 # Remove version from URI query strings to improve caching.
 call_user_func(function ( $unversion ) {
     // add_filter( 'style_loader_src', $unversion );
@@ -344,11 +337,46 @@ add_action ('$script', function ($node) {
     $node->removeAttribute('type');
 });
 
+# early priority <head> actions
+# debating whether to use filters (like below) and/or to make
+# them named functions so child themes can use remove_action
 add_action ('wp_head', function () {
-    echo \implode( "\n", array (
-        '<meta charset="utf-8">'
-      , \apply_filters( '@title_tag', '<title>' . \get_the_title() . '</title>' ) . '</title>'
-      , '<meta name="viewport" content="width=device-width,initial-scale=1.0">'
-    )) . "\n";
-}, -1 ); # early priority
+     $tag = '<meta charset="utf-8">';
+     echo ltrim( apply_filters( '@meta_charset', $tag ) . "\n" );
+}, -5 ); 
+
+add_action ('wp_head', function () {
+    $tag = '<title>' . get_the_title() . '</title>';
+    echo ltrim( apply_filters( '@title_tag', $tag ) . "\n\n" );
+}, -3 ); 
+
+add_action ('wp_head', function () {
+    $tag = '<meta name="viewport" content="width=device-width,initial-scale=1.0">';
+    echo ltrim( apply_filters( '@meta_viewport', $tag ) . "\n" );
+}, -1 ); 
+
+
+# comments callback ( see comments.php )
+# codex.wordpress.org/Function_Reference/wp_list_comments
+add_filter('@list_comments', function ( $array ) {
+    null === $array['callback'] and $array['callback'] = function ( $comment, $array, $depth ) {
+        $GLOBALS['comment'] = $comment;
+        $GLOBALS['comment_depth'] = $depth;
+        $comment_type = get_comment_type($comment->comment_ID); #wp-includes/comment-template.php
+        locate_template( array( 'comment-' . $comment_type . '.php', 'comment.php' ), true, false ); #wp')
+    };
+    return $array;
+});
+
+
+add_filter('the_author_posts_link', function ( $tag ) {
+    # add hcard classes to the link if there's not already any classes
+    if ( false !== strpos( $tag, 'class=' ) )
+        return $tag;
+    return str_replace( '<a href', '<a class="url fn n" href', $tag );
+});
+
+
+
+
 

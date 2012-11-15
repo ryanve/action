@@ -4,13 +4,6 @@ namespace theme;
 global $comment;
 ?>
 
-    <!--
-        There is currently no official microformat for comments. 
-        hcomment is used for symmetry with hentry
-        @link microformats.org/wiki/hcomment
-        @link microformats.org/wiki/comments-formats
-    -->
-
 	<li id="comment-<?php comment_ID(); ?>">
 
 		<?php do_action( '@before_comment' ); ?>
@@ -36,5 +29,9 @@ global $comment;
 
 		<?php do_action( '@after_comment' ); ?>
 
-	</li>
+    <?php 
+    # "Note the lack of a trailing </li>. WordPress will add it 
+    # itself once it's done listing any children and whatnot."
+    # codex.wordpress.org/Function_Reference/wp_list_comments
+
     

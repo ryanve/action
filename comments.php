@@ -1,62 +1,56 @@
 <?php
 namespace theme;
 
-# this page is not done yet ( adapted from Hybrid )
+# adapted from @link bit.ly/github-twentytwelve
+# try to be as simple and semantic as possible
 
-if ( 'comments.php' == basename( $_SERVER['SCRIPT_FILENAME'] ) )
-	die( __( 'This page is not designed to be loaded directly.' ) );
+if ( 'comments.php' === basename( $_SERVER['SCRIPT_FILENAME'] ) )
+	die( __( 'This file is not designed to be loaded directly.' ) );
 
-if ( post_password_required() || ( !have_comments() && !comments_open() && !pings_open() ) )
+if ( post_password_required() || ! post_type_supports( get_post_type(), 'comments' ) )
 	return;
 ?>
 
-<section id="comments-template">
+    <!--
+        @link microformats.org/wiki/hcomment
+        @link microformats.org/wiki/comments-formats
+        @link microformats.org/wiki/comment-brainstorming
+        @link microformats.org/wiki/xoxo
+    -->
 
-	<h3 id="comments">One Response to "Hello world!"</h3> 
-	<ol class="commentlist">
-		<li class="alt" id="comment-1">
-			<cite>
-	<a href="http://example.org/" rel="nofollow">Mr WordPress</a>
-			</cite> Says:<br>
-			<small class="commentmetadata">
-				<a href="#comment-1" title="">Date and Time</a>
-			</small>
-				<p>Hi, this is a comment.</p>
-		</li>
-	</ol>
-	<h3 id="respond">Leave a Reply</h3>
-	<form action="http://example.com/blog/wp-comments-post.php" method="post" id="commentform">
-	<div>
-		<input name="author" value="" size="22" tabindex="1" type="text">
-			<label for="author">
-				<small>Name (required)</small>
-			</label>
-	</div>
-	<div>
-		<input name="email" value="" size="22" tabindex="2" type="email">
-			<label for="email">
-				<small>Mail (will not be published) required)</small>
-			</label>
-	</div>
-	<div>
-		<input name="url" value="" size="22" tabindex="3" type="url">
-			<label for="url">
-				<small>Website</small>
-			</label>
-	</div>
-	<div>
-		<small><strong>HTML:</strong> You can use these
-		tags:....</small>
-	</div>
-	<div>
-		<textarea name="comment" id="comment" cols="100" rows="10" tabindex="4">
-		</textarea>
-	</div>
-	<div>
-		<input name="submit" id="submit" tabindex="5" value="Submit Comment" type="submit">
-		<input name="comment_post_ID" value="1" type="hidden">
-	</div>
-	</form>
-	</div>
+<?php 
+    # There is currently no official microformat for comments. 
+    # hcomment is used in comment.php for symmetry with hentry in loop.php
+    # Should .comments be on the container or the list? .hfeed? See links above.
+    # Todo: maybe add filter(s) for the attrs.
+?>
+<section <?php if ( is_singular() ) echo 'id="comments" '; ?>class="hfeed">
 
-</section><!-- / -->
+	<?php if ( have_comments() ) { ?>
+    
+		<h2 class="loop-title"><?php comments_number(); ?></h2>
+
+		<ol class="xoxo">
+            <?php
+                # see the '@list_comments' filter in functions.php
+                wp_list_comments( apply_filters( '@list_comments', array( 'style' => 'ol', 'avatar_size' => 60 ) ) ); 
+            ?>
+		</ol><!-- /.xoxo -->
+
+		<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) { // "paged" comments ?>
+		<nav>
+			<h3 class="assistive"><?php _e( 'Comment navigation' ); ?></h3>
+            <?php previous_comments_link( apply_filters( '@comments_older', __( '&laquo; ' . 'Older' ) ) ); ?>
+            <?php next_comments_link( apply_filters( '@comments_newer', __( 'Newer' ) . ' &raquo;' ) ); ?>
+		</nav>
+		<?php } ?>
+
+    <?php } ?>
+
+	<?php if ( comments_open() ) { ?>
+          <?php comment_form(); ?>
+	<?php } else { ?>
+        <p class="status"><?php _e( 'Comments are closed.' ); ?></p>
+    <?php } ?>
+
+</section><!-- -->
