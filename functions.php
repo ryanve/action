@@ -326,10 +326,10 @@ add_filter( '@output', function ( $html ) {
 
 });
 
-add_filter ('@html_tag', function ( $html ) {
+//add_filter ('@html_tag', function ( $tag ) {
     // $node->setAttribute('dir', is_rtl() ? 'rtl' : 'ltr'); #wp
-    return '<html class="g">';
-});
+    //return $tag;
+//});
 
 # testing ( not in use )
 add_action ('$script', function ($node) {
