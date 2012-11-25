@@ -106,7 +106,6 @@ if ( ! exists( '_e' ) ) {
     }
 }
 
-
 # I'm going to port this to a plugin
 # @link  codex.wordpress.org/Conditional_Tags
 add_action( 'wp', function () {
@@ -229,19 +228,83 @@ if ( ! is_child_theme() ) {
     });
 }
 
-# Insert the loop into [role="main"]
-add_action ('@main', function () {
+add_action( '@header', function () {
+    locate_template( 'branding.php', true, false );
+});
+
+add_action('@main', function () {
+    # insert the loop into [role="main"]
     # codex.wordpress.org/Function_Reference/get_template_part
     get_template_part( 'loop', is_singular() ? 'singular' : 'index' ); #wp
 });
 
-/*add_filter ('the_content', function ( $html ) {
-    $html and $html .= wp_link_pages( array('echo' => 0) );
-    return $html;
-}, 20 );*/
+add_action('@loop', function () {
+    # codex.wordpress.org/Function_Reference/locate_template
+    is_singular() or locate_template( 'loop-header.php', true, false );
+}, 1);
+
+add_action('@loop', function () {
+    # the actual loop
+    if ( ! have_posts() )
+        locate_template( 'loop-empty.php', true, false );
+    else for ( $path = locate_template( 'entry.php', false, false ); have_posts(); ) {
+        the_post();
+        include( $path );
+    }
+});
+
+add_action('@loop', function () {
+    # codex.wordpress.org/Function_Reference/locate_template
+    locate_template( 'loop-nav.php', true, false );
+}, 20);
+
+add_action('@entry', function () {
+    # insert the entry-header.php template inside each entry
+    static $path;
+    isset( $path ) or $path = locate_template( 'entry-header.php', false, false );
+    include ( $path );
+}, 1);
+
+add_action('@entry', function () {
+    # Insert the entry-content.php template inside each entry
+    # Allow the '@content_mode' to be changed between iterations
+    # Cache the result(s) of locate_template() to static var(s).
+    static $cont;
+    static $summ;
+    if ( apply_filters( '@content_mode', is_singular() ) )
+         $path = $cont = isset($cont) ? $cont : locate_template( 'entry-content.php', false, false ); 
+    else $path = $summ = isset($summ) ? $summ : locate_template( 'entry-summary.php', false, false ); 
+    include ( $path );
+});
+
+add_action ('@entry', function () {
+
+    # still testing this + it needs a filter
+    global $wp_taxonomies;
+    static $taxos;
+    isset( $taxos ) or $taxos = \wp_list_pluck( $wp_taxonomies, 'label' );
+    $id    = get_the_ID();
+    $type  = get_post_type( $id );
+
+    foreach ( $taxos as $name => $label ) {
+        if ( is_object_in_taxonomy($type, $name) ) {
+            if ( $class = sanitize_html_class( \mb_strtolower($label) ) ) {
+                echo '<div class="entry-terms entry-' . $class . '">';
+                echo '<h4 class="term-list-header">' . $label . '</h4> <ul class="term-list">';
+                echo get_the_term_list( $id, $name, '<li>', '</li><li>', '</li>' ) . '</ul></div>';
+            }
+        }
+    }
+
+}, 20);
+
+add_action ('@entry', function () {
+    # codex.wordpress.org/Function_Reference/comments_templatey
+    is_singular() and comments_template( '/comments.php', true );
+}, 30);
 
 # Remove version from URI query strings to improve caching.
-call_user_func(function ( $unversion ) {
+\call_user_func(function ( $unversion ) {
     // add_filter( 'style_loader_src', $unversion );
     // is_admin() or add_filter( 'script_loader_src', $unversion );
 }, function ( $src ) {
@@ -249,33 +312,33 @@ call_user_func(function ( $unversion ) {
     return remove_query_arg('ver', $src); #wp
 });
 
-# hmm maybe better to store in data()
-add_filter( '_gaq', function () {
-    return '[[]]';
-});
-
 # Actions to be run on the 'init' hook:
 add_action( 'init', function () {
 
     # CPTs and taxonomies should register on init.
     # Scripts/styles should register/enqueue on init.
+    
+    # Register Modernizr
+    $modernizr_uri = apply_filters( '@modernizr_uri', 'http://airve.github.com/js/modernizr/modernizr_shiv.min.js' );
+    $modernizr_uri and wp_register_script( 'modernizr', $modernizr_uri, array(), null, false );
 
 	if ( is_admin() ) { # Admin-specific actions
     
     } else { # Frontend-specific actions
     
+        # Enqueue style.css
         wp_enqueue_style( 'style', get_stylesheet_uri(), array(), null, null );
-        $modernizr_uri = apply_filters('@modernizr_uri', 'http://airve.github.com/js/modernizr/modernizr_shiv.min.js');
-        empty( $modernizr_uri ) or wp_enqueue_script( 'modernizr', $modernizr_uri, array(), null, false );
+        
+        # Enqueue Modernizr
+        $modernizr_uri and wp_enqueue_script( 'modernizr' );
     
-        // Google Analytics
-        $gaq = apply_filters( '@gaq', array() );
-        if ( !empty($gaq) ) {
-            // WP runs json_encode on data provided to wp_localize_script
-            // so decode it if it looks like it's already encoded.
-            is_scalar($gaq) and $gaq = json_decode( $gaq );
+        # Google Analytics
+        if ( $gaq = apply_filters( '@gaq', array() ) ) {
+            # WP runs json_encode on data provided to wp_localize_script
+            # so decode it if it looks like it's already encoded.
+            \is_scalar($gaq) and $gaq = \json_decode( $gaq );
             $ga_uri = apply_filters( '@ga_uri', 'http://www.google-analytics.com/ga.js' );
-            empty( $ga_uri ) or wp_enqueue_script( 'ga', $ga_uri, array(), null, true );
+            $ga_uri and wp_enqueue_script( 'ga', $ga_uri, array(), null, true );
             wp_localize_script( 'ga', '_gaq', $gaq );
         }
     }
@@ -326,11 +389,6 @@ add_filter( '@output', function ( $html ) {
 
 });
 
-//add_filter ('@html_tag', function ( $tag ) {
-    // $node->setAttribute('dir', is_rtl() ? 'rtl' : 'ltr'); #wp
-    //return $tag;
-//});
-
 # testing ( not in use )
 add_action ('$script', function ($node) {
     $node->setAttribute('data-yea', 'aaaaa');
@@ -373,10 +431,5 @@ add_filter('the_author_posts_link', function ( $tag ) {
     # add hcard classes to the link if there's not already any classes
     if ( false !== strpos( $tag, 'class=' ) )
         return $tag;
-    return str_replace( '<a href', '<a class="url fn n" href', $tag );
+    return str_replace( ' href=', ' class="url fn n" href=', $tag );
 });
-
-
-
-
-

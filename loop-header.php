@@ -2,6 +2,7 @@
 namespace theme;
 
 # Markup to display at the top of .hfeed in loop.php
+# codex.wordpress.org/images/1/18/Template_Hierarchy.png
 #
 # I put this in a separate file so that child themes can more easily  override the loop 
 # in components. I wanted to handle this all via hooks but some of the needed WP funcs 
@@ -45,11 +46,11 @@ namespace theme;
                 <h1 class="loop-title"><?php post_type_archive_title(); ?></h1>
                 <div class="loop-desc"><?php echo ( get_post_type_object( get_query_var('post_type') )->description ); ?></div>
             </header>
+            
+        <?php } elseif ( ! is_singular() ) { ?>
 
-        <?php } elseif ( is_archive() ) { ?>
-
-            <header class="loop-header">
-                <h1 class="loop-title"><?php _e( 'Archives' ); ?></h1>
+            <header class="loop-header assistive">
+                <h1 class="loop-title"><?php _e( 'Posts' ); ?></h1>
             </header>
 
         <?php } ?>
