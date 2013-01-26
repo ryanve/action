@@ -44,8 +44,8 @@ em,cite{font-style:italic}em em,cite cite{font-style:normal}
 
 
 
-a { color:#28d; /*border-bottom:1px solid #28d; */}
-a:not(:hover) { text-decoration:none; }
+a { color:#09b; /*border-bottom:1px solid #28d; */}
+a { text-decoration:none; }
 a:hover { color:#409; /*border-bottom:1px solid #409; */}
 img, a.block { border:0; }
 
@@ -59,11 +59,15 @@ img, a.block { border:0; }
 .hentry:last-child { margin-bottom:0 }
 
 
-html {}
+/* selected Text (these must be declared separately) ============== */
+::-moz-selection { background:#09b;color:#ffd; text-shadow:none }
+     ::selection { background:#09b;color:#ffd; text-shadow:none }
+
+html { color:#222; background:#ffd; }
 body {
-    color:#222; background:#fff;
     margin:0 auto; /* centering */
-    width:96%; max-width:1000px; /* implies 2% padding */
+    width:96%; /* implies 2% padding */
+    max-width:960px;
     font-size:1.1em; /* all text sizes are relative to this */
     line-height:1.5em;
 }
@@ -71,16 +75,34 @@ body {
 #header,#grid,#footer {
     clear:both; margin:0 auto;
 }
-.site-description { display:none; } 
- #menu {  }
+
+#branding { margin-bottom:1em }
+#site-title, #site-description {}
+
+#site-description { display:none; } 
+
+#header-widget-area { padding:1em; clear:left; }
+
+#menu { font-weight:bold; }  
+#menu ul { padding-left:0; }
+#menu li { max-width:320px; }
+#menu li, #menu a { display:block }
+#menu a { padding:.5em; }
+#menu a { background:#09b; color:#ffd; }
+#menu a:hover { background:#409; }
+#menu li + li { margin-top:2px } 
+#menu li ul { display:block; margin:2px 0; }  
 
 .widget-area > ul { list-style-type:none }
 /* .widgettitle { font-size:inherit } */
 
+#main { }
 
 @media all and (min-width:40em) {
-    :not(.child-theme):not(.full-width) #main { max-width:64%; float:left; }
-    :not(.child-theme):not(.full-width) #sidebar  { max-width:30%; float:right; }
+    :not(.full-width) #main { width:66.666667%; float:left; clear:left; }
+    :not(.full-width) #sidebar  { width:31.25%; float:right; clear:right; }
+    #branding { float:left }
+    #menu { float:right; }
 }
 
 /*
@@ -94,9 +116,4 @@ body {
 .assistive.focusable:focus {
     position:static; clip:auto; overflow:visible; 
     width:auto; height:auto; margin:0; 
-}
-
-
-.tag\=example {
-
 }
