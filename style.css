@@ -44,21 +44,45 @@ em,cite{font-style:italic}em em,cite cite{font-style:normal}
 
 
 
-a { color:#28d; text-decoration:none; border-bottom:1px solid #28d; }
-a:hover { color:#409; border-bottom:1px solid #409; }
+a { color:#28d; /*border-bottom:1px solid #28d; */}
+a:not(:hover) { text-decoration:none; }
+a:hover { color:#409; /*border-bottom:1px solid #409; */}
 img, a.block { border:0; }
+
+.entry-title { margin:.2em 0 }
+
+.entry-terms { display:none }
+.single .entry-terms, .singular .entry-terms { display:block }
+
+.hentry { margin:2em 0 }
+.hentry:first-child { margin-top:0 }
+.hentry:last-child { margin-bottom:0 }
+
 
 html {}
 body {
     color:#222; background:#fff;
     margin:0 auto; /* centering */
-    width:96%; max-width:960px; /* implies 2% padding */
+    width:96%; max-width:1000px; /* implies 2% padding */
     font-size:1.1em; /* all text sizes are relative to this */
+    line-height:1.5em;
 }
 
 #header,#grid,#footer {
     clear:both; margin:0 auto;
 }
+.site-description { display:none; } 
+ #menu {  }
+
+.widget-area > ul { list-style-type:none }
+/* .widgettitle { font-size:inherit } */
+
+
+@media all and (min-width:40em) {
+    :not(.child-theme):not(.full-width) #main { max-width:64%; float:left; }
+    :not(.child-theme):not(.full-width) #sidebar  { max-width:30%; float:right; }
+}
+
 
 html:not(.js) body { background:#eee; }
 
