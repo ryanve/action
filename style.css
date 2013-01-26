@@ -83,13 +83,19 @@ body {
     :not(.child-theme):not(.full-width) #sidebar  { max-width:30%; float:right; }
 }
 
+/*
+ * Same as .visuallyhidden from h5bp.com
+ */
+.assistive { 
+    position:absolute; clip:rect(0 0 0 0); overflow:hidden; 
+    width: 1px; height:1px; margin:-1px; border:0; padding:0;
+}
+.assistive.focusable:active,
+.assistive.focusable:focus {
+    position:static; clip:auto; overflow:visible; 
+    width:auto; height:auto; margin:0; 
+}
 
-html:not(.js) body { background:#eee; }
-
-@media all and (min-width:1120px) {
-	#sidebar-primary,#sidebar-secondary{background:#d08;min-width:200px;float:left}
-	#sidebar-primary{margin-right:10px}
-} /* @media */
 
 .tag\=example {
 
