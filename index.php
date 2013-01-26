@@ -4,7 +4,7 @@ namespace theme;
 # the outbut buffer usage here is experimental and powerful
 # the content must go between ob_start and ob_get_flush
 # see functions.php
-ob_start(function ( $html ) {
+\ob_start(function ( $html ) {
     return apply_filters( '@output', $html );
 });
 
@@ -25,6 +25,6 @@ get_sidebar();
 
 get_footer();
 
-ob_get_flush(); 
+\ob_get_flush(); 
 
 #end

@@ -121,29 +121,29 @@ add_action('after_setup_theme', function () {
 
 add_action( '@header', function () {
     locate_template( 'branding.php', true, false );
-});
-
-# Default sidebars (1)
-//add_action( 'widgets_init', 'register_sidebar', 10, 0 );
-//add_action( 'widgets_init', 'register_sidebars', 10, 0 );
+}, apply_filters('@branding_priority', 10) );
 
 # still testing this
 add_action('@header', function () {
-    echo \str_repeat( ' ', 8 )
+    echo apply_filters('@menu', \str_repeat( ' ', 8 )
       . '<nav id="menu" role="navigation">'
       . '<h2 class="assistive menu-toggle">Menu</h2>'
-      . wp_nav_menu( array(
+      . wp_nav_menu(array(
             'theme_location' => 'menu'
           , 'container'      => false
           , 'echo'           => false
           , 'menu_class'     => 'nav'
           , 'items_wrap'     => '<ul class="%2$s">'
                 . '<li class="assistive"><a href="#main" accesskey="5">Skip</a></li>%3$s</ul>'
-    )) . '</nav>' . "\n\n";
-});
+    )) . '</nav>' . "\n\n");
+}, apply_filters('@menu_priority', 10));
 
 add_action('@header', function () {
     is_active_sidebar('header') and get_sidebar('header');
+});
+
+add_action('@footer', function () {
+    is_active_sidebar('footer') and get_sidebar('footer');
 });
 
 # still testing this
@@ -153,6 +153,12 @@ add_action('@header', function () {
         register_sidebar(array( 
             'name' => __( 'Header' )
           , 'id' => 'header' 
+          , 'description' => __( 'Inserts into #header' )
+        ));
+        register_sidebar(array( 
+            'name' => __( 'Footer' )
+          , 'id' => 'footer' 
+          , 'description' => __( 'Inserts into #footer' )
         ));
     });
     add_action( 'init', function () {
@@ -164,7 +170,7 @@ add_action('@main', function () {
     # insert the loop into [role="main"]
     # codex.wordpress.org/Function_Reference/get_template_part
     get_template_part( 'loop', is_singular() ? 'singular' : 'index' ); #wp
-});
+}, apply_filters('@loop_priority', 10));
 
 add_action('@loop', function () {
     # codex.wordpress.org/Function_Reference/locate_template
@@ -239,6 +245,20 @@ add_action ('@entry', function () {
     # codex.wordpress.org/Function_Reference/remove_query_arg
     return remove_query_arg('ver', $src); #wp
 });
+
+add_action('@after_footer', function () {
+    $url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']; ?>
+
+    <div class="diagnostic">
+        <h3>Testing</h3>
+        <ul>
+            <li><a accesskey="x" rel="nofollow" href="http://html5.validator.nu/?doc=<?php echo $url; ?>">validate</a></li>
+            <li><a accesskey="o" rel="nofollow" href="http://gsnedders.html5.org/outliner/process.py?url=<?php echo $url; ?>">outline</a></li>
+            <li><a accesskey="d" rel="nofollow" href="http://www.google.com/webmasters/tools/richsnippets?url=<?php echo $url; ?>">data</a></li>
+        </ul>
+    </div>
+
+<?php });
 
 # Actions to be run on the 'init' hook:
 add_action( 'init', function () {

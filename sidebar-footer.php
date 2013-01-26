@@ -5,11 +5,11 @@ namespace theme;
 #  @link  codex.wordpress.org/Function_Reference/register_sidebar
 ?>
 
-<?php if ( is_active_sidebar('header') ) { ?>
+<?php if ( is_active_sidebar('footer') ) { ?>
 
-        <div id="header-widget-area" class="widget-area">
+        <div id="footer-widget-area" class="widget-area">
             <ul>
-                <?php dynamic_sidebar( 'header' ); ?>
+                <?php dynamic_sidebar( 'footer' ); ?>
             </ul>
         </div>
 
