@@ -106,100 +106,12 @@ if ( ! exists( '_e' ) ) {
     }
 }
 
-# I'm going to port this to a plugin
-# @link  codex.wordpress.org/Conditional_Tags
-add_action( 'wp', function () {
-    data( 'context', call_user_func(function () {
-
-        # Adapted from Hybrid Core
-        # github.com/justintadlock/hybrid-core -> functions -> context.php
-
-        $array = array( is_child_theme() ? 'child-theme' : 'parent-theme' );
-        is_front_page() and $array[] = 'home';
-        is_paged()      and $array[] = 'paged';
-        is_singular()   and $array[] = 'singular';
-        
-        if ( is_user_logged_in() ) {
-            $array[] = 'logged-in';
-            is_admin_bar_showing() and $array[] = 'admin-bar';
-        } else {
-            $array[] = 'logged-out';
-        }
-        
-        if ( is_multisite() ) {
-            $array[] = 'multisite';
-            $array[] = 'blog-' . get_current_blog_id();
-        }
-
-        if ( is_home() ) {
-            $array[] = 'blog';
-            return $array;
-        }
-
-        $object = get_queried_object();
-        $id     = get_queried_object_id();
-        $type   = null;
-        $format = null;
-
-        if ( is_singular() ) {
-
-            $type = $object->post_type;
-            $array[] = 'singular';
-            $array[] = 'singular-' . $type;
-            $array[] = 'singular-' . $type . '-' . $id;
-            
-            if ( current_theme_supports( 'post-formats' ) && post_type_supports( $type, 'post-formats' ) ) {
-                $format = get_post_format($id);
-                $format && !is_wp_error($format) or $format = 'standard';
-                $array[] = $type . '-format-' . $format;
-            }
-            
-            if ( is_attachment() ) {
-                $array[] = 'attachment';
-                foreach ( \explode( '/', (string) get_post_mime_type() ) as $type )
-                    $type and $array[] = 'attachment-' . $type;
-            }
-
-        } elseif ( is_search() ) {
-            $array[] = 'search';
-
-        } elseif ( is_404() ) {
-            $array[] = 'error-404';
-
-        } elseif ( is_archive() ) {
-        
-            $array[] = 'archive';
-
-            if ( is_tax() || is_tag() || is_category() ) {
-                $type = $object->taxonomy;
-                $array[] = 'taxonomy';
-                $array[] = 'taxonomy' . $type;
-                $array[] = 'taxonomy' . $type . sanitize_html_class( $object->slug, $object->term_id );
-                
-            } elseif ( is_post_type_archive() ) {
-                $type = get_post_type_object( get_query_var('post_type') );
-                $type and $array[] = 'archive-' . $type->name;
-                
-            } elseif ( is_author() ) {
-                $array[] = 'user';
-                $array[] = 'user-' . sanitize_html_class( get_the_author_meta('user_nicename', $id), $id );
-                
-            } else {
-                if ( is_date() and $array[] = 'date' ) {
-                    is_year()  and $array[] = 'year';
-                    is_month() and $array[] = 'month';
-                    is_day()   and $array[] = 'day';
-                }
-                if ( is_time() and $array[] = 'time' ) {
-                    get_query_var('hour')   and $array[] = 'hour';
-                    get_query_var('minute') and $array[] = 'minute';
-                }
-            }
-        }
-
-        return array_unique( $array );
-
-    }));
+# Basic contextual support.
+add_filter('body_class', function ($array) {
+    return \array_unique( \array_merge($array, array(
+        is_child_theme() ? 'child-theme' : 'parent-theme'
+      , is_singular() ? 'singular' : 'plural'
+    )));
 });
 
 # Actions to be run on the 'after_setup_theme' hook:
@@ -226,7 +138,7 @@ add_action('@header', function () {
           , 'echo'           => false
           , 'menu_class'     => 'nav'
           , 'items_wrap'     => '<ul class="%2$s">'
-                . '<li><a class="assistive" href="#main" accesskey="5">Skip</a></li>%3$s</ul>'
+                . '<li class="assistive"><a href="#main" accesskey="5">Skip</a></li>%3$s</ul>'
     )) . '</nav>' . "\n\n";
 });
 
