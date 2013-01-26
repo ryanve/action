@@ -207,30 +207,46 @@ add_action('after_setup_theme', function () {
     remove_action( 'wp_head', 'wp_generator' ); # better security w/o this
 });
 
+add_action( '@header', function () {
+    locate_template( 'branding.php', true, false );
+});
+
 # Default sidebars (1)
 //add_action( 'widgets_init', 'register_sidebar', 10, 0 );
 //add_action( 'widgets_init', 'register_sidebars', 10, 0 );
 
 # still testing this
-add_action('@after_header', function () {
-    wp_nav_menu();
+add_action('@header', function () {
+    echo \str_repeat( ' ', 8 )
+      . '<nav id="menu" role="navigation">'
+      . '<h2 class="assistive menu-toggle">Menu</h2>'
+      . wp_nav_menu( array(
+            'theme_location' => 'menu'
+          , 'container'      => false
+          , 'echo'           => false
+          , 'menu_class'     => 'nav'
+          , 'items_wrap'     => '<ul class="%2$s">'
+                . '<li><a class="assistive" href="#main" accesskey="5">Skip</a></li>%3$s</ul>'
+    )) . '</nav>' . "\n\n";
+});
+
+add_action('@header', function () {
+    is_active_sidebar('header') and get_sidebar('header');
 });
 
 # still testing this
-if ( ! is_child_theme() ) {
-
-    add_action( 'widgets_init', 'register_sidebar', 10, 0 );
-    
-    add_action( 'init', function () {
-        
-        register_nav_menus( array('primary' => 'Primary') );
-    
+#if ( ! is_child_theme() ) {
+    add_action( 'widgets_init', function () {
+        register_sidebar();
+        register_sidebar(array( 
+            'name' => __( 'Header' )
+          , 'id' => 'header' 
+        ));
     });
-}
-
-add_action( '@header', function () {
-    locate_template( 'branding.php', true, false );
-});
+    add_action( 'init', function () {
+        register_nav_menus( array('menu' => 'Menu') );
+    });
+#}
 
 add_action('@main', function () {
     # insert the loop into [role="main"]

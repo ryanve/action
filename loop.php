@@ -8,9 +8,9 @@ namespace theme;
             @link microformats.org/wiki/hentry
             @link stackoverflow.com/a/7295013/770127
         -->
-        <div class="hfeed">
+        <div class="loop hfeed">
             
             <?php do_action( '@loop' ); ?>
 
-        </div><!-- .hfeed -->
+        </div><!-- .loop -->
         

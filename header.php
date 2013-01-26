@@ -14,11 +14,11 @@ namespace theme;
 <?php echo apply_filters( '@body_tag', '<body class="'. \implode( ' ', get_body_class() ) . '">' ); ?>
 
     <?php do_action( '@before_header' ); ?>
-    
+
     <header id="header" role="banner">
 
         <?php do_action( '@header' ); ?>
 
-    </header><!-- #header -->
+    </header>
     
     <?php do_action( '@after_header' );
