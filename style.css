@@ -29,14 +29,7 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
 
 .byline > * { display: inline-block; font-style:normal; }
 
-ol,ul{list-style:none}
-ul{list-style:disc;margin:0 0 25px 2.5em}
-ol{list-style-type:decimal;margin:0 0 25px 3em}
-ol ol{list-style:upper-roman}ol ol ol{list-style:lower-roman}
-ol ol ol ol{list-style:upper-alpha}ol ol ol ol ol{list-style:lower-alpha}ul ul,ol ol,ul ol,ol ul{margin-bottom:0}
-dl{margin:0 0 25px 5px}dl dt{font-weight:bold;margin:10px 0 0 0}
-dl dd{margin:5px 0 0 1.5em}
-strong{font-weight:bold}strong strong{font-weight:normal}
+strong{font-weight:bold}strong small { font-weight:normal; }
 em,cite{font-style:italic}em em,cite cite{font-style:normal}
 
 /* helper classes for alignment, floats, uploads, lists */
@@ -49,30 +42,31 @@ em,cite{font-style:italic}em em,cite cite{font-style:normal}
 .inline,.inline li,.floatfix{display:inline}
 .none{list-style-type:none}.circle{list-style-type:circle}.disc{list-style-type:disc}.square{list-style-type:square}
 
-/* images */
-img.alignleft,img.alignright{} /* ##check */
-.hentry .thumbnail{}
-.sticky .thumbnail{}
-img.wp-smiley{background:transparent;border:none}
 
-/* [caption] shortcode */
-.wp-caption{}
-.wp-caption img{}
-.wp-caption-text {}
 
-/***
-CONTAINERS
-***/
-html{background:#fff;width:100%;font-size:90%} /* All text sizes are relative to this. */
-	body{padding:0;color:#444;background:#fff;margin:0 auto;padding:3%;max-width:1080px}
-		#header,#grid,#footer{clear:both;margin:0 auto}
+a { color:#28d; text-decoration:none; border-bottom:1px solid #28d; }
+a:hover { color:#409; border-bottom:1px solid #409; }
+img, a.block { border:0; }
 
-/* if you don't have js then we're giving you all pink! ##edit LOL */	
-html:not(.js) body{background:#d08} 
+html {}
+body {
+    color:#222; background:#fff;
+    margin:0 auto; /* centering */
+    width:96%; max-width:960px; /* implies 2% padding */
+    font-size:1.1em; /* all text sizes are relative to this */
+}
+
+#header,#grid,#footer {
+    clear:both; margin:0 auto;
+}
+
+html:not(.js) body { background:#eee; }
 
 @media all and (min-width:1120px) {
 	#sidebar-primary,#sidebar-secondary{background:#d08;min-width:200px;float:left}
 	#sidebar-primary{margin-right:10px}
 } /* @media */
 
+.tag\=example {
 
+}
