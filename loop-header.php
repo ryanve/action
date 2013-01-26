@@ -49,8 +49,10 @@ namespace theme;
             
         <?php } elseif ( ! is_singular() ) { ?>
 
+            <!--
             <header class="loop-header assistive">
                 <h1 class="loop-title"><?php _e( 'Posts' ); ?></h1>
             </header>
+            -->
 
         <?php } ?>
