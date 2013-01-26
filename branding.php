@@ -1,7 +1,7 @@
 <?php 
 namespace theme;
 
-# this gets inserted into the site header via the '@banner' action 
+# this gets inserted into the site header via the '@header' action 
 # hook in functions.php - I put in into a separate file so that it 
 # would be easy to override in components in a child theme and so 
 # that it'd be easier to control the sequence of header content b/c
@@ -10,7 +10,7 @@ namespace theme;
 
         <hgroup id="branding" itemscope itemtype="http://schema.org/Organization">
             <h1 class="site-title">
-                <a accesskey="1" itemprop="url" rel="home" href="<?php echo home_url(); ?>">
+                <a id="brand" accesskey="1" itemprop="url" rel="home" href="<?php echo home_url(); ?>">
                     <span itemprop="name"><?php bloginfo('name'); ?></span>
                 </a>
             </h1>
