@@ -28,14 +28,8 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
  */
 
 .byline address { display: inline-block; font-style:normal; }
-.byline dt,dd { display:inline-block; margin:0 .2em; }
-.byline dl >:first-child { margin-left:0 }
-.byline dl >:last-child { margin-right:0 }
-.byline dt:after { content:": " }
-.byline .time-type { display:none }
-.byline .time-data:before { content: " | " }
-.byline .time-type-modified { display:none }
-.byline .time-data-modified { display:none }
+[data-meta-label] { display: inline-block; margin-left:.4em; }
+[data-meta-label]:before { content:" " attr(data-time-label) ": "; font-weight:normal; }
 
 strong{font-weight:bold}strong small { font-weight:normal; }
 em,cite{font-style:italic}em em,cite cite{font-style:normal}

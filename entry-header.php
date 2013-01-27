@@ -9,14 +9,14 @@ namespace theme;
                                     <span itemprop="headline name"><?php the_title(); ?></span>
                                 </a>
                             </h1>
-                            <dl class="byline"><?php \call_user_func(function () {
+                            <div class="byline"><?php \call_user_func(function () {
 
-                                ?><dt><?php _e( 'By' ); ?></dt><dd class="vcard" itemprop="author"><?php 
+                                ?><address class="vcard" itemprop="author"><?php 
                                     the_author_posts_link(); 
-                                ?></dd><?php 
+                                ?></address><?php 
                             
                                 $time = array(
-                                    'Published' => array( 'fn' => 'get_the_time', 'class' => 'published' )
+                                    'Published' => array( 'fn' => 'get_the_time', 'class' => 'published', 'rel' => 'index' )
                                   , 'Modified' => array( 'fn' => 'get_the_modified_time', 'class' => 'updated' )
                                 );
 
@@ -28,8 +28,10 @@ namespace theme;
                                     $class = $v['class'];
                                     $tag = "<time itemprop='date$k' class='$class' datetime='$ymd' title='$k: $ymd'>$y</time>";
                                     $tag = apply_filters( '@' . $lc . '_tag', $tag, $ymd, $y );
-                                    echo "<dt class='time-type time-type-$lc'>$k</dt><dd class='time-data time-data-$lc'>$tag</dd>";
+                                    $archive = get_year_link($y);
+                                    $rel = $v['rel'] ? " rel='$rel'" : '';
+                                    echo "<span data-meta-label='$k' data-time-label='$k'><a$rel href='$archive'>$tag</a></span>";
                                 }
-                            }); ?></dl>
+                            }); ?></div>
                         </header>
 
