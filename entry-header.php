@@ -14,29 +14,27 @@ namespace theme;
                                 ?><dt><?php _e('By'); ?></dt><dd class="vcard" itemprop="author"><?php 
                                     the_author_posts_link(); 
                                 ?></dd><?php 
-                            
-                                $time = array(
-                                    'Published' => array( 'fn' => 'get_the_time', 'class' => 'published', 'rel' => 'index' )
-                                  , 'Modified' => array( 'fn' => 'get_the_modified_time', 'class' => 'updated' )
-                                );
 
-                                foreach ( $time as $k => $v ) {
-                                    $ymd = \call_user_func( $v['fn'], 'Y-m-d' );
-                                    $nums = \explode( '-', $ymd );
-                                    $urls = array('year', 'month', 'day');
-                                    $j = \count($nums);
-                                    while ( $j-- ) {
-                                        $url = \call_user_func_array( 'get_' . $urls[$j] . '_link', \array_slice($nums, 0, $j + 1) );
-                                        $urls[$j] = '<a class="' . $urls[$j] . '-link" href="' . $url . '">' . $nums[$j] . '</a>';
-                                    }
-                                    $urls = \implode('<span>-</span>', $urls);
-                                    #$y   = $parts['year'];
-                                    $lc = \strtolower($k);
-                                    $class = $v['class'];
-                                    $tag = "<time itemprop='date$k' class='$class' datetime='$ymd'>$urls</time>";
-                                    $tag = apply_filters( '@' . $lc . '_tag', $tag, $ymd );
-                                    #$archive = get_year_link($y);
-                                    $rel = $v['rel'] ? " rel='$rel'" : '';
+                                foreach ( array(
+                                    'Published' => array( 
+                                        'fn' => 'get_the_date'
+                                      , 'class' => 'published'
+                                      , 'rel' => 'index' 
+                                    )
+                                  , 'Modified' => array(
+                                        'fn' => 'get_the_modified_date'
+                                      , 'class' => 'updated'
+                                      , 'rel' => null
+                                    )
+                                ) as $k => $v ) {
+                                    \extract($v);
+                                    $date = \call_user_func( $fn ); # Uses: Settings > General > Date Format
+                                    $ymd = \call_user_func( $fn, 'Y-m-d' );
+                                    $idx = get_year_link($y);
+                                    $rel and $rel = ' rel="index"';
+                                    $date = "<a$rel href='$idx'>$date</a>";
+                                    $tag = "<time itemprop='date$k' class='$class' datetime='$ymd'>$date</time>";
+                                    $tag = apply_filters( '@' . \strtolower($k) . '_tag', $tag, $date );
                                     echo "<dt>$k</dt><dd>$tag</dd>";
                                 }
                             }); ?></dl>

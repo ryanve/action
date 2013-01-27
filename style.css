@@ -76,7 +76,7 @@ body {
     margin:0 auto; /* centering */
     width:96%; /* implies 2% padding */
     max-width:960px; 
-    font-size:1.1em; /* all text sizes are relative to this */
+    font-size:1em; /* all text sizes are relative to this */
     line-height:1.5em;
 }
 
