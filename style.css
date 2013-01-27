@@ -27,9 +27,15 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
  * @author Ryan Van Etten
  */
 
-.byline address { display: inline-block; font-style:normal; }
+.byline address { display:inline-block; font-style:normal; }
+.byline dt, .byline dd { display:inline-block; margin:0; }
+.byline dt + dd { margin-left:.2em; }
+.byline dd + dt { margin-left:.4em; }
+.byline dt:not(:empty):after{ content: ": " }
+/*
 [data-meta-label] { display: inline-block; margin-left:.4em; }
 [data-meta-label]:before { content:" " attr(data-time-label) ": "; font-weight:normal; }
+*/
 
 strong{font-weight:bold}strong small { font-weight:normal; }
 em,cite{font-style:italic}em em,cite cite{font-style:normal}

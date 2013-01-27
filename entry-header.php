@@ -9,11 +9,11 @@ namespace theme;
                                     <span itemprop="headline name"><?php the_title(); ?></span>
                                 </a>
                             </h1>
-                            <div class="byline"><?php \call_user_func(function () {
+                            <dl class="byline"><?php \call_user_func(function () {
 
-                                ?><address class="vcard" itemprop="author"><?php 
+                                ?><dt><?php _e('By'); ?></dt><dd class="vcard" itemprop="author"><?php 
                                     the_author_posts_link(); 
-                                ?></address><?php 
+                                ?></dd><?php 
                             
                                 $time = array(
                                     'Published' => array( 'fn' => 'get_the_time', 'class' => 'published', 'rel' => 'index' )
@@ -22,16 +22,23 @@ namespace theme;
 
                                 foreach ( $time as $k => $v ) {
                                     $ymd = \call_user_func( $v['fn'], 'Y-m-d' );
-                                    #$d   = \call_user_func( \str_replace( '_time', '_date', $v['fn'] ) );
-                                    $y   = \array_shift( \explode( '-', $ymd ) );
+                                    $nums = \explode( '-', $ymd );
+                                    $urls = array('year', 'month', 'day');
+                                    $j = \count($nums);
+                                    while ( $j-- ) {
+                                        $url = \call_user_func_array( 'get_' . $urls[$j] . '_link', \array_slice($nums, 0, $j + 1) );
+                                        $urls[$j] = '<a class="' . $urls[$j] . '-link" href="' . $url . '">' . $nums[$j] . '</a>';
+                                    }
+                                    $urls = \implode('<span>-</span>', $urls);
+                                    #$y   = $parts['year'];
                                     $lc = \strtolower($k);
                                     $class = $v['class'];
-                                    $tag = "<time itemprop='date$k' class='$class' datetime='$ymd' title='$k: $ymd'>$y</time>";
-                                    $tag = apply_filters( '@' . $lc . '_tag', $tag, $ymd, $y );
-                                    $archive = get_year_link($y);
+                                    $tag = "<time itemprop='date$k' class='$class' datetime='$ymd'>$urls</time>";
+                                    $tag = apply_filters( '@' . $lc . '_tag', $tag, $ymd );
+                                    #$archive = get_year_link($y);
                                     $rel = $v['rel'] ? " rel='$rel'" : '';
-                                    echo "<span data-meta-label='$k' data-time-label='$k'><a$rel href='$archive'>$tag</a></span>";
+                                    echo "<dt>$k</dt><dd>$tag</dd>";
                                 }
-                            }); ?></div>
+                            }); ?></dl>
                         </header>
 
