@@ -149,7 +149,11 @@ add_action('@footer', function () {
 # still testing this
 #if ( ! is_child_theme() ) {
     add_action( 'widgets_init', function () {
-        register_sidebar();
+        register_sidebar(array( 
+            'name' => __( 'Sidebar' )
+          , 'id' => 'sidebar-1' 
+          , 'description' => __( 'Inserts into #sidebar' )
+        ));
         register_sidebar(array( 
             'name' => __( 'Header' )
           , 'id' => 'header' 

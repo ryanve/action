@@ -7,7 +7,10 @@ namespace theme;
 
                     <?php do_action( '@before_entry' ); ?>
 
-                    <article<?php echo \rtrim(' ' . apply_filters( '@entry_attrs', 'class="hentry"' ) ); ?>>
+                    <article <?php echo apply_filters( '@entry_attrs', 
+                        'class="' . \implode( ' ', get_post_class() ) . '"' 
+                      . ' itemscope itemtype="http://schema.org/Article"' 
+                    ); ?>>
 
                         <?php do_action( '@entry' ); ?>
 

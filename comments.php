@@ -24,11 +24,13 @@ if ( post_password_required() || ! post_type_supports( get_post_type(), 'comment
     # Should .comments be on the container or the list? .hfeed? See links above.
     # Todo: maybe add filter(s) for the attrs.
 ?>
-<section <?php if ( is_singular() ) echo 'id="comments" '; ?>class="hfeed">
+<div <?php if ( is_singular() ) echo 'id="comments" '; ?>class="hfeed">
 
 	<?php if ( have_comments() ) { ?>
     
-		<h2 class="loop-title"><?php comments_number(); ?></h2>
+		<h2 class="loop-title">
+            <?php comments_number(); ?>
+        </h2>
 
 		<ol class="xoxo">
             <?php
@@ -53,4 +55,4 @@ if ( post_password_required() || ! post_type_supports( get_post_type(), 'comment
         <p class="status"><?php _e( 'Comments are closed.' ); ?></p>
     <?php } ?>
 
-</section><!-- -->
+</div><!-- -->
