@@ -223,15 +223,25 @@ add_action ('@entry', function () {
     isset( $taxos ) or $taxos = \wp_list_pluck( $wp_taxonomies, 'label' );
     $id    = get_the_ID();
     $type  = get_post_type( $id );
+    $markup = '';
 
     foreach ( $taxos as $name => $label ) {
         if ( is_object_in_taxonomy($type, $name) ) {
             if ( $class = sanitize_html_class( \mb_strtolower($label) ) ) {
-                echo '<div class="entry-terms entry-' . $class . '">';
-                echo '<h4 class="term-list-header">' . $label . '</h4> <ul class="term-list">';
-                echo get_the_term_list( $id, $name, '<li>', '</li><li>', '</li>' ) . '</ul></div>';
+                $markup .= '<dl class="meta-list entry-terms entry-' . $class . '">';
+                $terms = get_the_term_list( $id, $name, '<li>', '</li><li>', '</li>' );
+                $markup .= $terms ? '<dt>' : '<dt class="void">';
+                $markup .= $label . '</dt>';
+                $markup .= $terms ? '<dd>' : '<dd class="void">';
+                $markup .= '<ul class="term-list">' . $terms . '</ul></dd></dl>';
             }
         }
+    }
+
+    $markup = apply_filters( '@entry_terms', $markup );
+    if ( $markup ) {
+        $markup = "<footer class='entry-meta' role='contentinfo'>$markup</footer>";
+        echo "\n\n" . \str_repeat(' ', 24) . $markup . "\n\n";
     }
 
 }, 20);
