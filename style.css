@@ -1,13 +1,12 @@
-/**
+/*!
  * Theme Name: action
- * Theme URI: https://github.com/ryanve/action
- * Description: In development.
+ * Theme URI: http://actiontheme.com
+ * Description: Extendable HTML5 theme.
  * Version: 0.3.0
  * Author: Ryan Van Etten
  * Author URI: http://ryanvanetten.com
- * Tags: modular, minimal, html5, responsive, microformats, semantic, boilerplate
+ * Tags: html5, responsive, microdata, semantic, minimal, base, modular, boilerplate
  * License: MIT
- * License URI: en.wikipedia.org/wiki/MIT_License
  */
  
 /*! normalize.css v2.0.1 | MIT License | git.io/normalize */
@@ -22,106 +21,128 @@ article,aside,details,figcaption,figure,footer,header,hgroup,nav,section,summary
  */
 html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap:break-word;}img,audio,video,canvas,iframe,object,embed,input,textarea,progress,meter,datalist,output{max-width:100%}img,audio,video,canvas{height:auto}@media \0screen{img{width:auto}}img,audio,video,canvas,iframe,object,embed{vertical-align:middle} [style]{max-width:100%} .rwd-wrap-16\:9,.rwd-wrap-4\:3{position:relative}.rwd-wrap-16\:9{padding:56.25% 0 0 0}.rwd-wrap-4\:3{padding:75% 0 0 0}.rwd-wrap-16\:9>*,.rwd-wrap-4\:3>*{position:absolute;left:0;top:0;height:100%}
 
+
 /*!
  * = theme styles ===
  * @author Ryan Van Etten
  */
 
-.byline address { display:inline-block; font-style:normal; }
-.byline dt, .byline dd { display:inline-block; margin:0; }
-.byline dt + dd { margin-left:.2em; }
-.byline dd + dt { margin-left:.4em; }
-.byline dt:not(:empty):after{ content: ": " }
-/*
-[data-meta-label] { display: inline-block; margin-left:.4em; }
-[data-meta-label]:before { content:" " attr(data-time-label) ": "; font-weight:normal; }
-*/
+/* ==========================================================================
+   $text
+   ========================================================================== */
 
-strong{font-weight:bold}strong small { font-weight:normal; }
-em,cite{font-style:italic}em em,cite cite{font-style:normal}
+    a { color:#09b; /*border-bottom:1px solid #28d; */}
+    a { text-decoration:none; }
+    a:hover { color:#409; /*border-bottom:1px solid #409; */}
+    img, a.block { border:0; }
+    
+    html { color:#222; background:#ffd; }
+    body { font-size:1.1em; line-height:1.5em; } /* All text is relative to this. */
 
-/* helper classes for alignment, floats, uploads, lists */
-.clear{clear:both;float:none}
-.center,.aligncenter{margin-left:auto;margin-right:auto}
-.left,.alignleft{float:left;margin:1em 20px 1em 0}
-.right,.alignright{float:right;margin:1em 0 1em 20px}
-.left,.right{margin:0}
-.block,.alignnone{display:block}
-.inline,.inline li,.floatfix{display:inline}
-.none{list-style-type:none}.circle{list-style-type:circle}.disc{list-style-type:disc}.square{list-style-type:square}
+    /* $selection rules must be declared separately */
+    ::-moz-selection { background:#09b;color:#ffd; text-shadow:none }
+         ::selection { background:#09b;color:#ffd; text-shadow:none }
+
+    
+/* ==========================================================================
+   $helper
+   ========================================================================== */
+
+    .clear { clear:both; }
+    .block { display:block }
+    .inline, .inline > li { display:inline }
+
+    /* intended for testing via [accesskey] */
+    .diagnostic { display:none }
+    
+    /* same as .visuallyhidden from h5bp.com */
+    .assistive {
+        position:absolute; clip:rect(0 0 0 0); overflow:hidden; 
+        width: 1px; height:1px; margin:-1px; border:0; padding:0;
+    }
+    .assistive.focusable:active,
+    .assistive.focusable:focus {
+        position:static; clip:auto; overflow:visible; 
+        width:auto; height:auto; margin:0; 
+    }
 
 
+/* ==========================================================================
+   $entries
+   ========================================================================== */
 
-a { color:#09b; /*border-bottom:1px solid #28d; */}
-a { text-decoration:none; }
-a:hover { color:#409; /*border-bottom:1px solid #409; */}
-img, a.block { border:0; }
+    .hentry { margin:2em 0 }
+    .hentry:first-child { margin-top:0 }
+    .hentry:last-child { margin-bottom:0 }
+    .entry-title { margin:.2em 0 }
+    .entry-terms { display:none }
+    .single .entry-terms, .singular .entry-terms { display:block }
+    
+    .byline { margin-top:.2em }
+    .byline address { display:inline-block; font-style:normal; }
+    .byline dt, .byline dd { display:inline-block; margin:0; }
+    .byline dt + dd { margin-left:.2em; }
+    .byline dd + dt { margin-left:.4em; }
+    .byline dt:not(:empty):after{ content: ": " }
+    /*
+    [data-meta-label] { display: inline-block; margin-left:.4em; }
+    [data-meta-label]:before { content:" " attr(data-time-label) ": "; font-weight:normal; }
+    */
+    
+/* ==========================================================================
+   $editor
+   bit.ly/wp-theme-review#WordPress-Generated_CSS_Classes
+   ========================================================================== */
+    .alignnone, .alignleft, .alignright, .aligncenter { display:block; margin:1.1em 0; }
+    .aligncenter { margin-left:auto; margin-right:auto; }
+    .alignleft { float:left; margin-right:4%; }
+    .alignright { float:right; margin-left:4%; }
 
-.entry-title { margin:.2em 0 }
 
-.entry-terms { display:none }
-.single .entry-terms, .singular .entry-terms { display:block }
+/* ==========================================================================
+   $menu
+   ========================================================================== */    
 
-.hentry { margin:2em 0 }
-.hentry:first-child { margin-top:0 }
-.hentry:last-child { margin-bottom:0 }
+    #menu { font-weight:bold; }  
+    #menu ul { padding-left:0; }
+    #menu li { max-width:320px; }
+    #menu li, #menu a { display:block }
+    #menu a { padding:.5em; }
+    #menu a { background:#09b; color:#ffd; }
+    #menu a:hover { background:#409; }
+    #menu li + li { margin-top:2px } 
+    #menu li ul { display:block; margin:2px 0; }
 
+/* ==========================================================================
+   $layout
+   ========================================================================== */
+   
+    body {
+        margin:0 auto; /* centering */
+        width:96%; /* implies 2% padding */
+        max-width:960px; 
+    }
+    
+    #header, #grid, #footer { clear:both; margin:0 auto; }
+    #branding { margin-bottom:1em; }
+    #site-title {}
+    #site-description { display:none; }
+    
+    #header-widget-area { padding:1em; clear:left; }
 
-/* selected Text (these must be declared separately) ============== */
-::-moz-selection { background:#09b;color:#ffd; text-shadow:none }
-     ::selection { background:#09b;color:#ffd; text-shadow:none }
+    .widget-area > ul { list-style-type:none }
+    /* .widgettitle { font-size:inherit } */
+    li.widget { display:block; }
 
-html { color:#222; background:#ffd; }
-body {
-    margin:0 auto; /* centering */
-    width:96%; /* implies 2% padding */
-    max-width:960px; 
-    font-size:1em; /* all text sizes are relative to this */
-    line-height:1.5em;
-}
+    #main { }
 
-#header,#grid,#footer {
-    clear:both; margin:0 auto;
-}
+    @media all and (min-width:40em) {
+        #main { clear:left; }
+        
+        :not(.full-width) #main { width:66.666667%; float:left; clear:left; }
+        :not(.full-width) #sidebar  { width:31.25%; float:right; clear:right; }
+        
+        #branding { float:left }
+        #menu { float:right; }
+    }
 
-#branding { margin-bottom:1em }
-#site-title, #site-description {}
-
-#site-description { display:none; } 
-
-#header-widget-area { padding:1em; clear:left; }
-
-#menu { font-weight:bold; }  
-#menu ul { padding-left:0; }
-#menu li { max-width:320px; }
-#menu li, #menu a { display:block }
-#menu a { padding:.5em; }
-#menu a { background:#09b; color:#ffd; }
-#menu a:hover { background:#409; }
-#menu li + li { margin-top:2px } 
-#menu li ul { display:block; margin:2px 0; }  
-
-.widget-area > ul { list-style-type:none }
-/* .widgettitle { font-size:inherit } */
-
-#main { }
-
-@media all and (min-width:40em) {
-    :not(.full-width) #main { width:66.666667%; float:left; clear:left; }
-    :not(.full-width) #sidebar  { width:31.25%; float:right; clear:right; }
-    #branding { float:left }
-    #menu { float:right; }
-}
-
-/*
- * Same as .visuallyhidden from h5bp.com
- */
-.assistive { 
-    position:absolute; clip:rect(0 0 0 0); overflow:hidden; 
-    width: 1px; height:1px; margin:-1px; border:0; padding:0;
-}
-.assistive.focusable:active,
-.assistive.focusable:focus {
-    position:static; clip:auto; overflow:visible; 
-    width:auto; height:auto; margin:0; 
-}
