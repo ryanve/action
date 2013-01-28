@@ -196,26 +196,39 @@ add_action('@loop', function () {
     locate_template( 'loop-nav.php', true, false );
 }, 20);
 
-add_action('@entry', function () {
-    # insert the entry-header.php template inside each entry
-    static $path;
-    isset( $path ) or $path = locate_template( 'entry-header.php', false, false );
-    include ( $path );
-}, 1);
+add_action('@entry', ns('entry_actions'), 0);
+function entry_actions () {
 
-add_action('@entry', function () {
-    # Insert the entry-content.php template inside each entry
-    # Allow the '@content_mode' to be changed between iterations
-    # Cache the result(s) of locate_template() to static var(s).
-    static $cont;
-    static $summ;
-    if ( apply_filters( '@content_mode', is_singular() ) )
-         $path = $cont = isset($cont) ? $cont : locate_template( 'entry-content.php', false, false ); 
-    else $path = $summ = isset($summ) ? $summ : locate_template( 'entry-summary.php', false, false ); 
-    include ( $path );
-});
+    remove_action('@entry', __FUNCTION__, 0); # only run actions once
+    static $ran; # redundancy to prevent it being called twice by other means
+    if ( $ran = null !== $ran ) return;
 
-add_action ('@entry', function () {
+    add_action('@entry', function () {# insert entry-header.php
+        include ( locate_template( 'entry-header.php', false, false ) );
+    }, 5);
+    
+    # allow the '@content_mode' to be changed between iterations
+    # truthy => content | falsey => excerpt
+    $content_mode = apply_filters( '@content_mode', is_singular() );
+
+    add_action('@entry', $content_mode ? function () {
+        include ( locate_template( 'entry-content.php', false, false ) );
+    } : function () {
+        static $summ; # cache template location b/c repeated calls are likely here
+        include ( $summ = $summ ? $summ : locate_template( 'entry-summary.php', false, false ) );
+    }, 10);
+
+    $content_mode and add_action('@entry', function () {
+        include ( locate_template( 'entry-footer.php', false, false ) );
+    }, 15);
+    
+    $content_mode && is_singular() and add_action('@entry', function () {
+        # codex.wordpress.org/Function_Reference/comments_template
+        comments_template( '/comments.php', true );
+    }, 20);
+}
+
+add_action ('@entry_footer', function () {
 
     # still testing this + it needs a filter
     global $wp_taxonomies;
@@ -238,11 +251,8 @@ add_action ('@entry', function () {
         }
     }
 
-    $markup = apply_filters( '@entry_terms', $markup );
-    if ( $markup ) {
-        $markup = "<footer class='entry-meta' role='contentinfo'>$markup</footer>";
-        echo "\n\n" . \str_repeat(' ', 24) . $markup . "\n\n";
-    }
+    $markup = apply_filters( '@entry_terms', $markup, $taxos );
+    echo $markup;
 
 }, 20);
 

@@ -1,1 +1,1 @@
-<?php namespace theme;?>                        <div class="entry-content" itemprop="articleBody"><?php                     the_content();                    wp_link_pages();                ?></div><!-- .entry-content -->
+<?php namespace theme;?>                        <div class="entry-content" itemprop="articleBody"><?php                     the_content();                    wp_link_pages();                ?></div><!-- .entry-content -->

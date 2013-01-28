@@ -3,7 +3,7 @@ namespace theme;
 
 ?>
 
-                        <header class="entry-header">                        
+                        <header class="entry-header">
                             <h1 class="entry-title">
                                 <a itemprop="url" rel="bookmark" href="<?php the_permalink(); ?>">
                                     <span itemprop="headline name"><?php the_title(); ?></span>
