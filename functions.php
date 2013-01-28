@@ -228,14 +228,57 @@ function entry_actions () {
     }, 20);
 }
 
+add_action('@entry_header', function () {
+    $markup = '<h1 class="entry-title">';
+    $markup .= '<a itemprop="url" rel="bookmark" href="' . get_permalink() . '">';
+    $markup .= '<span itemprop="headline name">' . get_the_title() . '</span></a></h1>';
+    echo apply_filters( '@headline', $markup );
+}, 5);
+
+add_action('@entry_header', function () {
+
+    $markup = '<dl class="byline meta-list">';
+    $times = array(
+        'Published' => array( 'fn' => 'get_the_date', 'class' => 'published', 'rel' => 'index' )
+      , 'Modified' => array( 'fn' => 'get_the_modified_date', 'class' => 'updated', 'rel' => null )
+    );
+        /*
+        ?><dt><?php _e('By'); ?></dt><dd class="vcard" itemprop="author"><?php 
+            the_author_posts_link(); 
+        ?></dd><?php 
+    */
+
+    foreach ( $times as $k => $v ) {
+        \extract($v);
+        $date = call_user_func( $fn ); # Uses: Settings > General > Date Format
+        $ymd = call_user_func( $fn, 'Y-m-d' );
+        $idx = get_year_link($y);
+        $rel and $rel = ' rel="index"';
+        $date = "<a$rel href='$idx'>$date</a>";
+        $tag = "<time itemprop='date$k' class='$class' datetime='$ymd'>$date</time>";
+        $tag = apply_filters( '@' . \strtolower($k) . '_tag', $tag, $date );
+        $markup .= "<dt>$k</dt><dd>$tag</dd>";
+    }
+
+    $markup .= '</dl>';
+    echo apply_filters( '@byline', $markup );
+
+}, 7);
+
 add_action ('@entry_footer', function () {
 
-    # still testing this + it needs a filter
     global $wp_taxonomies;
     static $taxos;
+
+    echo apply_filters('@entry_pages', wp_link_pages(array(
+        'echo'   => 0
+      , 'before' => '<dl class="meta-list entry-pages"><dt>' . __('Pages') . '</dt><dd>'
+      , 'after'  => '</dd></dl>'
+    )));
+
     isset( $taxos ) or $taxos = \wp_list_pluck( $wp_taxonomies, 'label' );
     $id    = get_the_ID();
-    $type  = get_post_type( $id );
+    $type  = get_post_type( $id );   
     $markup = '';
 
     foreach ( $taxos as $name => $label ) {
