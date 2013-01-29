@@ -290,11 +290,11 @@ add_action ('@entry_footer', function () {
     foreach ( $taxos as $name => $label ) {
         if ( is_object_in_taxonomy($type, $name) ) {
             if ( $class = sanitize_html_class( \mb_strtolower($label) ) ) {
-                $markup .= '<dl class="meta-list entry-terms entry-' . $class . '">';
+                $markup .= '<dl class="meta-list entry-taxos entry-' . $class . '">';
                 $terms = get_the_term_list( $id, $name, '<li>', '</li><li>', '</li>' );
-                $markup .= $terms ? '<dt>' : '<dt class="void">';
-                $markup .= $label . '</dt>';
-                $markup .= $terms ? '<dd>' : '<dd class="void">';
+                $void = $terms ? '' : ' void';
+                $markup .= "<dt class='taxo-label $class-label$void'>$label</dt>";
+                $markup .= "<dd class='taxo-value $class-value$void'>";
                 $markup .= '<ul class="term-list">' . $terms . '</ul></dd></dl>';
             }
         }
@@ -454,6 +454,7 @@ add_filter('the_author_posts_link', function ( $tag ) {
         return $tag;
     return str_replace( ' href=', ' class="url fn n" href=', $tag );
 });
+
 
 
 

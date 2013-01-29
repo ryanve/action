@@ -94,8 +94,8 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
     .entry-terms { display:inline-block; }
     .entry-terms + .entry-terms { margin-left: .5em; }
     */
-    .entry-terms { line-height:1; }
-    .entry-terms .term-list { display:inline; padding-left:0; }
+    .entry-taxos { line-height:1; }
+    .entry-taxos .term-list { display:inline; padding-left:0; }
     .term-list li { display:inline; margin:0; }
     .term-list li + li:before { content: ", "; }
 
@@ -157,11 +157,8 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
     #main { clear:left; }
 
     @media all and (min-width:40em) {
-        
         :not(.full-width) #main { width:64%; float:left; clear:left; }
         :not(.full-width) #sidebar  { width:30%; float:right; clear:right; }
-        #sidebar {  }
-        #branding { float:left }
+        #branding { float:left; }
         #menu { float:right; margin:0 0 2em 4%; }
     }
-
