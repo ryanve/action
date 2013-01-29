@@ -230,34 +230,40 @@ function entry_actions () {
 
 add_action('@entry_header', function () {
     $markup = '<h1 class="entry-title">';
-    $markup .= '<a itemprop="url" rel="bookmark" href="' . get_permalink() . '">';
-    $markup .= '<span itemprop="headline name">' . get_the_title() . '</span></a></h1>';
+    $markup .= '<a itemprop="url headline name" rel="bookmark" href="' . get_permalink() . '">';
+    $markup .= get_the_title() . '</a></h1>';
     echo apply_filters( '@headline', $markup );
 }, 5);
 
 add_action('@entry_header', function () {
 
     $markup = '<dl class="byline meta-list">';
+    
+    global $authordata;
+	\is_object( $authordata )
+        and ( $link = get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ) # href
+        and ( $link = "<a href='$link' class='url fn n' itemprop='author' rel='author'>" . get_the_author() .'</a>' )
+        and ( $link = apply_filters( 'the_author_posts_link', $link ) ) #wp: the_author_posts_link()
+        and $markup .= '<dt class="author-label">' . __('By') . '</dt><dd class="author-value vcard">' . $link . '</dd>';
+        
     $times = array(
         'Published' => array( 'fn' => 'get_the_date', 'class' => 'published', 'rel' => 'index' )
       , 'Modified' => array( 'fn' => 'get_the_modified_date', 'class' => 'updated', 'rel' => null )
     );
-        /*
-        ?><dt><?php _e('By'); ?></dt><dd class="vcard" itemprop="author"><?php 
-            the_author_posts_link(); 
-        ?></dd><?php 
-    */
 
     foreach ( $times as $k => $v ) {
         \extract($v);
         $date = call_user_func( $fn ); # Uses: Settings > General > Date Format
         $ymd = call_user_func( $fn, 'Y-m-d' );
-        $idx = get_year_link($y);
+        $idx = get_year_link( $y );
         $rel and $rel = ' rel="index"';
         $date = "<a$rel href='$idx'>$date</a>";
         $tag = "<time itemprop='date$k' class='$class' datetime='$ymd'>$date</time>";
-        $tag = apply_filters( '@' . \strtolower($k) . '_tag', $tag, $date );
-        $markup .= "<dt>$k</dt><dd>$tag</dd>";
+        $k = \strtolower( $k );
+        $tag = apply_filters( '@' . $k . '_tag', $tag, $date );
+        $label = __( \ucfirst( $class ) );
+        $markup .= '<dt class="' . $k . '-label time-label">' . $label . '</dt>';
+        $markup .= '<dd class="' . $k . '-value time-value">' . $tag . '</dd>'; # maybe should filter here too
     }
 
     $markup .= '</dl>';
@@ -431,14 +437,14 @@ add_action ('wp_head', function () {
 
 # comments callback ( see comments.php )
 # codex.wordpress.org/Function_Reference/wp_list_comments
-add_filter('@list_comments', function ( $array ) {
-    null === $array['callback'] and $array['callback'] = function ( $comment, $array, $depth ) {
+add_filter('@list_comments', function ( $arr ) {
+    null === $arr['callback'] and $arr['callback'] = function ( $comment, $arr, $depth ) {
         $GLOBALS['comment'] = $comment;
         $GLOBALS['comment_depth'] = $depth;
-        $comment_type = get_comment_type($comment->comment_ID); #wp-includes/comment-template.php
-        locate_template( array( 'comment-' . $comment_type . '.php', 'comment.php' ), true, false ); #wp')
+        $comment_type = get_comment_type( $comment->comment_ID ); #wp-includes/comment-template.php
+        locate_template( array( 'comment-' . $comment_type . '.php', 'comment.php' ), true, false ); #wp
     };
-    return $array;
+    return $arr;
 });
 
 
@@ -448,3 +454,6 @@ add_filter('the_author_posts_link', function ( $tag ) {
         return $tag;
     return str_replace( ' href=', ' class="url fn n" href=', $tag );
 });
+
+
+
