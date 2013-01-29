@@ -8,24 +8,25 @@ global $comment;
 
 		<?php do_action( '@before_comment' ); ?>
 
-		<article class="hcomment">
+		<article class="comment">
 
-			<?php do_action( '@open_comment' ); ?>
-
-            <?php echo apply_filters( '@comment_avatar', get_avatar( $comment, 90 ) ); ?>
-
-			<?php echo apply_filters( '@comment_meta', '<div class="comment-meta">[comment-author] [comment-published] [comment-permalink before="| "] [comment-edit-link before="| "] [comment-reply-link before="| "]</div>' ); ?>
+			<header class="comment-header">
+                <?php echo apply_filters( '@comment_avatar', get_avatar( $comment, 60 ) ); ?>
+                <!-- '@comment_meta' -->
+                <dl class="meta-list">
+                    <dt><?php _e('By'); ?></dt><dd><?php echo get_comment_author_link(); ?></dd>
+                    <dt><?php _e('Published'); ?></dt><dd><?php echo get_comment_date(); ?></dd>
+                </dl>
+            </header>
 
 			<div class="comment-content"><?php
                 if ( ! $comment->comment_approved )
                     echo apply_filters( '@comment_moderation', '<p class="alert moderation">' . __( 'Your comment is awaiting moderation.' ) . '</p>' );
 
                 comment_text( $comment->comment_ID );
-            ?></div><!-- /.comment-content -->
+            ?></div>
 
-			<?php do_action( '@close_comment' ); ?>
-
-		</article><!-- /.hcomment -->
+		</article>
 
 		<?php do_action( '@after_comment' ); ?>
 

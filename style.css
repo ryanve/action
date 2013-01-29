@@ -104,6 +104,9 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
     [data-meta-label]:before { content:" " attr(data-time-label) ": "; font-weight:normal; }
     */
     
+    .xoxo { list-style-type:none; padding-left:0; }
+    .comment .avatar  { float:left; margin-bottom:1em; margin-right:4%; }
+    
 /* ==========================================================================
    $editor
    bit.ly/wp-theme-review#WordPress-Generated_CSS_Classes
