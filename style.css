@@ -91,8 +91,8 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
     .meta-list > dt:after{ content: ": " }
     .meta-list > .void { display:none; }
 
-    .entry-pages  { margin-bottom:0 }
-    .entry-pages + .entry-taxos  { margin-top:0 }
+    .entry-pages {  }
+    .entry-pages + .entry-taxos  { margin-top:-1em }
     
     .entry-taxos > dt { display:block; float:left; }
     .entry-taxos > dd + dt { margin-left:0; }

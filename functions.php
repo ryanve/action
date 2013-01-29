@@ -278,8 +278,8 @@ add_action ('@entry_footer', function () {
 
     echo apply_filters('@entry_pages', wp_link_pages(array(
         'echo'   => 0
-      , 'before' => '<dl class="meta-list entry-pages"><dt class="pages-label">' . __('Pages') . '</dt><dd class="pages-value">'
-      , 'after'  => '</dd></dl>'
+      , 'before' => '<nav class="entry-pages"><dl class="meta-list entry-pages"><dt class="pages-label">' . __('Pages') . '</dt><dd class="pages-value">'
+      , 'after'  => '</dd></dl></nav>'
     )));
 
     isset( $taxos ) or $taxos = \wp_list_pluck( $wp_taxonomies, 'label' );
