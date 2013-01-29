@@ -84,19 +84,21 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
     /* Hide .entry-meta for excerpt views. */
     .entry-summary ~ .entry-meta { display:none; }
     
-    .meta-list > dt, .meta-list > dd { display:inline-block; margin:0; }
-    .meta-list > dt { margin-right:.2em; }
-    .meta-list > dt + dd { margin-left:.2em; }
-    .meta-list > dd + dt { margin-left:.6em; }
-    .meta-list > dt:after{ content: ": " }
-    .meta-list > .void { display:none; }
-
-    .entry-pages {  }
-    .entry-pages + .entry-taxos  { margin-top:-1em }
+    .meta-list > dt, .meta-list > dd, .meta-label, .meta-value { display:inline-block; margin:0; }
+    .meta-list > dt, .meta-label { margin-right:.2em; }
+    .meta-list > dt + dd, .meta-label + .meta-value { margin-left:.2em; }
+    .meta-list > dd + dt, .meta-value + .meta-label { margin-left:.6em; }
+    .meta-list > dt:after, .meta-label:after  { content: ": " }
+    .void { display:none !important; }
     
-    .entry-taxos > dt { display:block; float:left; }
-    .entry-taxos > dd + dt { margin-left:0; }
-    .entry-taxos > dd { display:block; }
+    .meta-label { font-size:inherit; font-weight:bold; }
+
+    .entry-pages { margin-bottom:0 }
+    .entry-pages + .entry-taxos  { margin-top:0 }
+    
+    .entry-taxos > dt, .entry-taxos > .meta-label { display:block; float:left; }
+    .entry-taxos > dd + dt, .entry-taxos > .meta-value + .meta-label { margin-left:0; }
+    .entry-taxos > dd, .entry-taxos > .meta-value { display:block; }
     .entry-taxos .term-list { display:inline; padding-left:0; }
     .term-list li { display:inline; margin:0; }
     .term-list li + li:before { content: ", "; }
