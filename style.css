@@ -90,11 +90,6 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
     .meta-list > dd + dt { margin-left:.6em; }
     .meta-list > dt:after{ content: ": " }
     .meta-list > .void { display:none; }
-    
-    /*
-    .entry-terms { display:inline-block; }
-    .entry-terms + .entry-terms { margin-left: .5em; }
-    */
 
     .entry-taxos > dt { display:block; float:left; }
     .entry-taxos > dd + dt { margin-left:0; }
