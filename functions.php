@@ -290,15 +290,15 @@ add_action ('@entry_footer', function () {
     foreach ( $taxos as $name => $label ) {
         if ( is_object_in_taxonomy($type, $name) ) {
             if ( $class = sanitize_html_class( \mb_strtolower($label) ) ) {
-                $markup .= '<dl class="meta-list entry-taxos entry-' . $class . '">';
                 $terms = get_the_term_list( $id, $name, '<li>', '</li><li>', '</li>' );
                 $void = $terms ? '' : ' void';
                 $markup .= "<dt class='taxo-label $class-label$void'>$label</dt>";
                 $markup .= "<dd class='taxo-value $class-value$void'>";
-                $markup .= '<ul class="term-list">' . $terms . '</ul></dd></dl>';
+                $markup .= '<ul class="term-list">' . $terms . '</ul></dd>';
             }
         }
     }
+    $markup = '<dl class="meta-list entry-taxos">' . $markup . '</dl>';
 
     $markup = apply_filters( '@entry_terms', $markup, $taxos );
     echo $markup;

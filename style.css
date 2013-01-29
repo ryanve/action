@@ -85,8 +85,9 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
     .entry-summary ~ .entry-meta { display:none; }
     
     .meta-list > dt, .meta-list > dd { display:inline-block; margin:0; }
+    .meta-list > dt { margin-right:.2em; }
     .meta-list > dt + dd { margin-left:.2em; }
-    .meta-list > dd + dt { margin-left:.5em; }
+    .meta-list > dd + dt { margin-left:.6em; }
     .meta-list > dt:after{ content: ": " }
     .meta-list > .void { display:none; }
     
@@ -94,7 +95,10 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
     .entry-terms { display:inline-block; }
     .entry-terms + .entry-terms { margin-left: .5em; }
     */
-    .entry-taxos { line-height:1; }
+
+    .entry-taxos > dt { display:block; float:left; }
+    .entry-taxos > dd + dt { margin-left:0; }
+    .entry-taxos > dd { display:block; }
     .entry-taxos .term-list { display:inline; padding-left:0; }
     .term-list li { display:inline; margin:0; }
     .term-list li + li:before { content: ", "; }
