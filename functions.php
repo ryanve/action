@@ -276,15 +276,16 @@ add_action ('@entry_footer', function () {
     global $wp_taxonomies;
     static $taxos;
 
+    echo apply_filters('@entry_pages', wp_link_pages(array(
+        'echo'   => 0
+      , 'before' => '<dl class="meta-list entry-pages"><dt>' . __('Pages') . '</dt><dd>'
+      , 'after'  => '</dd></dl>'
+    )));
+
     isset( $taxos ) or $taxos = \wp_list_pluck( $wp_taxonomies, 'label' );
     $id    = get_the_ID();
-    $type  = get_post_type( $id );
-    
-    $markup = wp_link_pages(array(
-        'echo'   => 0
-      , 'before' => '<dt class="pages-label">' . __('Pages') . '</dt><dd class="pages-value">'
-      , 'after'  => '</dd>'
-    ));
+    $type  = get_post_type( $id );   
+    $markup = '';
 
     foreach ( $taxos as $name => $label ) {
         if ( is_object_in_taxonomy($type, $name) ) {
@@ -299,7 +300,7 @@ add_action ('@entry_footer', function () {
     }
     $markup = '<dl class="meta-list entry-taxos">' . $markup . '</dl>';
 
-    $markup = apply_filters( '@entry_meta', $markup, $taxos );
+    $markup = apply_filters( '@entry_terms', $markup, $taxos );
     echo $markup;
 
 }, 20);
