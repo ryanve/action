@@ -278,7 +278,7 @@ add_action ('@entry_footer', function () {
 
     echo apply_filters('@entry_pages', wp_link_pages(array(
         'echo'   => 0
-      , 'before' => '<dl class="meta-list entry-pages"><dt>' . __('Pages') . '</dt><dd>'
+      , 'before' => '<dl class="meta-list entry-pages"><dt class="pages-label">' . __('Pages') . '</dt><dd class="pages-value">'
       , 'after'  => '</dd></dl>'
     )));
 
