@@ -197,8 +197,7 @@ add_action('@loop', function () {
     locate_template( 'loop-nav.php', true, false );
 }, 20);
 
-add_action('@entry', ns('entry_actions'), 0);
-function entry_actions () {
+add_action('@entry', apply_filters('@entry_actions', function () {
 
     static $ran; # prevent from running more than once
     if ( $ran = null !== $ran ) return;
@@ -226,7 +225,7 @@ function entry_actions () {
         # codex.wordpress.org/Function_Reference/comments_template
         comments_template( '/comments.php', true );
     }, 20);
-}
+}), 0);
 
 add_action('@entry_header', function () {
     $markup = '<h1 class="entry-title">';
@@ -474,8 +473,7 @@ add_filter('@comment_attrs', \function_exists('\\phat\\attrs') ? function () {
 }, 1);
 
 
-add_action('@comment', ns('comment_actions'), 0);
-function comment_actions () {
+add_action('@comment', apply_filters('@comment_actions', function () {
 
     static $ran; # prevent from running more than once
     if ( $ran = null !== $ran ) return;
@@ -508,7 +506,7 @@ function comment_actions () {
             echo apply_filters( '@comment_moderation', $markup);
         }
     }, 10);
-}
+}), 0);
 
 add_filter('the_author_posts_link', function ( $tag ) {
     # add hcard classes to the link if there's not already any classes
