@@ -196,8 +196,7 @@ add_action('@loop', function () {
 add_action('@entry', ns('entry_actions'), 0);
 function entry_actions () {
 
-    remove_action('@entry', __FUNCTION__, 0); # only run actions once
-    static $ran; # redundancy to prevent it being called twice by other means
+    static $ran; # prevent from running more than once
     if ( $ran = null !== $ran ) return;
 
     add_action('@entry', function () {# insert entry-header.php
@@ -475,24 +474,36 @@ add_filter('@comment_attrs', \function_exists('\\phat\\attrs') ? function () {
     return implode( ' ', $attrs );
 }, 1);
 
-add_filter('@comment', function () {
-    global $comment;
-    $markup = '<header class="comment-header">';
-    $markup .= apply_filters( '@comment_avatar', get_avatar( $comment, 60 ) );
-    $markup .= '<dl class="meta-list">'; 
-    $markup .= '<dt>' . __('By') . '</dt>'; 
-    $markup .= '<dd>' . get_comment_author_link() . '</dd>';
-    $markup .= '<dt class="published-label">' . __('Published') . '</dt>';
-    $markup .= '<dd class="published-value">' . get_comment_date() . '</dd>';
-    $markup .= '</dl></header>';
-    $markup .= '<div class="comment-content">';
-    $comment->comment_approved or $markup .= apply_filters( '@comment_moderation', 
-        '<p class="alert moderation">' . __( 'Your comment is awaiting moderation.' ) . '</p>' );
-    $markup .= get_comment_text( $comment->comment_ID );
-    $markup .= '</div>';
-    echo $markup;
-});
 
+add_action('@comment', ns('comment_actions'), 0);
+function comment_actions () {
+
+    static $ran; # prevent from running more than once
+    if ( $ran = null !== $ran ) return;
+
+    add_action('@comment', function () {
+        global $comment;
+        $markup = '<header class="comment-header">';
+        $markup .= apply_filters( '@comment_avatar', get_avatar( $comment, 60 ) );
+        $markup .= '<dl class="meta-list">'; 
+        $markup .= '<dt>' . __('By') . '</dt>'; 
+        $markup .= '<dd>' . get_comment_author_link() . '</dd>';
+        $markup .= '<dt class="published-label">' . __('Published') . '</dt>';
+        $markup .= '<dd class="published-value">' . get_comment_date() . '</dd>';
+        $markup .= '</dl></header>';
+        echo $markup;
+    }, 5);
+    
+    add_action('@comment', function () {
+        global $comment;
+        $markup .= '<div class="comment-content">';
+        $comment->comment_approved or $markup .= apply_filters( '@comment_moderation', 
+            '<p class="alert moderation">' . __( 'Your comment is awaiting moderation.' ) . '</p>' );
+        $markup .= get_comment_text( get_comment_ID() );
+        $markup .= '</div>';
+        echo $markup;
+    }, 10);
+}
 
 add_filter('the_author_posts_link', function ( $tag ) {
     # add hcard classes to the link if there's not already any classes
