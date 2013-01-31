@@ -482,21 +482,27 @@ function comment_actions () {
         $markup .= apply_filters( '@comment_avatar', get_avatar( $comment, 60 ) );
         $markup .= '<dl class="meta-list">'; 
         $markup .= '<dt>' . __('By') . '</dt>'; 
-        $markup .= '<dd>' . get_comment_author_link() . '</dd>';
+        $markup .= '<dd itemprop="creator">' . get_comment_author_link() . '</dd>';
         $markup .= '<dt class="published-label">' . __('Published') . '</dt>';
-        $markup .= '<dd class="published-value">' . get_comment_date() . '</dd>';
+        $markup .= '<dd class="published-value" itemprop="commentTime">' . get_comment_date() . '</dd>';
         $markup .= '</dl></header>';
-        echo $markup;
+        echo apply_filters( '@comment_header', $markup );
     }, 5);
     
     add_action('@comment', function () {
-        global $comment;
-        $markup = '<div class="comment-content">';
-        $comment->comment_approved or $markup .= apply_filters( '@comment_moderation', 
-            '<p class="alert moderation">' . __( 'Your comment is awaiting moderation.' ) . '</p>' );
+        $markup = '<div class="comment-content" itemprop="commentText">';
         $markup .= get_comment_text( get_comment_ID() );
         $markup .= '</div>';
         echo $markup;
+    }, 10);
+    
+    add_action('@comment', function () {
+        global $comment;
+        if ( ! $comment->comment_approved ) {
+            $markup = __( 'Your comment is awaiting moderation.' );
+            $markup = "<p class='alert' role='alert'>$markup</p>";
+            echo apply_filters( '@comment_moderation', $markup);
+        }
     }, 10);
 }
 
