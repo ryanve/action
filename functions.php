@@ -496,7 +496,7 @@ function comment_actions () {
     
     add_action('@comment', function () {
         global $comment;
-        $markup .= '<div class="comment-content">';
+        $markup = '<div class="comment-content">';
         $comment->comment_approved or $markup .= apply_filters( '@comment_moderation', 
             '<p class="alert moderation">' . __( 'Your comment is awaiting moderation.' ) . '</p>' );
         $markup .= get_comment_text( get_comment_ID() );
