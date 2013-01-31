@@ -7,6 +7,7 @@
  */
 
 namespace theme;
+# include_once( path_join(__DIR__, 'lib/phatml.php') );
  
 # Hooks created by the theme are prefixed with the '@' symbol 
 # as to not conflict with hooks created by the WordPress core.
@@ -448,23 +449,31 @@ add_filter('@list_comments', function ( $arr ) {
     return $arr;
 });
 
-add_filter('@comment_attrs', function () {
-    if ( \function_exists('\\phat\\attrs') ) {
-        # core.trac.wordpress.org/ticket/23236
-        $attrs = array(); 
-        $id = get_comment_ID();
-        $attrs['id'] = 'comment-' . $id;
-        $attrs['class'] = \implode( ' ', get_comment_class( '', $id ) );
-        if ( 'comment' === get_comment_type($id) ) {
-            $attrs['itemprop'] = 'comment';
-            $attrs['itemscope'] = '';
-            $attrs['itemtype'] = 'http://schema.org/UserComments';
-        }
-        return  \phat\attrs( $attrs );
+add_filter('@comment_attrs', \function_exists('\\phat\\attrs') ? function () {
+    # core.trac.wordpress.org/ticket/23236
+    $attrs = array(); 
+    $id = get_comment_ID();
+    is_singular() and $attrs['id'] = 'comment-' . $id;
+    $attrs['class'] = \implode( ' ', get_comment_class( '', $id ) );
+    if ( 'comment' === get_comment_type($id) ) {
+        $attrs['itemprop'] = 'comment';
+        $attrs['itemscope'] = '';
+        $attrs['itemtype'] = 'http://schema.org/UserComments';
     }
-    return '';
+    return  \phat\attrs( $attrs );
+} : function () {
+    $attrs = array(); 
+    $id = get_comment_ID();
+    is_singular() and $attrs[] = "id='comment-$id'";
+    $class = \implode( ' ', get_comment_class( '', $id ) );
+    $class and $attrs[] = "class='$class'";
+    if ( 'comment' === get_comment_type( $id ) ) {
+        $attrs[] = 'itemprop="comment"';
+        $attrs[] = 'itemscope';
+        $attrs[] = 'itemtype="http://schema.org/UserComments"';
+    }
+    return implode( ' ', $attrs );
 }, 1);
-
 
 add_filter('@comment', function () {
     global $comment;
