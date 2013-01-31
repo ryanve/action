@@ -5,11 +5,10 @@ global $comment;
 ?>
 
 	<li>
-		<article id="comment-<?php comment_ID(); ?>" class="comment">
-        
-            <?php do_action( '@comment' ); ?>
-
-		</article>
+		<article <?php echo apply_filters('@comment_attrs'
+         , 'id="comment-' . get_comment_ID() . '" class="comment"'); ?>><?php 
+            do_action( '@comment' ); 
+        ?></article>
 
     <?php 
     # "Note the lack of a trailing </li>. WordPress will add it 

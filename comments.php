@@ -28,9 +28,9 @@ if ( post_password_required() || ! post_type_supports( get_post_type(), 'comment
 
 	<?php if ( have_comments() ) { ?>
     
-		<h2 class="loop-title">
-            <?php comments_number(); ?>
-        </h2>
+        <h2 class="loop-title comments-title"><?php 
+            comments_number(); 
+        ?></h2>
 
 		<ol class="xoxo"><?php
                 # see the '@list_comments' filter in functions.php
@@ -46,11 +46,11 @@ if ( post_password_required() || ! post_type_supports( get_post_type(), 'comment
 		<?php } ?>
 
     <?php } ?>
+    
+    <?php 
+        if ( comments_open() )
+            comment_form();
+        else echo '<p class="status">' . __( 'Comments are closed.' ) . '</p>';
+    ?>
 
-	<?php if ( comments_open() ) { ?>
-          <?php comment_form(); ?>
-	<?php } else { ?>
-        <p class="status"><?php _e( 'Comments are closed.' ); ?></p>
-    <?php } ?>
-
-</div><!-- -->
+</div><!-- #comments -->

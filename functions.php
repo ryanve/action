@@ -451,19 +451,20 @@ add_filter('@list_comments', function ( $arr ) {
 
 add_filter('@comment', function () {
     global $comment;
-    if ( $comment ) {
-        $markup = '<header class="comment-header">';
-        $markup .= apply_filters( '@comment_avatar', get_avatar( $comment, 60 ) );
-        $markup .= '<dl class="meta-list">'; 
-        $markup .= '<dt>' . __('By') . '</dt><dd>' . get_comment_author_link() . '</dd>';
-        $markup .= '</dl></header>';
-        $markup .= '<div class="comment-content">';
-        $comment->comment_approved or $markup .= apply_filters( '@comment_moderation', 
-            '<p class="alert moderation">' . __( 'Your comment is awaiting moderation.' ) . '</p>' );
-        $markup .= get_comment_text( $comment->comment_ID );
-        $markup .= '</div>';
-        echo $markup;
-    }
+    $markup = '<header class="comment-header">';
+    $markup .= apply_filters( '@comment_avatar', get_avatar( $comment, 60 ) );
+    $markup .= '<dl class="meta-list">'; 
+    $markup .= '<dt>' . __('By') . '</dt>'; 
+    $markup .= '<dd>' . get_comment_author_link() . '</dd>';
+    $markup .= '<dt class="published-label">' . __('Published') . '</dt>';
+    $markup .= '<dd class="published-value">' . get_comment_date() . '</dd>';
+    $markup .= '</dl></header>';
+    $markup .= '<div class="comment-content">';
+    $comment->comment_approved or $markup .= apply_filters( '@comment_moderation', 
+        '<p class="alert moderation">' . __( 'Your comment is awaiting moderation.' ) . '</p>' );
+    $markup .= get_comment_text( $comment->comment_ID );
+    $markup .= '</div>';
+    echo $markup;
 });
 
 
