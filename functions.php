@@ -449,6 +449,24 @@ add_filter('@list_comments', function ( $arr ) {
 });
 
 
+add_filter('@comment', function () {
+    global $comment;
+    if ( $comment ) {
+        $markup = '<header class="comment-header">';
+        $markup .= apply_filters( '@comment_avatar', get_avatar( $comment, 60 ) );
+        $markup .= '<dl class="meta-list">'; 
+        $markup .= '<dt>' . __('By') . '</dt><dd>' . get_comment_author_link() . '</dd>';
+        $markup .= '</dl></header>';
+        $markup .= '<div class="comment-content">';
+        $comment->comment_approved or $markup .= apply_filters( '@comment_moderation', 
+            '<p class="alert moderation">' . __( 'Your comment is awaiting moderation.' ) . '</p>' );
+        $markup .= get_comment_text( $comment->comment_ID );
+        $markup .= '</div>';
+        echo $markup;
+    }
+});
+
+
 add_filter('the_author_posts_link', function ( $tag ) {
     # add hcard classes to the link if there's not already any classes
     if ( false !== strpos( $tag, 'class=' ) )
