@@ -116,6 +116,10 @@ add_action('after_setup_theme', function () {
     remove_action( 'wp_head', 'wp_generator' ); # better security w/o this
 });
 
+add_filter('@html_tag', function () {
+    return '<html lang="' . get_bloginfo('language') . '" dir="' . (is_rtl() ? 'rtl' : 'ltr') . '">';
+}, 0);
+
 add_action( '@header', function () {
     locate_template( 'branding.php', true, false );
 }, apply_filters('@branding_priority', 10) );

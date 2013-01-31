@@ -5,7 +5,7 @@ namespace theme;
 # codex.wordpress.org/Theme_Review#Template_Tags_and_Hooks
 
 ?><!DOCTYPE html>
-<?php echo apply_filters( '@html_tag', '<html lang="' . get_bloginfo('language') . '">' ); ?>
+<?php echo apply_filters( '@html_tag', '<html>' ); ?>
 
 <head>
 <?php wp_head(); # use action hooks ?>
