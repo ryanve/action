@@ -1,34 +1,37 @@
 <?php
-namespace theme;
-
 /**
- * @requires PHP 5.3+
+ * @link     actiontheme.com
+ * @author   Ryan Van Etten
  * @license  MIT
- * @author   Ryan Van Etten <@ryanve>
- * @link     github.com/ryanve/action
- *
- * Hooks created by the theme are prefixed with the '@' symbol 
- * as not to conflict with hooks created by the WordPress core.
- * Lines marked with '#wp' use non-obvious WordPress functions. 
- *
- * @link  codex.wordpress.org/Function_Reference/add_action
- * @link  codex.wordpress.org/Function_Reference/add_filter
- * @link  codex.wordpress.org/Plugin_API/Action_Reference
+ * @uses     PHP 5.3+
  */
 
-# Basic functions for working in namespaces:
-
-/**
- *
- */
-if ( ! \function_exists( __NAMESPACE__ . '\\ns' ) ) {
-    function ns ( $name ) {
-        return __NAMESPACE__ . '\\' . ltrim( $name, '\\' );
-    }
-}
+namespace theme;
+ 
+# Hooks created by the theme are prefixed with the '@' symbol 
+# as to not conflict with hooks created by the WordPress core.
+# @link  codex.wordpress.org/Plugin_API/Action_Reference
+# @link  codex.wordpress.org/Function_Reference/add_action
+# @link  codex.wordpress.org/Function_Reference/add_filter
  
 /**
- *
+ * Convert a function name or class name from a namespace into a 
+ * fully-qualified name. In other words, prefix it with the namespace.
+ * @param   string   A local function name or class name.
+ * @param   string=  The namespace. Defaults to the current namespace.
+ */
+if ( ! \function_exists( __NAMESPACE__ . '\\ns' ) ) {
+    function ns ( $name, $ns = null ) {
+        $ns or $ns = __NAMESPACE__;
+        return $ns . '\\' . \ltrim( $name, '\\' );
+    }
+}
+
+/**
+ * Check if a function name or class name exists in the current namespace.
+ * @param   string   $name
+ * @param   string=  $what
+ * @return  bool
  */
 if ( ! \function_exists( __NAMESPACE__ . '\\exists' ) ) {
     function exists ( $name, $what = 'function' ) {
