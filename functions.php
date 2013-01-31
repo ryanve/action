@@ -16,12 +16,6 @@ namespace theme;
  * @link  codex.wordpress.org/Plugin_API/Action_Reference
  */
 
-# Load Hybrid Core ( themehybrid.com/hybrid-core/setup ) if present.
-if ( \file_exists( __DIR__ . '/hybrid-core/hybrid.php' ) ) {
-    require_once( __DIR__ . '/hybrid-core/hybrid.php' );
-    \class_exists('\Hybrid') and $hybrid = new \Hybrid();
-}
-
 # Basic functions for working in namespaces:
 
 /**
