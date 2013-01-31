@@ -88,7 +88,7 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
     .meta-list > dt, .meta-label { margin-right:.2em; }
     .meta-list > dt + dd, .meta-label + .meta-value { margin-left:.2em; }
     .meta-list > dd + dt, .meta-value + .meta-label { margin-left:.6em; }
-    .meta-list > dt:after, .meta-label:after  { content: ": " }
+    .meta-list > dt:after, .meta-label:after  { content: ":" }
     .void { display:none !important; }
     
     .meta-label { font-size:inherit; font-weight:bold; }
