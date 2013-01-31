@@ -16,11 +16,10 @@ namespace theme;
  * @link  codex.wordpress.org/Plugin_API/Action_Reference
  */
 
-  
 # Load Hybrid Core ( themehybrid.com/hybrid-core/setup ) if present.
 if ( \file_exists( __DIR__ . '/hybrid-core/hybrid.php' ) ) {
-     # require_once( __DIR__ . '/hybrid-core/hybrid.php' );
-     # \class_exists('\Hybrid') and $hybrid = new \Hybrid();
+    require_once( __DIR__ . '/hybrid-core/hybrid.php' );
+    \class_exists('\Hybrid') and $hybrid = new \Hybrid();
 }
 
 # Basic functions for working in namespaces:
@@ -438,15 +437,36 @@ add_action ('wp_head', function () {
 
 # comments callback ( see comments.php )
 # codex.wordpress.org/Function_Reference/wp_list_comments
+# wp-includes/comment-template.php
 add_filter('@list_comments', function ( $arr ) {
     null === $arr['callback'] and $arr['callback'] = function ( $comment, $arr, $depth ) {
         $GLOBALS['comment'] = $comment;
         $GLOBALS['comment_depth'] = $depth;
-        $comment_type = get_comment_type( $comment->comment_ID ); #wp-includes/comment-template.php
-        locate_template( array( 'comment-' . $comment_type . '.php', 'comment.php' ), true, false ); #wp
+        $attrs;
+        $attrs = apply_filters( '@comment_attrs', $attrs );
+        echo "<li><article $attrs>"; 
+        do_action( '@comment' );
+        echo '</article>'; 
     };
     return $arr;
 });
+
+add_filter('@comment_attrs', function () {
+    if ( \function_exists('\\phat\\attrs') ) {
+        # core.trac.wordpress.org/ticket/23236
+        $attrs = array(); 
+        $id = get_comment_ID();
+        $attrs['id'] = 'comment-' . $id;
+        $attrs['class'] = \implode( ' ', get_comment_class( '', $id ) );
+        if ( 'comment' === get_comment_type($id) ) {
+            $attrs['itemprop'] = 'comment';
+            $attrs['itemscope'] = '';
+            $attrs['itemtype'] = 'http://schema.org/UserComments';
+        }
+        return  \phat\attrs( $attrs );
+    }
+    return '';
+}, 1);
 
 
 add_filter('@comment', function () {
@@ -474,7 +494,3 @@ add_filter('the_author_posts_link', function ( $tag ) {
         return $tag;
     return str_replace( ' href=', ' class="url fn n" href=', $tag );
 });
-
-
-
-

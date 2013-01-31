@@ -24,33 +24,34 @@ if ( post_password_required() || ! post_type_supports( get_post_type(), 'comment
     # Should .comments be on the container or the list? .hfeed? See links above.
     # Todo: maybe add filter(s) for the attrs.
 ?>
-<div <?php if ( is_singular() ) echo 'id="comments" '; ?>class="hfeed">
 
-	<?php if ( have_comments() ) { ?>
-    
-        <h2 class="loop-title comments-title"><?php 
-            comments_number(); 
-        ?></h2>
+                        <aside <?php echo ((is_singular() ? 'id="comments"' : '') . (' class="comments"')); ?>>
 
-		<ol class="xoxo"><?php
-                # see the '@list_comments' filter in functions.php
-                wp_list_comments( apply_filters( '@list_comments', array( 'style' => 'ol', 'avatar_size' => 60 ) ) ); 
-        ?></ol><!-- /.xoxo -->
+                            <?php if ( have_comments() ) { ?>
+                            
+                                <h2 class="loop-title comments-title"><?php 
+                                    comments_number(); 
+                                ?></h2>
 
-		<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) { // "paged" comments ?>
-		<nav>
-			<h3 class="assistive"><?php _e( 'Comment navigation' ); ?></h3>
-            <?php previous_comments_link( apply_filters( '@comments_older', __( '&laquo; ' . 'Older' ) ) ); ?>
-            <?php next_comments_link( apply_filters( '@comments_newer', __( 'Newer' ) . ' &raquo;' ) ); ?>
-		</nav>
-		<?php } ?>
+                                <ol class="xoxo comments"><?php
+                                        # see the '@list_comments' filter in functions.php
+                                        wp_list_comments( apply_filters( '@list_comments', array( 'style' => 'ol', 'avatar_size' => 60 ) ) ); 
+                                ?></ol><!-- /.xoxo -->
 
-    <?php } ?>
-    
-    <?php 
-        if ( comments_open() )
-            comment_form();
-        else echo '<p class="status">' . __( 'Comments are closed.' ) . '</p>';
-    ?>
+                                <?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) { // "paged" comments ?>
+                                <nav>
+                                    <h3 class="assistive"><?php _e( 'Comment navigation' ); ?></h3>
+                                    <?php previous_comments_link( apply_filters( '@comments_older', __( '&laquo; ' . 'Older' ) ) ); ?>
+                                    <?php next_comments_link( apply_filters( '@comments_newer', __( 'Newer' ) . ' &raquo;' ) ); ?>
+                                </nav>
+                                <?php } ?>
 
-</div><!-- #comments -->
+                            <?php } ?>
+                            
+                            <?php 
+                                if ( comments_open() )
+                                    comment_form();
+                                else echo '<p class="status">' . __( 'Comments are closed.' ) . '</p>';
+                            ?>
+
+                        </aside>
