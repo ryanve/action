@@ -302,11 +302,6 @@ add_action ('@entry_footer', function () {
 
 }, 20);
 
-add_action ('@entry', function () {
-    # codex.wordpress.org/Function_Reference/comments_templatey
-    is_singular() and comments_template( '/comments.php', true );
-}, 30);
-
 # Remove version from URI query strings to improve caching.
 \call_user_func(function ( $unversion ) {
     // add_filter( 'style_loader_src', $unversion );
