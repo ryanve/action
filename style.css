@@ -37,7 +37,7 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
     img, a.block { border:0; }
     
     html { color:#222; background:#ffd; }
-    body { font-size:1em; line-height:1.4em; } /* All text is relative to this. */
+    body { font-size:1em; line-height:1.6em; } /* All text is relative to this. */
 
     /* $selection rules must be declared separately */
     ::-moz-selection { background:#09b;color:#ffd; text-shadow:none }
@@ -73,13 +73,14 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
    $entries
    ========================================================================== */
 
-    .hentry { margin:2em 0 }
-    .hentry:first-child { margin-top:0 }
-    .hentry:last-child { margin-bottom:0 }
-    .entry-title { margin:.2em 0 }
+    .hentry { margin:2em 0; }
+    .hentry:first-child { margin-top:0; }
+    .hentry:last-child { margin-bottom:0; }
+    .entry-title { margin:.2em 0; }
     
-    .byline { margin-top:.5em; }
     .byline address { display:inline-block; font-style:normal; }
+    .byline { margin:.5em 0; }
+    .entry-summary p:first-child { margin-top:0; }
     
     /* Hide .entry-meta for excerpt views. */
     .entry-summary ~ .entry-meta { display:none; }
@@ -142,15 +143,19 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
     body {
         margin:0 auto; /* centering */
         width:96%; /* implies 2% padding */
-        max-width:1000px; 
+        max-width:1024px; 
     }
     
     #header, #grid, #footer { clear:both; margin:0 auto; }
     #branding { margin-bottom:1em; }
     #site-title {}
-    #site-description { display:none; }
+    #site-description {}
+    
+    .hentry,.widget-area {}
+    .wp-post-image { max-width:240px; float:left; margin:0 2% 1em 0; }
     
     #header-widget-area { padding:1em; clear:left; }
+    .hentry { clear:both }
 
     .widget-area > ul { list-style-type:none; padding-left:0; }
     .widgettitle { }
@@ -161,8 +166,10 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
     #main { clear:left; }
 
     @media all and (min-width:40em) {
-        :not(.full-width) #main { width:64%; float:left; clear:left; }
-        :not(.full-width) #sidebar  { width:30%; float:right; clear:right; }
+        :not(.full-width) #main { width:62.5%; float:left; clear:left; }
+        :not(.full-width) #sidebar  { width:29.297%; float:right; clear:right; }
         #branding { float:left; }
         #menu { float:right; margin:0 0 2em 4%; }
     }
+    
+    form label { margin-right:.6em; }

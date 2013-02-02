@@ -202,14 +202,21 @@ add_action('@entry', apply_filters('@entry_actions', function () {
 
     static $ran; # prevent from running more than once
     if ( $ran = null !== $ran ) return;
-
-    add_action('@entry', function () {# insert entry-header.php
-        include ( locate_template( 'entry-header.php', false, false ) );
-    }, 5);
     
     # allow the '@content_mode' to be changed between iterations
     # truthy => content | falsey => excerpt
     $content_mode = apply_filters( '@content_mode', is_singular() );
+    
+    $content_mode or current_theme_supports( 'post-thumbnails' ) && add_filter('@thumbnail', function () {
+        if ( $size = apply_filters( '@thumbnail_size', 'thumbnail' ) )
+            if ( $img = get_the_post_thumbnail( null, $size, array( 'itemprop' => 'image' ) ) )
+                return ( $url = get_permalink() ) && \strip_tags( $img, '<img>' ) === $img
+                    ? "<a itemprop='url' rel='bookmark' href='$url'>$img</a>" : $img;
+    }, 0);
+
+    add_action('@entry', function () {# insert entry-header.php
+        include ( locate_template( 'entry-header.php', false, false ) );
+    }, 5);
 
     add_action('@entry', $content_mode ? function () {
         include ( locate_template( 'entry-content.php', false, false ) );
@@ -229,16 +236,9 @@ add_action('@entry', apply_filters('@entry_actions', function () {
 }), 0);
 
 add_action('@entry_header', function () {
-
-    $markup = '';
-    $url = get_permalink();
-    
-    current_theme_supports('post-thumbnails')
-        and ($img = get_the_post_thumbnail(null, 'thumbnail', array( 'itemprop' => 'image' )))
-        and ($markup .= "<a itemprop='url' rel='bookmark' href='$url'>$img</a>");
-
-    $markup .= '<h1 class="entry-title">';
-    $markup .= '<a itemprop="url" rel="bookmark" href="' . $url . '">';
+    echo apply_filters( '@thumbnail', null );
+    $markup  = '<h1 class="entry-title">';
+    $markup .= '<a itemprop="url" rel="bookmark" href="' . get_permalink() . '">';
     $markup .= '<span class="headline name">' . get_the_title() . '</span></a></h1>';
     echo apply_filters( '@headline', $markup );
 }, 5);
@@ -437,6 +437,24 @@ add_action ('wp_head', function () {
     $tag = '<meta name="viewport" content="width=device-width,initial-scale=1.0">';
     echo ltrim( apply_filters( '@meta_viewport', $tag ) . "\n" );
 }, -1 ); 
+
+/* port to plugin
+   github.com/ryanve/image_src
+add_action('wp_head', function () {
+    $src;
+    is_singular()
+        and current_theme_supports( 'post-thumbnails' )
+        and ( $id = get_post_thumbnail_id() )
+        and ( $type = apply_filters( '@thumbnail_size', 'thumbnail' ) )
+        and ( $src = wp_get_attachment_image_src( $id, $type ) )
+        and ( $src = \is_array( $src ) ? $src[0] : $src );
+    $raw = $src = apply_filters( '@image_src', $src );
+    $src and $src = \strip_tags( (string) $src ); 
+    if ( $src && $src === $raw && $src === esc_attr( $src ) ) # ensure valid html below
+        echo "<link rel='image_src' href='$src'>\n"; 
+});
+*/
+
 
 
 # comments callback ( see comments.php )
