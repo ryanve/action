@@ -229,12 +229,16 @@ add_action('@entry', apply_filters('@entry_actions', function () {
 }), 0);
 
 add_action('@entry_header', function () {
+
     $markup = '';
     $url = get_permalink();
-    $img = get_the_post_thumbnail(null, 'thumbnail', array( 'itemprop' => 'image' ));
-    $img and $markup .= "<a itemprop='url' rel='bookmark' href='$url'>$img</a>";
+    
+    current_theme_supports('post-thumbnails')
+        and ($img = get_the_post_thumbnail(null, 'thumbnail', array( 'itemprop' => 'image' )));
+        and ($markup .= "<a itemprop='url' rel='bookmark' href='$url'>$img</a>");
+
     $markup .= '<h1 class="entry-title">';
-    $markup .= '<a itemprop="url" rel="bookmark" href="' . $link . '">';
+    $markup .= '<a itemprop="url" rel="bookmark" href="' . $url . '">';
     $markup .= '<span class="headline name">' . get_the_title() . '</span></a></h1>';
     echo apply_filters( '@headline', $markup );
 }, 5);
