@@ -234,7 +234,7 @@ add_action('@entry_header', function () {
     $url = get_permalink();
     
     current_theme_supports('post-thumbnails')
-        and ($img = get_the_post_thumbnail(null, 'thumbnail', array( 'itemprop' => 'image' )));
+        and ($img = get_the_post_thumbnail(null, 'thumbnail', array( 'itemprop' => 'image' )))
         and ($markup .= "<a itemprop='url' rel='bookmark' href='$url'>$img</a>");
 
     $markup .= '<h1 class="entry-title">';
