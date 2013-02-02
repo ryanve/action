@@ -114,7 +114,8 @@ add_filter('body_class', function ($array) {
 # Actions to be run on the 'after_setup_theme' hook:
 add_action('after_setup_theme', function () {
     remove_action( 'wp_head', 'wp_generator' ); # better security w/o this
-});
+    add_theme_support( 'post-thumbnails' ); # "featured image"
+}, 0);
 
 add_filter('@html_tag', function () {
     return '<html lang="' . get_bloginfo('language') . '" dir="' . (is_rtl() ? 'rtl' : 'ltr') . '">';
@@ -228,9 +229,13 @@ add_action('@entry', apply_filters('@entry_actions', function () {
 }), 0);
 
 add_action('@entry_header', function () {
-    $markup = '<h1 class="entry-title">';
-    $markup .= '<a itemprop="url headline name" rel="bookmark" href="' . get_permalink() . '">';
-    $markup .= get_the_title() . '</a></h1>';
+    $markup = '';
+    $url = get_permalink();
+    $img = get_the_post_thumbnail(null, 'thumbnail', array( 'itemprop' => 'image' ));
+    $img and $markup .= "<a itemprop='url' rel='bookmark' href='$url'>$img</a>";
+    $markup .= '<h1 class="entry-title">';
+    $markup .= '<a itemprop="url" rel="bookmark" href="' . $link . '">';
+    $markup .= '<span class="headline name">' . get_the_title() . '</span></a></h1>';
     echo apply_filters( '@headline', $markup );
 }, 5);
 
