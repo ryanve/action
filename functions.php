@@ -438,25 +438,6 @@ add_action ('wp_head', function () {
     echo ltrim( apply_filters( '@meta_viewport', $tag ) . "\n" );
 }, -1 ); 
 
-/* port to plugin
-   github.com/ryanve/image_src
-add_action('wp_head', function () {
-    $src;
-    is_singular()
-        and current_theme_supports( 'post-thumbnails' )
-        and ( $id = get_post_thumbnail_id() )
-        and ( $type = apply_filters( '@thumbnail_size', 'thumbnail' ) )
-        and ( $src = wp_get_attachment_image_src( $id, $type ) )
-        and ( $src = \is_array( $src ) ? $src[0] : $src );
-    $raw = $src = apply_filters( '@image_src', $src );
-    $src and $src = \strip_tags( (string) $src ); 
-    if ( $src && $src === $raw && $src === esc_attr( $src ) ) # ensure valid html below
-        echo "<link rel='image_src' href='$src'>\n"; 
-});
-*/
-
-
-
 # comments callback ( see comments.php )
 # codex.wordpress.org/Function_Reference/wp_list_comments
 # wp-includes/comment-template.php
