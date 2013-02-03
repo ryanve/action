@@ -135,7 +135,7 @@ add_action('@header', function () {
           , 'container'      => false
           , 'echo'           => false
           , 'menu_class'     => 'nav'
-          , 'items_wrap'     => '<ul class="%2$s">'
+          , 'items_wrap'     => '<ul class="%2$s-list">'
                 . '<li class="assistive"><a href="#main" accesskey="5">Skip</a></li>%3$s</ul>'
     )) . '</nav>' . "\n\n");
 }, apply_filters('@menu_priority', 10));
