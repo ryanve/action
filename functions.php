@@ -132,9 +132,11 @@ add_action('@header', function () {
     $skip and $skip = \trim( \strip_tags( $skip, '<a>' ) );
     $skip = $skip ? '<li class="assistive focusable">' . $skip . '</li>' : '';
     
+    $attrs = 'id="menu" role="navigation" class="invert-anchors"';
+    $attrs = apply_filters( '@menu_attrs', $attrs );
+
     echo apply_filters('@menu', \str_repeat( ' ', 8 )
-      . '<nav id="menu" role="navigation">'
-      . '<h2 class="assistive menu-toggle">Menu</h2>'
+      . "<nav $attrs><h2 class='assistive menu-toggle'>Menu</h2>"
       . wp_nav_menu(array(
             'theme_location' => 'menu'
           , 'container'      => false
@@ -356,8 +358,13 @@ add_action( 'init', function () {
     
     } else { # Frontend-specific actions
     
-        # Enqueue style.css
-        wp_enqueue_style( 'style', get_stylesheet_uri(), array(), null, null );
+        # Enqueue base.css and style.css
+        $base = '/base.css';
+        if ( \file_exists( \rtrim( get_stylesheet_directory(), '/' ) . $base ) )
+             $base = \rtrim( get_stylesheet_directory_uri()  , '/' ) . $base;
+        else $base = \rtrim( get_template_directory_uri()    , '/' ) . $base;
+        wp_enqueue_style( 'base', $base, array(), null, null );
+        wp_enqueue_style( 'style', get_stylesheet_uri(), array(), null, 'screen,projection,tty,tv' );
         
         # Enqueue Modernizr
         $modernizr_uri and wp_enqueue_script( 'modernizr' );
