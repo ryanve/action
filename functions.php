@@ -125,8 +125,13 @@ add_action( '@header', function () {
     locate_template( 'branding.php', true, false );
 }, apply_filters('@branding_priority', 10) );
 
-# still testing this
 add_action('@header', function () {
+
+    $skip = '<a href="#main" accesskey="5">' . __( 'Skip' ) . '</a>';
+    $skip = apply_filters( '@menu_skip_anchor', $skip );
+    $skip and $skip = \trim( \strip_tags( $skip, '<a>' ) );
+    $skip = $skip ? '<li class="assistive focusable">' . $skip . '</li>' : '';
+    
     echo apply_filters('@menu', \str_repeat( ' ', 8 )
       . '<nav id="menu" role="navigation">'
       . '<h2 class="assistive menu-toggle">Menu</h2>'
@@ -135,10 +140,10 @@ add_action('@header', function () {
           , 'container'      => false
           , 'echo'           => false
           , 'menu_class'     => 'nav'
-          , 'items_wrap'     => '<ul class="%2$s-list">'
-                . '<li class="assistive"><a href="#main" accesskey="5">Skip</a></li>%3$s</ul>'
+          , 'items_wrap'     => '<ul>' . $skip . '%3$s</ul>'
     )) . '</nav>' . "\n\n");
-}, apply_filters('@menu_priority', 10));
+
+}, apply_filters( '@menu_priority', 10));
 
 add_action('@header', function () {
     is_active_sidebar('header') and get_sidebar('header');
