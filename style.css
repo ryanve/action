@@ -17,14 +17,14 @@
    
     @media screen, tv {
         a { color:#09b; text-decoration:none; }
-        a:hover { color:#409; }
+        a:hover { color:#509; }
         .invert-anchors a { color:#ffd; background:#09b; }
-        .invert-anchors a:hover { background:#409; }
+        .invert-anchors a:hover { background:#509; }
     }
     img, a.block { border:0; }
     
     html { color:#222; background:#ffd; }
-    body { font-size:1em; line-height:1.6em; } /* All text is relative to this. */
+    body { font-size:1.1em; line-height:1.8em; } /* All text is relative to this. */
 
     /* $selection rules must be declared separately */
     ::-moz-selection { background:#09b;color:#ffd; text-shadow:none }
@@ -154,9 +154,11 @@
 
     @media all and (min-width:40em) {
         :not(.full-width) #main { width:62.5%; float:left; clear:left; }
-        :not(.full-width) #sidebar  { width:29.297%; float:right; clear:right; }
+        :not(.full-width) #sidebar  { width:31.25%; float:right; clear:right; }
         #branding { float:left; }
         #menu { float:right; margin:0 0 2em 4%; }
     }
+    
+    
     
     form label { margin-right:.6em; }
