@@ -194,7 +194,7 @@ add_action('@entry', apply_filters('@entry_actions', function () {
         include ( locate_template( 'entry-footer.php', false, false ) );
     }, 15);
     
-    $content_mode && is_singular() and add_action('@entry', function () {
+    is_singular() and add_action('@entry', function () {
         # codex.wordpress.org/Function_Reference/comments_template
         comments_template( '/comments.php', true );
     }, 20);
@@ -345,6 +345,10 @@ add_action( 'init', function () {
         
         # Enqueue Modernizr
         $modernizr_uri and wp_enqueue_script( 'modernizr' );
+        
+        # required for theme approval
+        # codex.wordpress.org/Migrating_Plugins_and_Themes_to_2.7/Enhanced_Comment_Display
+        is_singular() and wp_enqueue_script( 'comment-reply' );
     
         # Google Analytics
         if ( $gaq = apply_filters( '@gaq', array() ) ) {
