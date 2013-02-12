@@ -48,7 +48,7 @@ add_filter('body_class', function ($array) {
 
 # Actions to be run on the 'after_setup_theme' hook:
 add_action('after_setup_theme', function () {
-    remove_action( 'wp_head', 'wp_generator' ); # better security w/o this
+    \defined('WP_DEBUG') && WP_DEBUG or remove_action( 'wp_head', 'wp_generator' ); # tighten security
     add_theme_support( 'post-thumbnails' ); # "featured image"
 }, 0);
 
