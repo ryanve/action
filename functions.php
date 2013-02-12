@@ -278,15 +278,6 @@ add_action ('@entry_footer', function () {
 
 }, 20);
 
-# Remove version from URI query strings to improve caching.
-\call_user_func(function ( $unversion ) {
-    // add_filter( 'style_loader_src', $unversion );
-    // is_admin() or add_filter( 'script_loader_src', $unversion );
-}, function ( $src ) {
-    # codex.wordpress.org/Function_Reference/remove_query_arg
-    return remove_query_arg('ver', $src); #wp
-});
-
 add_action('@after_footer', function () {
     $url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']; ?>
 
