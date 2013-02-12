@@ -56,6 +56,20 @@ add_filter('@html_tag', function () {
     return '<html lang="' . get_bloginfo('language') . '" dir="' . (is_rtl() ? 'rtl' : 'ltr') . '">';
 }, 0);
 
+add_action('@body', apply_filters('@body_actions', function () {
+
+    static $ran; # prevent from running more than once
+    if ( $ran = null !== $ran ) return;
+
+    add_action( '@body', 'get_header' , 5 );
+    add_action( '@body', function () {
+        include ( locate_template( 'main.php', false, false ) );
+    }, 10 );
+    add_action( '@body', 'get_sidebar', 20 );
+    add_action( '@body', 'get_footer' , 30 );
+
+}), 0);
+
 add_action( '@header', function () {
     locate_template( 'branding.php', true, false );
 }, apply_filters('@branding_priority', 10) );
