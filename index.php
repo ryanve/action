@@ -9,13 +9,13 @@ namespace theme;
 }); 
 
 ?><!DOCTYPE html>
-<?php echo apply_filters( '@html_tag', '<html>' ); ?>
+<?php echo apply_filters( '@html_tag', '<html>' ); # @html_attrs in functions.php ?>
 
 <head>
 <?php wp_head(); # all head tags load via this hook ?>
 </head>
 
-<?php echo apply_filters( '@body_tag', '<body class="'. \implode( ' ', get_body_class() ) . '">' ); ?>
+<?php echo apply_filters( '@body_tag', '<body>' ); # @body_attrs in functions.php ?>
 
 <?php do_action( '@body' ); # all sections load via this hook ?>
 

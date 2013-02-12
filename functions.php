@@ -53,7 +53,15 @@ add_action('after_setup_theme', function () {
 }, 0);
 
 add_filter('@html_tag', function () {
-    return '<html lang="' . get_bloginfo('language') . '" dir="' . (is_rtl() ? 'rtl' : 'ltr') . '">';
+    $attrs = 'lang="' . get_bloginfo('language') . '" dir="' . (is_rtl() ? 'rtl' : 'ltr') . '"';
+    $attrs = apply_filters( '@html_attrs', $attrs );
+    return "<html $attrs>";
+}, 0);
+
+add_filter('@body_tag', function () {
+    $class = \implode( ' ', get_body_class() );
+    $attrs = apply_filters( '@body_attrs', "class='$class'" );
+    return "<body $attrs>";
 }, 0);
 
 add_action('@body', apply_filters('@body_actions', function () {
