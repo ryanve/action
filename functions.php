@@ -7,14 +7,15 @@
  */
 
 namespace theme;
-# include_once( path_join(__DIR__, 'lib/phatml.php') );
+# Theme files use the generic namespace "theme" to prevent
+# conflicts with WP core, plugin, or native PHP functions. 
+# php.net/manual/en/language.namespaces.php
  
 # Hooks created by the theme are prefixed with the '@' symbol 
 # as to not conflict with hooks created by the WordPress core.
 # @link  codex.wordpress.org/Plugin_API/Action_Reference
 # @link  codex.wordpress.org/Function_Reference/add_action
 # @link  codex.wordpress.org/Function_Reference/add_filter
-
 
 # wrap the translate functions w/in the theme namespace so
 # the $textdomain param is automatically added if omitted.
