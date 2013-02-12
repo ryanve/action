@@ -106,19 +106,29 @@
     .term-list li { display:inline; margin:0; }
     .term-list li + li:before { content: ", "; }
     
-     /* comments */
+     #comments, #disqus_thread { clear:both; }
+     form label { margin-right:.6em; }
     .xoxo { list-style-type:none; padding-left:0; } /* microformats.org/wiki/xoxo */
     .comment .avatar  { float:left; margin-bottom:1em; margin-right:4%; }
-    form label { margin-right:.6em; }
     
 /* ==========================================================================
    $editor
    bit.ly/wp-theme-review#WordPress-Generated_CSS_Classes
    ========================================================================== */
+
+    .wp-caption { display:block; }
+    article figure + figure, .wp-caption + .wp-caption { margin-top:1.1em; }
+    figcaption, .wp-caption-text { padding-top:.5em; padding-bottom:.5em; }
+    .wp-caption-text { margin:0; }
+    figcaption:first-child { padding-top:0; padding-bottom:0; } /* revert if caption is on top */
+   
     .alignnone, .alignleft, .alignright, .aligncenter { display:block; margin:1.1em 0; }
     .aligncenter { margin-left:auto; margin-right:auto; }
     .alignleft { float:left; margin-right:4%; }
     .alignright { float:right; margin-left:4%; }
+    
+    .sticky {}
+    .bypostauthor {}
 
 /* ==========================================================================
    $layout
