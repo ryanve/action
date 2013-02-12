@@ -177,16 +177,15 @@ add_filter('next_posts_link_attributes', function ( $attrs = '' ) {
 });
 
 add_action('@loop', function () {
-    # prev / next links
-    $markup = get_posts_nav_link(array(
-        'sep' => ' '
-      , 'prelabel' => '<span>' . __('Prev') . '</span>'
-      , 'nxtlabel' => '<span>' . __('Next') . '</span>'
-    ));
-    $markup = "<nav class='loop-nav invert-anchors'>$markup</nav>";
-    echo $markup;
+    echo "\n" . \str_repeat( ' ', 12 ) . '<nav class="loop-nav invert-anchors">';
+    if ( is_singular() ) {
+        previous_post_link('%link');
+        next_post_link('%link');
+    } else {
+        posts_nav_link(' ', '<span>' . __('Prev') . '</span>', '<span>' . __('Next') . '</span>');
+    }
+    echo "</nav>\n";
 }, 15);
-
 
 
 add_action('@loop', function () {
