@@ -317,35 +317,6 @@ add_action( 'init', function () {
 
 });
 
-# experimental
-add_filter( 'style_loader_tag', function ( $html, $handle ) {
-    
-    $source = new \DOMDocument;
-    $source->loadHtml($html);
-    $node = $source->getElementsByTagName('link')->item(0);
-    
-    if ( $node->getAttribute('rel') !== 'stylesheet' )
-        return $html;
-
-    $attrs = apply_filters( '@stylesheet_attributes', array(), $handle );
-    if ( !is_array($attrs) )
-        return $html;
-    unset ($attrs['rel']);
-
-    # remove uneeded defaults
-    foreach ( array('media' => 'all', 'type' => 'text/css') as $k => $v )
-        empty($attrs[$k]) && $node->getAttribute($k) === $v and $node->removeAttribute($k);
-
-    # add custom attrs
-    foreach ( $attrs as $k => $v )
-        empty($v) or ( is_int($k) ? $node->getAttribute($v, '') : $node->getAttribute($k, $v) );
-
-    $output = new \DOMDocument;        
-    $output->appendChild( $output->importNode($node, true) );    
-    return $output->saveHtml();
-
-}, 12, 2);
-
 add_filter( '@output', function ( $html ) {
 
     # The '@output' filter is mainly designed for use 
@@ -359,12 +330,6 @@ add_filter( '@output', function ( $html ) {
 
     return $html;
 
-});
-
-# testing ( not in use )
-add_action ('$script', function ($node) {
-    $node->setAttribute('data-yea', 'aaaaa');
-    $node->removeAttribute('type');
 });
 
 # early priority <head> actions
