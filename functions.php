@@ -188,27 +188,8 @@ add_action('@entry_header', function () {
 add_action('@entry_header', function () {
 
     global $authordata;    
-    $markup = '<dl class="byline meta-list">';
-	\is_object( $authordata )
-        and ( $link = get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ) # href
-        and ( $link = "<a href='$link' class='url fn n' itemprop='author' rel='author'>" . get_the_author() .'</a>' )
-        and ( $link = apply_filters( 'the_author_posts_link', $link ) ) #wp: the_author_posts_link()
-        and $markup .= '<dt class="author-label">' . __('By') . '</dt><dd class="author-value vcard">' . $link . '</dd>';
 
-    $time_item = function ( $arr ) {
-        \extract( $arr );
-        $date = \call_user_func( $fn ); # Uses: Settings > General > Date Format
-        $ymd = \call_user_func( $fn, 'Y-m-d' );
-        $idx = get_year_link( \strtok( $ymd, '-' ) );
-        $rel and $rel = ' rel="index"';
-        $date = "<a$rel href='$idx'>$date</a>";
-        $tag = "<time itemprop='$itemprop' class='$class' datetime='$ymd'>$date</time>";
-        $tag = apply_filters( '@' . $hook . '_tag', $tag, $date );
-        $item = '<dt class="' . $hook . '-label time-label">' . $label . '</dt>';
-        return $item . '<dd class="' . $hook . '-value time-value">' . $tag . '</dd>';
-    };
-    
-    # microformats.org/wiki/hentry 
+    # microformats.org/wiki/hentry
     # schema.org/Article
     $pub = array( 
            'date' => get_the_date() # Settings > General > Date Format
@@ -228,15 +209,31 @@ add_action('@entry_header', function () {
       , 'hook' => 'modified'
       , 'rel' => '' 
     );
+    
+    $state = $pub['date'] === $mod['date'] ? ' unmodified' : '';
+    $markup = "<dl class='byline meta-list$state'>";
+    
+	\is_object( $authordata )
+        and ( $link = get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ) # href
+        and ( $link = "<a href='$link' class='url fn n' itemprop='author' rel='author'>" . get_the_author() .'</a>' )
+        and ( $link = apply_filters( 'the_author_posts_link', $link ) ) #wp: the_author_posts_link()
+        and $markup .= '<dt class="author-label">' . __('By') . '</dt><dd class="author-value vcard">' . $link . '</dd>';
 
-    if ( $pub['date'] === $mod['date'] ) {
-        $pub['class'] = 'published updated'; # hentry requires "updated"
-        $pub['itemprop'] = 'datePublished dateModified'; # hentry requires "updated"
-        $markup .= $time_item( $pub );
-    } else {
-        $markup .= $time_item( $pub );
-        $markup .= $time_item( $mod );
-    }
+    $time_item = function ( $arr ) {
+        \extract( $arr );
+        $date = \call_user_func( $fn ); # Uses: Settings > General > Date Format
+        $ymd = \call_user_func( $fn, 'Y-m-d' );
+        $idx = get_year_link( \strtok( $ymd, '-' ) );
+        $rel and $rel = ' rel="index"';
+        $date = "<a$rel href='$idx'>$date</a>";
+        $tag = "<time itemprop='$itemprop' class='$class' datetime='$ymd'>$date</time>";
+        $tag = apply_filters( '@' . $hook . '_tag', $tag, $date );
+        $item = '<dt class="' . $hook . '-label time-label">' . $label . '</dt>';
+        return $item . '<dd class="' . $hook . '-value time-value">' . $tag . '</dd>';
+    };
+    
+    $markup .= $time_item( $pub );
+    $markup .= $time_item( $mod );
         
     $markup .= '</dl>';
     echo apply_filters( '@byline', $markup );
