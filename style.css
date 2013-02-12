@@ -2,7 +2,7 @@
  * Theme Name: action
  * Theme URI: http://actiontheme.com
  * Description: Extendable HTML5 theme.
- * Version: 0.7.0
+ * Version: 0.7.1
  * Author: Ryan Van Etten
  * Author URI: http://ryanvanetten.com
  * Tags: html5, responsive, microdata, semantic, minimal, base, modular, boilerplate
@@ -140,11 +140,13 @@
     #site-title {}
     #site-description {}
     
-    .hentry,.widget-area {}
-    .wp-post-image { max-width:240px; float:left; margin:0 2% 1em 0; }
+    .attachment-thumbnail.wp-post-image { /* featured image */
+        max-width:240px; float:left; margin:0 2% 1em 0; 
+    }
     
     #header-widget-area { padding:1em; clear:left; }
     .hentry { clear:both }
+    .widget-area {}
 
     .widget-area > ul { list-style-type:none; padding-left:0; }
     .widgettitle { }
@@ -160,7 +162,5 @@
         #branding { float:left; }
         #menu { float:right; margin:0 0 2em 4%; }
     }
-    
-    
-    
+
     form label { margin-right:.6em; }
