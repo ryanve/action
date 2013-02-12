@@ -155,6 +155,12 @@
     li.widget:first-child { margin-top:inherit; }
     li.widget:last-child { margin-bottom:inherit; }
 
+    .loop-nav { clear:both; font-weight: bold; margin-top:1.1em; margin-bottom:1.1em; }
+    .loop-nav a { display:inline-block; padding:.5em; }
+    .loop-nav a + a { margin-left:2px; }
+    .loop-nav a.prev:before { content:"< "; font-weight: bold; }
+    .loop-nav a.next:after { content:" >"; font-weight: bold; }
+    
     #main { clear:left; }
 
     @media all and (min-width:40em) {

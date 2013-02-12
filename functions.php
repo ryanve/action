@@ -158,6 +158,37 @@ add_action('@loop', function () {
     }
 });
 
+add_filter('previous_posts_link_attributes', function ( $attrs = '' ) {
+    $attrs or $attrs = '';
+    if ( ! \is_string($attrs) )
+        return $attrs;
+    $attrs = (array) $attrs;
+    $attrs[] = 'rel="prev" class="prev"';
+    return \implode( ' ', $attrs );
+});
+
+add_filter('next_posts_link_attributes', function ( $attrs = '' ) {
+    $attrs or $attrs = '';
+    if ( ! \is_string($attrs) )
+        return $attrs;
+    $attrs = (array) $attrs;
+    $attrs[] = 'rel="next" class="next"';
+    return \implode( ' ', $attrs );
+});
+
+add_action('@loop', function () {
+    # prev / next links
+    $markup = get_posts_nav_link(array(
+        'sep' => ' '
+      , 'prelabel' => '<span>' . __('Prev') . '</span>'
+      , 'nxtlabel' => '<span>' . __('Next') . '</span>'
+    ));
+    $markup = "<nav class='loop-nav invert-anchors'>$markup</nav>";
+    echo $markup;
+}, 15);
+
+
+
 add_action('@loop', function () {
     # codex.wordpress.org/Function_Reference/locate_template
     locate_template( 'loop-nav.php', true, false );
