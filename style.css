@@ -89,8 +89,8 @@
     
     .meta-list > dt, .meta-list > dd, .meta-label, .meta-value { display:inline-block; margin:0; }
     .meta-list > dt, .meta-label { margin-right:.2em; }
-    .meta-list > dt + dd, .meta-label + .meta-value { margin-left:.2em; }
-    .meta-list > dd + dt, .meta-value + .meta-label { margin-left:.6em; }
+    .meta-list > dt + dd, .meta-label + .meta-value { margin-left:.3em; }
+    .meta-list > dd + dt, .meta-value + .meta-label { margin-left:.8em; }
     .meta-list > dt:after, .meta-label:after  { content: ":" }
     .void { display:none !important; }
     
@@ -105,6 +105,8 @@
     .entry-taxos .term-list { display:inline; padding-left:0; }
     .term-list li { display:inline; margin:0; }
     .term-list li + li:before { content: ", "; }
+    
+    .plural .modified-label, .plural .modified-value { display:none }
 
     /*
     [data-meta-label] { display: inline-block; margin-left:.4em; }

@@ -197,8 +197,8 @@ add_action('@entry_header', function () {
         and $markup .= '<dt class="author-label">' . __('By') . '</dt><dd class="author-value vcard">' . $link . '</dd>';
         
     $times = array(
-        'Published' => array( 'fn' => 'get_the_date', 'class' => 'published', 'rel' => 'index' )
-      , 'Modified' => array( 'fn' => 'get_the_modified_date', 'class' => 'updated', 'rel' => null )
+        'Published' => array( 'fn' => 'get_the_date', 'label' => 'Posted', 'rel' => 'index' )
+      , 'Modified' => array( 'fn' => 'get_the_modified_date', 'label' => 'Updated', 'rel' => null )
     );
 
     foreach ( $times as $k => $v ) {
@@ -209,9 +209,10 @@ add_action('@entry_header', function () {
         $rel and $rel = ' rel="index"';
         $date = "<a$rel href='$idx'>$date</a>";
         $tag = "<time itemprop='date$k' class='$class' datetime='$ymd'>$date</time>";
+        # $label = __( \ucfirst( $class ) );
+        # $label = __( $k );
         $k = \strtolower( $k );
         $tag = apply_filters( '@' . $k . '_tag', $tag, $date );
-        $label = __( \ucfirst( $class ) );
         $markup .= '<dt class="' . $k . '-label time-label">' . $label . '</dt>';
         $markup .= '<dd class="' . $k . '-value time-value">' . $tag . '</dd>'; # maybe should filter here too
     }
