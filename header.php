@@ -6,12 +6,9 @@ namespace theme;
 
 ?>
 
-    <?php do_action( '@before_header' ); ?>
-
     <header id="header" role="banner">
 
         <?php do_action( '@header' ); ?>
 
     </header>
-    
-    <?php do_action( '@after_header' );
+

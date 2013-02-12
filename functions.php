@@ -301,7 +301,7 @@ add_action ('@entry_footer', function () {
 
 }, 20);
 
-add_action('@after_footer', function () {
+add_action('wp_footer', function () {
     $url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']; ?>
 
     <div class="diagnostic">
@@ -313,7 +313,7 @@ add_action('@after_footer', function () {
         </ul>
     </div>
 
-<?php });
+<?php }, 0);
 
 # Actions to be run on the 'init' hook:
 add_action( 'init', function () {
