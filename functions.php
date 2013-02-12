@@ -14,84 +14,13 @@ namespace theme;
 # @link  codex.wordpress.org/Plugin_API/Action_Reference
 # @link  codex.wordpress.org/Function_Reference/add_action
 # @link  codex.wordpress.org/Function_Reference/add_filter
- 
-/**
- * Convert a function name or class name from a namespace into a 
- * fully-qualified name. In other words, prefix it with the namespace.
- * @param   string   A local function name or class name.
- * @param   string=  The namespace. Defaults to the current namespace.
- */
-if ( ! \function_exists( __NAMESPACE__ . '\\ns' ) ) {
-    function ns ( $name, $ns = null ) {
-        $ns or $ns = __NAMESPACE__;
-        return $ns . '\\' . \ltrim( $name, '\\' );
-    }
-}
 
-/**
- * Check if a function name or class name exists in the current namespace.
- * @param   string   $name
- * @param   string=  $what
- * @return  bool
- */
-if ( ! \function_exists( __NAMESPACE__ . '\\exists' ) ) {
-    function exists ( $name, $what = 'function' ) {
-        return \call_user_func( $what . '_exists', ns($name) );
-    }
-}
 
-/**
- * Call a namespaced function by name. ( Params can be supplied via array. )
- * @param   string    $fname
- * @param   array     $params
- */
-if ( ! exists( 'apply' ) ) {
-    function apply ( $fname, $params = array() ) {
-        return \call_user_func_array( ns( $fname ), $params );
-    }
-}
-
-/**
- * Get or set arbitrary data.
- */
-if ( ! exists( 'data' ) ) {
-    function data ( $key = null, $value = null ) {
-
-        static $hash;  # php.net/manual/en/language.variables.scope.php
-        isset( $hash ) or $hash = array();
-        
-        if ( \func_num_args() > 1 )
-            return $hash[ $key ] = $value; # set
-
-        if ( \is_scalar($key) ) 
-            return $hash[ $key ];          # get
-            
-        if ( null === $key )
-            return $hash;                  # get all
-            
-        foreach ( $key as $k => $v )       # set multi
-            $hash[ $k ] = $v;
-        return $hash; 
-    }
-}
-
-/**
- *
- */
-if ( ! exists( 'data_e' ) ) {
-    function data_e () {
-        echo apply( 'data', func_get_args() );
-    }
-}
-
-# Set a default textdomain for use below.
-# data( 'textdomain', get_template() ); #wp
-    
 # wrap the translate functions w/in the theme namespace so
 # the $textdomain param is automatically added if omitted.
 # @link  codex.wordpress.org/I18n_for_WordPress_Developers
 
-if ( ! exists( '__' ) ) {
+if ( ! \function_exists( __NAMESPACE__ . '\\__' ) ) {
     function __ ( $text = '', $textdomain = null ) {
         static $cached;
         if ( null === $text || false === $text || '' === $text )
@@ -102,7 +31,7 @@ if ( ! exists( '__' ) ) {
     }
 }
 
-if ( ! exists( '_e' ) ) {
+if ( ! \function_exists( __NAMESPACE__ . '\\_e' ) ) {
     function _e ( $text = '', $textdomain = null ) {
         echo __ ( $text, $textdomain );
     }
