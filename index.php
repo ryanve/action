@@ -6,9 +6,18 @@ namespace theme;
 # see functions.php
 \ob_start(function ( $html ) {
     return apply_filters( '@output', $html );
-});
+}); 
 
-get_header(); ?>
+?><!DOCTYPE html>
+<?php echo apply_filters( '@html_tag', '<html>' ); ?>
+
+<head>
+<?php wp_head(); # use action hooks ?>
+</head>
+
+<?php echo apply_filters( '@body_tag', '<body class="'. \implode( ' ', get_body_class() ) . '">' ); ?>
+
+<?php get_header(); ?>
 
     <?php do_action( '@before_main' ); ?>
     
@@ -20,11 +29,13 @@ get_header(); ?>
     
     <?php do_action( '@after_main' ); ?>
         
-<?php
-get_sidebar(); 
+<?php get_sidebar(); ?>
 
-get_footer();
+<?php get_footer(); ?>
 
-\ob_get_flush(); 
+<?php wp_footer(); ?>
+
+</body>
+</html><?php \ob_get_flush(); 
 
 #end
