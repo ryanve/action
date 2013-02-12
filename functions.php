@@ -143,21 +143,6 @@ add_action('@main', function () {
     get_template_part( 'loop', is_singular() ? 'singular' : 'index' ); #wp
 }, apply_filters('@loop_priority', 10));
 
-add_action('@loop', function () {
-    # codex.wordpress.org/Function_Reference/locate_template
-    is_singular() or locate_template( 'loop-header.php', true, false );
-}, 1);
-
-add_action('@loop', function () {
-    # the actual loop
-    if ( ! have_posts() )
-        locate_template( 'loop-empty.php', true, false );
-    else for ( $path = locate_template( 'entry.php', false, false ); have_posts(); ) {
-        the_post();
-        include( $path );
-    }
-});
-
 add_filter('previous_posts_link_attributes', function ( $attrs = '' ) {
     $attrs or $attrs = '';
     if ( ! \is_string($attrs) )
@@ -176,22 +161,42 @@ add_filter('next_posts_link_attributes', function ( $attrs = '' ) {
     return \implode( ' ', $attrs );
 });
 
-add_action('@loop', function () {
-    echo "\n" . \str_repeat( ' ', 12 ) . '<nav class="loop-nav invert-anchors">';
-    if ( is_singular() ) {
-        previous_post_link('%link');
-        next_post_link('%link');
-    } else {
-        posts_nav_link(' ', '<span>' . __('Prev') . '</span>', '<span>' . __('Next') . '</span>');
-    }
-    echo "</nav>\n";
-}, 15);
-
 
 add_action('@loop', function () {
-    # codex.wordpress.org/Function_Reference/locate_template
-    locate_template( 'loop-nav.php', true, false );
-}, 20);
+
+    static $ran; # prevent from running more than once
+    if ( $ran = null !== $ran ) return;
+    
+    add_action('@loop', function () {
+        # codex.wordpress.org/Function_Reference/locate_template
+        is_singular() or locate_template( 'loop-header.php', true, false );
+    }, 5);
+
+    add_action('@loop', function () {
+        # the actual loop
+        if ( ! have_posts() )
+            locate_template( 'loop-empty.php', true, false );
+        else for ( $path = locate_template( 'entry.php', false, false ); have_posts(); ) {
+            the_post();
+            include( $path );
+        }
+    }, 10);
+
+    add_action('@loop', function () {
+        # codex.wordpress.org/Function_Reference/locate_template
+        locate_template( 'loop-nav.php', true, false );
+    }, 20);
+    
+    add_action('@loop_nav', apply_filters('@loop_nav_actions', is_singular() ? function () {
+        previous_post_link( '%link' );
+        next_post_link( '%link' );
+    } : function () {
+        $prev = '<span>' . __('Prev') . '</span>';
+        $next = '<span>' . __('Next') . '</span>';
+        posts_nav_link( ' ', $prev, $next );
+    }));
+
+}, 0);
 
 add_action('@entry', apply_filters('@entry_actions', function () {
 
