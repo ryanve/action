@@ -185,33 +185,16 @@ add_action('@entry_header', function () {
     echo apply_filters( '@headline', $markup );
 }, 5);
 
+add_filter('post_class', function ( $arr = array() ) {
+    $arr = (array) $arr;
+    $arr[] = get_the_date() === get_the_modified_date() ? 'unrevised' : 'revised';
+    return \array_unique( $arr );
+});
+
 add_action('@entry_header', function () {
 
-    global $authordata;    
-
-    # microformats.org/wiki/hentry
-    # schema.org/Article
-    $pub = array( 
-           'date' => get_the_date() # Settings > General > Date Format
-         , 'fn' => 'get_the_date'
-         , 'itemprop' => 'datePublished'
-         , 'label' => 'Posted'
-         , 'class' => 'published'
-         , 'hook' => 'published'
-         , 'rel' => 'index' 
-    );
-    $mod = array(
-        'date' => get_the_modified_date() # Settings > General > Date Format
-      , 'fn' => 'get_the_modified_date'
-      , 'itemprop' => 'dateModified'
-      , 'label' => 'Updated'
-      , 'class' => 'updated'
-      , 'hook' => 'modified'
-      , 'rel' => '' 
-    );
-    
-    $state = $pub['date'] === $mod['date'] ? ' unmodified' : '';
-    $markup = "<dl class='byline meta-list$state'>";
+    global $authordata;        
+    $markup = "<dl class='byline meta-list'>";
     
 	\is_object( $authordata )
         and ( $link = get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ) # href
@@ -232,8 +215,26 @@ add_action('@entry_header', function () {
         return $item . '<dd class="' . $hook . '-value time-value">' . $tag . '</dd>';
     };
     
-    $markup .= $time_item( $pub );
-    $markup .= $time_item( $mod );
+    # microformats.org/wiki/hentry
+    # schema.org/Article
+        
+    $markup .= $time_item(array( 
+           'fn' => 'get_the_date'
+         , 'itemprop' => 'datePublished'
+         , 'label' => 'Posted'
+         , 'class' => 'published'
+         , 'hook' => 'published'
+         , 'rel' => 'index' 
+    ));
+    
+    $markup .= $time_item(array(
+        'fn' => 'get_the_modified_date'
+      , 'itemprop' => 'dateModified'
+      , 'label' => 'Updated'
+      , 'class' => 'updated'
+      , 'hook' => 'modified'
+      , 'rel' => '' 
+    ));
         
     $markup .= '</dl>';
     echo apply_filters( '@byline', $markup );
