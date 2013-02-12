@@ -199,13 +199,10 @@ add_action('@entry', apply_filters('@entry_actions', function () {
     }, 20);
 }), 0);
 
-add_action('@entry_header', function () {
-    echo apply_filters( '@thumbnail', null );
-    $markup  = '<h1 class="entry-title">';
-    $markup .= '<a itemprop="url" rel="bookmark" href="' . get_permalink() . '">';
-    $markup .= '<span class="headline name">' . get_the_title() . '</span></a></h1>';
-    echo apply_filters( '@headline', $markup );
-}, 5);
+add_filter('@entry_attrs', function ( $attrs = '' ) {
+    $class = \implode( ' ', get_post_class() );
+    return "class='$class' itemscope itemtype='http://schema.org/Article'";
+}, 0);
 
 add_filter('post_class', function ( $arr = array() ) {
     $arr = (array) $arr;
@@ -215,6 +212,14 @@ add_filter('post_class', function ( $arr = array() ) {
     $arr[] = get_the_date() === get_the_modified_date() ? 'unrevised' : 'revised';
     return \array_unique( $arr );
 });
+
+add_action('@entry_header', function () {
+    echo apply_filters( '@thumbnail', null );
+    $markup  = '<h1 class="entry-title">';
+    $markup .= '<a itemprop="url" rel="bookmark" href="' . get_permalink() . '">';
+    $markup .= '<span class="headline name">' . get_the_title() . '</span></a></h1>';
+    echo apply_filters( '@headline', $markup );
+}, 5);
 
 add_action('@entry_header', function () {
 

@@ -1,15 +1,12 @@
 <?php 
 namespace theme;
 
-# see '@entry' hooks in functions.php
+# see '@entry' and '@entry_attrs' hooks in functions.php
 ?>
 
-                    <article <?php echo apply_filters( '@entry_attrs', 
-                        'class="' . \implode( ' ', get_post_class() ) . '"' 
-                      . ' itemscope itemtype="http://schema.org/Article"' 
-                    ); ?>>
+                    <article <?php echo apply_filters( '@entry_attrs', '' ); ?>>
 
-                        <?php do_action( '@entry' ); ?>
+                        <?php do_action( '@entry' ); # all entry parts load via this hook ?>
 
                     </article>
 
