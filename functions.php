@@ -85,7 +85,7 @@ if ( ! exists( 'data_e' ) ) {
 }
 
 # Set a default textdomain for use below.
-data( 'textdomain', get_template() ); #wp
+# data( 'textdomain', get_template() ); #wp
     
 # wrap the translate functions w/in the theme namespace so
 # the $textdomain param is automatically added if omitted.
@@ -93,7 +93,12 @@ data( 'textdomain', get_template() ); #wp
 
 if ( ! exists( '__' ) ) {
     function __ ( $text = '', $textdomain = null ) {
-        return \__( $text, null === $textdomain ? data( 'textdomain' ) : $textdomain ); #wp 
+        static $cached;
+        if ( null === $text || false === $text || '' === $text )
+            return ''; # fail fast when translation is uneeded
+        if ( null === $textdomain ) # cached lookup:
+            $textdomain = $cached = $cached ? $cached : apply_filters( '@textdomain', get_template() );
+        return null === $textdomain ? \__( $text ) : \__( $text, $textdomain );
     }
 }
 
