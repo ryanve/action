@@ -7,8 +7,7 @@
  * Author URI: http://ryanvanetten.com
  * Tags: html5, responsive, microdata, semantic, minimal, base, modular, boilerplate
  * License: MIT
- */
- 
+ */ 
 
  
 /* ==========================================================================
@@ -27,8 +26,8 @@
     body { font-size:1em; line-height:1.5em; } /* All text is relative to this. */
 
     /* $selection rules must be declared separately */
-    ::-moz-selection { background:#09b;color:#ffd; text-shadow:none }
-         ::selection { background:#09b;color:#ffd; text-shadow:none }
+    ::-moz-selection { background:#09b;color:#ffd; text-shadow:none; }
+         ::selection { background:#09b;color:#ffd; text-shadow:none; }
          
 /* ==========================================================================
    $menu
@@ -37,14 +36,10 @@
     #menu { font-weight:bold; }
     #menu ul { padding-left:0; }
     #menu li { max-width:320px; }
-    #menu li, #menu a { display:block }
+    #menu li, #menu a { display:block; }
     #menu a { padding:.5em; }
-    #menu li + li { margin-top:2px }
+    #menu li + li { margin-top:2px; }
     #menu li ul { display:block; margin:2px 0; }
-    /*@media screen, tv {
-        #menu a { background:#09b; color:#ffd; }
-        #menu a:hover { background:#409; }
-    }*/
     
 /* ==========================================================================
    $helper
@@ -80,6 +75,10 @@
     .hentry:last-child { margin-bottom:0; }
     .entry-title { margin:.2em 0; }
     
+    .attachment-thumbnail.wp-post-image { /* featured image */
+        max-width:240px; float:left; margin:0 2% 1em 0; 
+    }
+    
     .byline address { display:inline-block; font-style:normal; }
     .byline { margin:.5em 0; }
     .entry-summary p:first-child { margin-top:0; }
@@ -91,13 +90,13 @@
     .meta-list > dt, .meta-label { margin-right:.2em; }
     .meta-list > dt + dd, .meta-label + .meta-value { margin-left:.3em; }
     .meta-list > dd + dt, .meta-value + .meta-label { margin-left:.8em; }
-    .meta-list > dt:after, .meta-label:after  { content: ":" }
+    .meta-list > dt:after, .meta-label:after  { content: ":"; }
     .void { display:none !important; }
     
     .meta-label { font-size:inherit; font-weight:bold; }
 
-    .entry-pages { margin-bottom:0 }
-    .entry-pages + .entry-taxos  { margin-top:0 }
+    .entry-pages { margin-bottom:0; }
+    .entry-pages + .entry-taxos  { margin-top:0; }
     
     .entry-taxos > dt, .entry-taxos > .meta-label { display:block; float:left; }
     .entry-taxos > dd + dt, .entry-taxos > .meta-value + .meta-label { margin-left:0; }
@@ -106,15 +105,10 @@
     .term-list li { display:inline; margin:0; }
     .term-list li + li:before { content: ", "; }
     
-    
-
-    /*
-    [data-meta-label] { display: inline-block; margin-left:.4em; }
-    [data-meta-label]:before { content:" " attr(data-time-label) ": "; font-weight:normal; }
-    */
-    
-    .xoxo { list-style-type:none; padding-left:0; }
+     /* comments */
+    .xoxo { list-style-type:none; padding-left:0; } /* microformats.org/wiki/xoxo */
     .comment .avatar  { float:left; margin-bottom:1em; margin-right:4%; }
+    form label { margin-right:.6em; }
     
 /* ==========================================================================
    $editor
@@ -135,14 +129,10 @@
         max-width:1024px; 
     }
     
-    #header, #grid, #footer { clear:both; margin:0 auto; }
+    #header, #footer { clear:both; margin:0 auto; }
     #branding { margin-bottom:1em; }
     #site-title {}
     #site-description {}
-    
-    .attachment-thumbnail.wp-post-image { /* featured image */
-        max-width:240px; float:left; margin:0 2% 1em 0; 
-    }
     
     #header-widget-area { padding:1em; clear:left; }
     .hentry { clear:both }
@@ -162,5 +152,3 @@
         #branding { float:left; }
         #menu { float:right; margin:0 0 2em 4%; }
     }
-
-    form label { margin-right:.6em; }
