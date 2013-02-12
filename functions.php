@@ -187,6 +187,9 @@ add_action('@entry_header', function () {
 
 add_filter('post_class', function ( $arr = array() ) {
     $arr = (array) $arr;
+    # This compares using the format from: Settings > General > Date Format
+    # Maybe we should use Y-m-d or provide a filter like:
+    # $format = apply_filters( '@time_compare_format', '' );
     $arr[] = get_the_date() === get_the_modified_date() ? 'unrevised' : 'revised';
     return \array_unique( $arr );
 });
@@ -204,7 +207,7 @@ add_action('@entry_header', function () {
 
     $time_item = function ( $arr ) {
         \extract( $arr );
-        $date = \call_user_func( $fn ); # Uses: Settings > General > Date Format
+        $date = \call_user_func( $fn ); # Settings > General > Date Format
         $ymd = \call_user_func( $fn, 'Y-m-d' );
         $idx = get_year_link( \strtok( $ymd, '-' ) );
         $rel and $rel = ' rel="index"';
