@@ -17,6 +17,10 @@ namespace theme;
 # @link  codex.wordpress.org/Function_Reference/add_action
 # @link  codex.wordpress.org/Function_Reference/add_filter
 
+# Required per codex.wordpress.org/Theme_Review#Template_Tags_and_Hooks
+# wordpress.stackexchange.com/q/11766/7388
+# isset( $content_width ) or $content_width = 0; # no max?
+
 # wrap the translate functions w/in the theme namespace so
 # the $textdomain param is automatically added if omitted.
 # @link  codex.wordpress.org/I18n_for_WordPress_Developers
