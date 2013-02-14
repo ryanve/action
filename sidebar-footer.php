@@ -8,9 +8,7 @@ namespace theme;
 <?php if ( is_active_sidebar('footer') ) { ?>
 
         <div id="footer-widget-area" class="widget-area">
-            <ul>
-                <?php dynamic_sidebar( 'footer' ); ?>
-            </ul>
+            <ul><?php dynamic_sidebar( 'footer' ); ?></ul>
         </div>
 
 <?php } ?>
