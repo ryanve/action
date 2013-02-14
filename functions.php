@@ -120,16 +120,19 @@ add_action('@footer', function () {
             'name' => __( 'Sidebar' )
           , 'id' => 'sidebar-1' 
           , 'description' => __( 'Inserts into #sidebar' )
+          , 'before_widget' => '<li class="widget %2$s">'
         ));
         register_sidebar(array( 
             'name' => __( 'Header' )
           , 'id' => 'header' 
           , 'description' => __( 'Inserts into #header' )
+          , 'before_widget' => '<li class="widget %2$s">'
         ));
         register_sidebar(array( 
             'name' => __( 'Footer' )
           , 'id' => 'footer' 
           , 'description' => __( 'Inserts into #footer' )
+          , 'before_widget' => '<li class="widget %2$s">'
         ));
     });
     add_action( 'init', function () {

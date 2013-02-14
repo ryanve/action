@@ -7,8 +7,8 @@ namespace theme;
 
 <?php if ( is_active_sidebar('sidebar-1') ) { ?>
 
-    <aside id="sidebar" class="widget-area">
+    <aside id="sidebar" class="widget-area sidebar">
         <ul><?php dynamic_sidebar(); ?></ul>
     </aside>
-    
+
 <?php } ?>
