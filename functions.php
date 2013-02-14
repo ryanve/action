@@ -19,7 +19,7 @@ namespace theme;
 
 # Required per codex.wordpress.org/Theme_Review#Template_Tags_and_Hooks
 # wordpress.stackexchange.com/q/11766/7388
-# isset( $content_width ) or $content_width = 0; # no max?
+isset( $content_width ) or $content_width = 0; # no max?
 
 # wrap the translate functions w/in the theme namespace so
 # the $textdomain param is automatically added if omitted.
