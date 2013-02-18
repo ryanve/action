@@ -58,7 +58,10 @@ add_action('after_setup_theme', function () {
 }, 0);
 
 add_filter('@html_tag', function () {
-    $attrs = 'lang="' . get_bloginfo('language') . '" dir="' . (is_rtl() ? 'rtl' : 'ltr') . '"';
+    # Emulate language_attributes() b/c it has no "get" version.
+    # Include its 'language_attributes' filter for plugin usage.
+    $attrs = 'dir="' . (is_rtl() ? 'rtl' : 'ltr') . '" lang="' . get_bloginfo('language') . '"';
+    $attrs = apply_filters( 'language_attributes', $attrs );
     $attrs = apply_filters( '@html_attrs', $attrs );
     return "<html $attrs>";
 }, 0);
