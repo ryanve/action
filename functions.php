@@ -117,32 +117,31 @@ add_action('@footer', function () {
     is_active_sidebar('footer') and get_sidebar('footer');
 });
 
-# still testing this
-#if ( ! is_child_theme() ) {
-    add_action( 'widgets_init', function () {
-        register_sidebar(array( 
-            'name' => __( 'Sidebar' )
-          , 'id' => 'sidebar-1' 
-          , 'description' => __( 'Inserts into #sidebar' )
-          , 'before_widget' => '<li class="widget %2$s">'
-        ));
-        register_sidebar(array( 
-            'name' => __( 'Header' )
-          , 'id' => 'header' 
-          , 'description' => __( 'Inserts into #header' )
-          , 'before_widget' => '<li class="widget %2$s">'
-        ));
-        register_sidebar(array( 
-            'name' => __( 'Footer' )
-          , 'id' => 'footer' 
-          , 'description' => __( 'Inserts into #footer' )
-          , 'before_widget' => '<li class="widget %2$s">'
-        ));
-    });
-    add_action( 'init', function () {
-        register_nav_menus( array('menu' => 'Menu') );
-    });
-#}
+# todo: need to make this hookable
+add_action( 'widgets_init', function () {
+    register_sidebar(array( 
+        'name' => __( 'Sidebar' )
+      , 'id' => 'sidebar-1' 
+      , 'description' => __( 'Inserts into #sidebar' )
+      , 'before_widget' => '<li class="widget %2$s">'
+    ));
+    register_sidebar(array( 
+        'name' => __( 'Header' )
+      , 'id' => 'header' 
+      , 'description' => __( 'Inserts into #header' )
+      , 'before_widget' => '<li class="widget %2$s">'
+    ));
+    register_sidebar(array( 
+        'name' => __( 'Footer' )
+      , 'id' => 'footer' 
+      , 'description' => __( 'Inserts into #footer' )
+      , 'before_widget' => '<li class="widget %2$s">'
+    ));
+});
+
+add_action( 'init', function () {
+    register_nav_menus( array('menu' => 'Menu') );
+});
 
 add_action('@main', function () {
     # insert the loop into [role="main"]
@@ -269,7 +268,7 @@ add_action('@entry_header', function () {
     global $authordata;        
     $markup = "<dl class='byline meta-list'>";
     
-	\is_object( $authordata )
+    \is_object( $authordata )
         and ( $link = get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ) # href
         and ( $link = "<a href='$link' class='url fn n' itemprop='author' rel='author'>" . get_the_author() .'</a>' )
         and ( $link = apply_filters( 'the_author_posts_link', $link ) ) #wp: the_author_posts_link()
@@ -373,7 +372,7 @@ add_action( 'init', function () {
     $modernizr_uri = apply_filters( '@modernizr_uri', 'http://airve.github.com/js/modernizr/modernizr_shiv.min.js' );
     $modernizr_uri and wp_register_script( 'modernizr', $modernizr_uri, array(), null, false );
 
-	if ( is_admin() ) { # Admin-specific actions
+    if ( is_admin() ) { # Admin-specific actions
     
     } else { # Frontend-specific actions
     
