@@ -146,7 +146,7 @@ add_action( 'init', function () {
 add_action('@main', function () {
     # insert the loop into [role="main"]
     # codex.wordpress.org/Function_Reference/get_template_part
-    get_template_part( 'loop', is_singular() ? 'singular' : 'index' ); #wp
+    get_template_part( 'loop', is_singular() ? 'singular' : 'plural' ); #wp
 }, apply_filters('@loop_priority', 10));
 
 add_filter('previous_posts_link_attributes', function ( $attrs = '' ) {
