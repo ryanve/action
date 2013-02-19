@@ -17,9 +17,12 @@ namespace theme;
 # @link  codex.wordpress.org/Function_Reference/add_action
 # @link  codex.wordpress.org/Function_Reference/add_filter
 
-# Required per codex.wordpress.org/Theme_Review#Template_Tags_and_Hooks
-# wordpress.stackexchange.com/q/11766/7388
-isset( $content_width ) or $content_width = 0; # no max?
+# $content_width is required per codex.wordpress.org/Theme_Review
+# codex.wordpress.org/Content_Width
+# bit.ly/content-width-zero
+# Use WP -> Settings -> Media
+isset( $content_width ) or $content_width = get_option( 'large_size_w' );
+\is_numeric( $content_width ) or $content_width = 1024;
 
 # wrap the translate functions w/in the theme namespace so
 # the $textdomain param is automatically added if omitted.
