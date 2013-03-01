@@ -45,6 +45,7 @@ add_action('after_setup_theme', function () {
     \defined('WP_DEBUG') && WP_DEBUG or remove_action( 'wp_head', 'wp_generator' ); # tighten security
     add_theme_support( 'automatic-feed-links' ); # required
     add_theme_support( 'post-thumbnails' ); # "featured image"
+    add_editor_style(); # codex.wordpress.org/Function_Reference/add_editor_style
 }, 0);
 
 add_filter('@html_tag', function () {
