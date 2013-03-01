@@ -128,19 +128,16 @@ add_action( 'widgets_init', function () {
     register_sidebar(array( 
         'name' => '#sidebar'
       , 'id' => 'sidebar-1' 
-      , 'description' => __( 'Inserts into #sidebar' )
       , 'before_widget' => '<li class="widget %2$s">'
     ));
     register_sidebar(array( 
         'name' => '#header .widget-area'
-      , 'id' => 'header' 
-      , 'description' => __( 'Inserts into #header' )
+      , 'id' => 'header'
       , 'before_widget' => '<li class="widget %2$s">'
     ));
     register_sidebar(array( 
         'name' => '#footer .widget-area'
       , 'id' => 'footer' 
-      , 'description' => __( 'Inserts into #footer' )
       , 'before_widget' => '<li class="widget %2$s">'
     ));
 });
