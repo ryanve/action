@@ -126,19 +126,19 @@ add_action('@footer', function () {
 # todo: need to make this hookable
 add_action( 'widgets_init', function () {
     register_sidebar(array( 
-        'name' => __( 'Sidebar' )
+        'name' => '#sidebar'
       , 'id' => 'sidebar-1' 
       , 'description' => __( 'Inserts into #sidebar' )
       , 'before_widget' => '<li class="widget %2$s">'
     ));
     register_sidebar(array( 
-        'name' => __( 'Header' )
+        'name' => '#header .widget-area'
       , 'id' => 'header' 
       , 'description' => __( 'Inserts into #header' )
       , 'before_widget' => '<li class="widget %2$s">'
     ));
     register_sidebar(array( 
-        'name' => __( 'Footer' )
+        'name' => '#footer .widget-area'
       , 'id' => 'footer' 
       , 'description' => __( 'Inserts into #footer' )
       , 'before_widget' => '<li class="widget %2$s">'
