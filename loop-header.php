@@ -31,13 +31,13 @@ namespace theme;
 
             <header class="loop-header date-header">
                 <h1 class="loop-title date-title"><?php echo implode('-', array_filter( explode( '/', $_SERVER['REQUEST_URI'] ), 'is_numeric' ) ); ?></h1>
-                <div class="loop-desc date-desc"><?php _e( 'Archives.' ); ?></div>
+                <div class="loop-desc date-desc"><?php _e('Archives.', 'theme'); ?></div>
             </header>
 
         <?php } elseif ( is_search() ) { ?>
 
             <header class="loop-header search-header">
-                <h1 class="loop-title search-title"><?php echo ( __( 'Search: ') . get_search_query() ); ?></h1>
+                <h1 class="loop-title search-title"><?php echo ( __('Search: ', 'theme') . get_search_query() ); ?></h1>
             </header>
 
         <?php } elseif ( is_post_type_archive() ) { ?>
@@ -51,7 +51,7 @@ namespace theme;
 
             <!--
             <header class="loop-header assistive">
-                <h1 class="loop-title"><?php _e( 'Posts' ); ?></h1>
+                <h1 class="loop-title"><?php _e('Posts', 'theme'); ?></h1>
             </header>
             -->
 

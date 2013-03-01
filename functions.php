@@ -24,26 +24,13 @@ namespace theme;
 isset( $content_width ) or $content_width = get_option( 'large_size_w' );
 \is_numeric( $content_width ) or $content_width = 1024;
 
-# wrap the translate functions w/in the theme namespace so
-# the $textdomain param is automatically added if omitted.
+# Use the generic 'theme' as the textdomain such that it is easier to 
+# repurpose code in other themes.
 # @link  codex.wordpress.org/I18n_for_WordPress_Developers
+# @link  ottopress.com/2012/internationalization-youre-probably-doing-it-wrong/
+# @link  markjaquith.wordpress.com/2011/10/06/translating-wordpress-plugins-and-themes-dont-get-clever/
+# todo: load textdomain
 
-if ( ! \function_exists( __NAMESPACE__ . '\\__' ) ) {
-    function __ ( $text = '', $textdomain = null ) {
-        static $cached;
-        if ( null === $text || false === $text || '' === $text )
-            return ''; # fail fast when translation is uneeded
-        if ( null === $textdomain ) # cached lookup:
-            $textdomain = $cached = $cached ? $cached : apply_filters( '@textdomain', get_template() );
-        return null === $textdomain ? \__( $text ) : \__( $text, $textdomain );
-    }
-}
-
-if ( ! \function_exists( __NAMESPACE__ . '\\_e' ) ) {
-    function _e ( $text = '', $textdomain = null ) {
-        echo __ ( $text, $textdomain );
-    }
-}
 
 # Basic contextual support.
 add_filter('body_class', function ($array) {
@@ -95,7 +82,7 @@ add_action( '@header', function () {
 
 add_action('@header', function () {
 
-    $skip = '<a href="#main" accesskey="5">' . __( 'Skip' ) . '</a>';
+    $skip = '<a href="#main" accesskey="5">' . __('Skip', 'theme') . '</a>';
     $skip = apply_filters( '@menu_skip_anchor', $skip );
     $skip and $skip = \trim( \strip_tags( $skip, '<a>' ) );
     $skip = $skip ? '<li class="assistive focusable">' . $skip . '</li>' : '';
@@ -200,8 +187,8 @@ add_action('@loop', function () {
         previous_post_link( '%link' );
         next_post_link( '%link' );
     } : function () {
-        $prev = '<span>' . __('Prev') . '</span>';
-        $next = '<span>' . __('Next') . '</span>';
+        $prev = '<span>' . __('Prev', 'theme') . '</span>';
+        $next = '<span>' . __('Next', 'theme') . '</span>';
         posts_nav_link( ' ', $prev, $next );
     }));
 
@@ -275,7 +262,7 @@ add_action('@entry_header', function () {
         and ( $link = get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ) # href
         and ( $link = "<a href='$link' class='url fn n' itemprop='author' rel='author'>" . get_the_author() .'</a>' )
         and ( $link = apply_filters( 'the_author_posts_link', $link ) ) #wp: the_author_posts_link()
-        and $markup .= '<dt class="author-label">' . __('By') . '</dt><dd class="author-value vcard">' . $link . '</dd>';
+        and $markup .= '<dt class="author-label">' . __('By', 'theme') . '</dt><dd class="author-value vcard">' . $link . '</dd>';
 
     $time_item = function ( $arr ) {
         \extract( $arr );
@@ -324,7 +311,7 @@ add_action ('@entry_footer', function () {
     echo apply_filters('@entry_pages', wp_link_pages(array(
         'echo'   => 0
       , 'before' => '<nav class="entry-pages meta-list"><h4 class="meta-label pages-label">' 
-                    . __('Pages') . '</h4><div class="meta-value pages-value">'
+                    . __('Pages', 'theme') . '</h4><div class="meta-value pages-value">'
       , 'after'  => '</div></nav>'
     )));
 
@@ -493,9 +480,9 @@ add_action('@comment', apply_filters('@comment_actions', function () {
         $markup = '<header class="comment-header">';
         $markup .= apply_filters( '@comment_avatar', get_avatar( $comment, 60 ) );
         $markup .= '<dl class="meta-list">'; 
-        $markup .= '<dt>' . __('By') . '</dt>'; 
+        $markup .= '<dt>' . __('By', 'theme') . '</dt>'; 
         $markup .= '<dd itemprop="creator">' . get_comment_author_link() . '</dd>';
-        $markup .= '<dt class="published-label">' . __('Published') . '</dt>';
+        $markup .= '<dt class="published-label">' . __('Published', 'theme') . '</dt>';
         $markup .= '<dd class="published-value" itemprop="commentTime">' . get_comment_date() . '</dd>';
         $markup .= '</dl></header>';
         echo apply_filters( '@comment_header', $markup );
@@ -511,9 +498,9 @@ add_action('@comment', apply_filters('@comment_actions', function () {
     add_action('@comment', function () {
         global $comment;
         if ( ! $comment->comment_approved ) {
-            $markup = __( 'Your comment is awaiting moderation.' );
+            $markup = __('Your comment is awaiting moderation.', 'theme');
             $markup = "<p class='alert' role='alert'>$markup</p>";
-            echo apply_filters( '@comment_moderation', $markup);
+            echo apply_filters( '@comment_moderation', $markup );
         }
     }, 10);
 }), 0);

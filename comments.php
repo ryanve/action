@@ -5,7 +5,7 @@ namespace theme;
 # try to be as simple and semantic as possible
 
 if ( 'comments.php' === basename( $_SERVER['SCRIPT_FILENAME'] ) )
-	die( __( 'This file is not designed to be loaded directly.' ) );
+	exit;
 
 if ( post_password_required() || ! post_type_supports( get_post_type(), 'comments' ) )
 	return;
@@ -40,9 +40,9 @@ if ( post_password_required() || ! post_type_supports( get_post_type(), 'comment
 
                                 <?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) { // "paged" comments ?>
                                 <nav>
-                                    <h3 class="assistive"><?php _e( 'Comment navigation' ); ?></h3>
-                                    <?php previous_comments_link( apply_filters( '@comments_older', __( '&laquo; ' . 'Older' ) ) ); ?>
-                                    <?php next_comments_link( apply_filters( '@comments_newer', __( 'Newer' ) . ' &raquo;' ) ); ?>
+                                    <h3 class="assistive"><?php _e('Comment navigation', 'theme'); ?></h3>
+                                    <?php previous_comments_link( apply_filters( '@comments_older', __('&laquo; Older', 'theme') ) ); ?>
+                                    <?php next_comments_link( apply_filters( '@comments_newer', __('Newer &raquo;', 'theme') ) ); ?>
                                 </nav>
                                 <?php } ?>
 
@@ -51,7 +51,7 @@ if ( post_password_required() || ! post_type_supports( get_post_type(), 'comment
                             <?php 
                                 if ( comments_open() )
                                     comment_form();
-                                else echo '<p class="status">' . __( 'Comments are closed.' ) . '</p>';
+                                else echo '<p class="status">' . __('Comments are closed.', 'theme') . '</p>';
                             ?>
 
                         </aside>
