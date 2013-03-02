@@ -356,13 +356,15 @@ add_action( 'init', function () {
     
         # Enqueue CSS
         # maybe vendor.css/theme.css  would be better than base.css/main.css
-        $css = array( 'base' => null, 'main' => 'screen,projection,tty,tv' );
-        foreach ( $css as $handle => $media ) {
-            $file = "/css/$handle.css";
-            if ( \file_exists( \rtrim( get_stylesheet_directory(), '/' ) . $file ) )
-                $file = \rtrim( get_stylesheet_directory_uri()  , '/' ) . $file;
-            else $file = \rtrim( get_template_directory_uri()    , '/' ) . $file;
-            wp_enqueue_style( $handle, $file, array(), null, $media );
+        foreach ( array( 'base' => null, 'main' => 'screen,projection,tty,tv' ) as $handle => $media ) {
+            $file = "css/$handle.css";
+            foreach( array( 'get_stylesheet_directory', 'get_template_directory' ) as $fn ) {
+                if ( \file_exists( path_join( \call_user_func($fn), $file ) ) ) {
+                    $file = trailingslashit( \call_user_func( $fn . '_uri' ) ) . $file;
+                    wp_enqueue_style( $handle, $file, array(), null, $media );
+                    break;
+                }
+            }
         }
         
         # Enqueue Modernizr
