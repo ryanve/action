@@ -2,7 +2,7 @@
  * Theme Name: action
  * Theme URI: http://actiontheme.com
  * Description: Extendable HTML5 theme.
- * Version: 0.8.7
+ * Version: 0.9.0
  * Author: Ryan Van Etten
  * Author URI: http://ryanvanetten.com
  * Tags: microformats, flexible-width, right-sidebar, light, white
@@ -165,7 +165,7 @@
 
     @media all and (min-width:40em) {
         :not(.full-width) #main { width:62.5%; float:left; clear:left; } /* 640/1024 */
-        :not(.full-width) #sidebar { width:29.296875%; float:right; clear:right; } /* 300/1024 */
+        :not(.full-width) .sidebar-widget-area { width:29.296875%; float:right; clear:right; } /* 300/1024 */
         #branding { float:left; }
         #menu { float:right; margin:0 0 2em 4%; }
     }

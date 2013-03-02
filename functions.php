@@ -108,9 +108,9 @@ add_action('@footer', function () {
 add_action( 'widgets_init', function () {
     $areas = (array) apply_filters( '@widget_areas', array(
         # codex.wordpress.org/Function_Reference/register_sidebar
-        array( 'id' => 'sidebar', 'name' => '#sidebar' )
-      , array( 'id' => 'header' , 'name' => '#header .widget-area' )
-      , array( 'id' => 'footer' , 'name' => '#footer .widget-area' )
+        array( 'id' => 'sidebar', 'name' => '.sidebar-widget-area' )
+      , array( 'id' => 'header' , 'name' => '.header-widget-area' )
+      , array( 'id' => 'footer' , 'name' => '.footer-widget-area' )
     ));
     foreach ( $areas as $a )
         # Merge sensible defaults:
