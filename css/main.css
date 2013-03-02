@@ -22,7 +22,7 @@
    $menu
    ========================================================================== */    
 
-    #menu { font-weight:bold; margin:2em 0; }
+    #menu { font-weight:bold; margin:1.5em 0; }
     #menu ul { padding-left:0; }
     #menu li { max-width:320px; }
     #menu li, #menu a { display:block; }
@@ -149,7 +149,7 @@
     .plural .loop-nav [rel~="prev"]:before { content:"< "; font-weight: bold; }
     .plural .loop-nav [rel~="next"]:after { content:" >"; font-weight: bold; }
     
-    #main { clear:left; }
+    #main { clear:left; margin:1.5em 0; }
 
     @media all and (min-width:40em) {
         :not(.full-width) #main { width:62.5%; float:left; clear:left; } /* 640/1024 */
