@@ -105,23 +105,16 @@ add_action('@footer', function () {
     is_active_sidebar('footer') and get_sidebar('footer');
 });
 
-# todo: need to make this hookable
 add_action( 'widgets_init', function () {
-    register_sidebar(array( 
-        'name' => '#sidebar'
-      , 'id' => 'sidebar-1' 
-      , 'before_widget' => '<li class="widget %2$s">'
+    $areas = (array) apply_filters( '@widget_areas', array(
+        # codex.wordpress.org/Function_Reference/register_sidebar
+        array( 'id' => 'sidebar', 'name' => '#sidebar' )
+      , array( 'id' => 'header' , 'name' => '#header .widget-area' )
+      , array( 'id' => 'footer' , 'name' => '#footer .widget-area' )
     ));
-    register_sidebar(array( 
-        'name' => '#header .widget-area'
-      , 'id' => 'header'
-      , 'before_widget' => '<li class="widget %2$s">'
-    ));
-    register_sidebar(array( 
-        'name' => '#footer .widget-area'
-      , 'id' => 'footer' 
-      , 'before_widget' => '<li class="widget %2$s">'
-    ));
+    foreach ( $areas as $a )
+        # Merge sensible defaults:
+        $a and register_sidebar( \array_merge( array( 'before_widget' => '<li class="widget %2$s">' ), $a ) );
 });
 
 add_action( 'init', function () {
