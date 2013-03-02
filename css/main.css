@@ -1,15 +1,20 @@
 
 /* ==========================================================================
    $text
+   baymard.com/blog/formatting-links-for-usability
+   nngroup.com/articles/guidelines-for-visualizing-links/
    ========================================================================== */
-   
     @media screen, tv {
         a { color:#09b; text-decoration:none; }
-        a:hover { color:#509; }
-        .invert-anchors a { color:#ffd; background:#09b; }
+        a:hover { color:#509; text-decoration:underline; }
+        .invert-anchors a { color:#ffd; background:#09b; text-decoration:none; }
         .invert-anchors a:hover { background:#509; }
     }
+
     img, a.block { border:0; }
+
+    /* Void underlines added via visual editor misuse. */
+    span[style] { text-decoration:none !important; }
     
     html { color:#222; background:#ffd; }
     body { font-size:1.1em; line-height:1.6em; } /* All text is relative to this. */
