@@ -12,7 +12,7 @@
     img, a.block { border:0; }
     
     html { color:#222; background:#ffd; }
-    body { font-size:1em; line-height:1.6em; } /* All text is relative to this. */
+    body { font-size:1.1em; line-height:1.6em; } /* All text is relative to this. */
 
     /* $selection rules must be declared separately */
     ::-moz-selection { background:#09b;color:#ffd; text-shadow:none; }
