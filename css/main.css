@@ -4,19 +4,19 @@
    ========================================================================== */
    
     @media screen, tv {
-        a { color:#509; text-decoration:none; }
-        a:hover { color:#e05; }
-        .invert-anchors a { color:#ffd; background:#509; }
-        .invert-anchors a:hover { background:#e05; }
+        a { color:#09b; text-decoration:none; }
+        a:hover { color:#509; }
+        .invert-anchors a { color:#ffd; background:#09b; }
+        .invert-anchors a:hover { background:#509; }
     }
     img, a.block { border:0; }
     
-    html { color:#333; background:#ffd; }
+    html { color:#222; background:#ffd; }
     body { font-size:1em; line-height:1.5em; } /* All text is relative to this. */
 
     /* $selection rules must be declared separately */
-    ::-moz-selection { background:#e05;color:#ffd; text-shadow:none; }
-         ::selection { background:#e05;color:#ffd; text-shadow:none; }
+    ::-moz-selection { background:#09b;color:#ffd; text-shadow:none; }
+         ::selection { background:#09b;color:#ffd; text-shadow:none; }
          
 /* ==========================================================================
    $menu
