@@ -10,7 +10,7 @@ namespace theme;
 ?><!DOCTYPE html>
 <?php 
     # Let the entire tag be hooked so that IE conditions could be added
-    # see @html_attrs in functions.php (defaults incl. language_attributes)
+    # see @html_attrs in functions.php (includes language_attributes)
     echo apply_filters( '@html_tag', '<html>' );
 ?>
 
@@ -20,8 +20,8 @@ namespace theme;
 
 <?php 
     # Let the entire tag be hooked for synomity with the html tag.
-    # see @body_attrs in functions.php (defaults incl. body_class)
-    echo apply_filters( '@body_tag', '<body>' );
+    # see @body_attrs in functions.php
+    echo apply_filters( '@body_tag', '<body ' . apply_filters( '@body_attrs', \implode(' ', get_body_class()) ) . '>' );
 ?>
 
 <?php do_action( '@body' ); # load all body parts via this hook ?>

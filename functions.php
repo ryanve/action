@@ -57,12 +57,6 @@ add_filter('@html_tag', function () {
     return "<html $attrs>";
 }, 0);
 
-add_filter('@body_tag', function () {
-    $class = \implode( ' ', get_body_class() );
-    $attrs = apply_filters( '@body_attrs', "class='$class'" );
-    return "<body $attrs>";
-}, 0);
-
 add_action('@body', apply_filters('@body_actions', function () {
 
     static $ran; # prevent from running more than once
