@@ -354,13 +354,16 @@ add_action( 'init', function () {
     
     } else { # Frontend-specific actions
     
-        # Enqueue base.css and style.css
-        $base = '/base.css';
-        if ( \file_exists( \rtrim( get_stylesheet_directory(), '/' ) . $base ) )
-             $base = \rtrim( get_stylesheet_directory_uri()  , '/' ) . $base;
-        else $base = \rtrim( get_template_directory_uri()    , '/' ) . $base;
-        wp_enqueue_style( 'base', $base, array(), null, null );
-        wp_enqueue_style( 'style', get_stylesheet_uri(), array(), null, 'screen,projection,tty,tv' );
+        # Enqueue CSS
+        # maybe vendor.css/theme.css  would be better than base.css/main.css
+        $css = array( 'base' => null, 'main' => 'screen,projection,tty,tv' );
+        foreach ( $css as $handle => $media ) {
+            $file = "/css/$handle.css";
+            if ( \file_exists( \rtrim( get_stylesheet_directory(), '/' ) . $file ) )
+                $file = \rtrim( get_stylesheet_directory_uri()  , '/' ) . $file;
+            else $file = \rtrim( get_template_directory_uri()    , '/' ) . $file;
+            wp_enqueue_style( $handle, $file, array(), null, $media );
+        }
         
         # Enqueue Modernizr
         $modernizr_uri and wp_enqueue_script( 'modernizr' );
