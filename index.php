@@ -21,7 +21,10 @@ namespace theme;
 <?php 
     # Let the entire tag be hooked for synomity with the html tag.
     # Re: github.com/ryanve/action/commit/ee589a0bc03f5720e3e28404a6118d9934755805
-    echo apply_filters( '@body_tag', '<body ' . apply_filters( '@body_attrs', \implode(' ', get_body_class()) ) . '>' );
+    echo apply_filters( '@body_tag', '<body ' 
+       . apply_filters( '@body_attrs', 'class="' . \implode( ' ', get_body_class() ) . '"' ) 
+       . '>' 
+    );
 ?>
 
 <?php do_action( '@body' ); # load all body parts via this hook ?>
