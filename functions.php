@@ -340,33 +340,31 @@ add_action('wp_footer', function () {
 
 <?php }, 0);
 
-# Actions to be run on the 'init' hook:
+# Actions to be run on the 'init' hook
+# CPTs and taxonomies should register on init.
+# Scripts/styles should register/enqueue on init.
 add_action( 'init', function () {
-
-    # CPTs and taxonomies should register on init.
-    # Scripts/styles should register/enqueue on init.
     
     # Register Modernizr
     $modernizr_uri = apply_filters( '@modernizr_uri', 'http://airve.github.com/js/modernizr/modernizr_shiv.min.js' );
     $modernizr_uri and wp_register_script( 'modernizr', $modernizr_uri, array(), null, false );
 
-    if ( is_admin() ) { # Admin-specific actions
-    
-    } else { # Frontend-specific actions
-    
+    # Get URI in child theme or else parent theme.
+    $locate_uri = function($file) {
+        $file = '/' . ltrim($file, '/');
+        foreach( array('get_stylesheet_directory', 'get_template_directory') as $fn )
+            if ( \file_exists( \rtrim( \call_user_func($fn), '/' ) . $file ) )
+                return \rtrim( \call_user_func($fn . '_uri'), '/' ) . $file;
+    };
+
+    # Frontend-specific actions:
+    if ( !is_admin() ) {
         # Enqueue CSS
-        # maybe vendor.css/theme.css  would be better than base.css/main.css
         $css = array( 'base' => null );
-        $css['main'] = is_child_theme() ? null : 'screen,projection,tty,tv';
+        $css['style'] = is_child_theme() ? null : 'screen,projection,tty,tv';
         foreach ( $css as $handle => $media ) {
-            $file = "/css/$handle.css";
-            foreach( array( 'get_stylesheet_directory', 'get_template_directory' ) as $fn ) {
-                if ( \file_exists( \rtrim( \call_user_func($fn), '/' ) . $file ) ) {
-                    $file = \rtrim( \call_user_func($fn . '_uri'), '/' ) . $file;
-                    wp_enqueue_style( $handle, $file, array(), null, $media );
-                    break;
-                }
-            }
+            $file = $locate_uri( "$handle.css" );
+            $file and wp_enqueue_style( $handle, $file, array(), null, $media );
         }
         
         # Enqueue Modernizr
@@ -386,7 +384,6 @@ add_action( 'init', function () {
             wp_localize_script( 'ga', '_gaq', $gaq );
         }
     }
-
 });
 
 add_filter( '@output', function ( $html ) {
