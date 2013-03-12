@@ -134,7 +134,7 @@
     }
     
     #header, #footer { clear:both; margin:0 auto; }
-    #branding { margin-bottom:1em; }
+    .site-branding { margin-bottom:1em; }
     .site-title {}
     .site-description {}
     
@@ -159,6 +159,6 @@
     @media all and (min-width:40em) {
         :not(.full-width) #main { width:62.5%; float:left; clear:left; } /* 640/1024 */
         :not(.full-width) .sidebar-widget-area { width:29.296875%; float:right; clear:right; } /* 300/1024 */
-        #branding { float:left; }
+        .site-branding { float:left; }
         #menu { float:right; margin:0 0 2em 4%; }
     }

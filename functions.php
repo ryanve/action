@@ -82,7 +82,7 @@ add_action('@header', function () {
     $skip and $skip = \trim( \strip_tags( $skip, '<a>' ) );
     $skip = $skip ? '<li class="assistive focusable">' . $skip . '</li>' : '';
     
-    $attrs = 'id="menu" role="navigation" class="invert-anchors"';
+    $attrs = 'id="menu" role="navigation" class="site-nav invert-anchors"';
     $attrs = apply_filters( '@menu_attrs', $attrs );
 
     echo apply_filters('@menu', \str_repeat( ' ', 8 )
