@@ -135,8 +135,8 @@
     
     #header, #footer { clear:both; margin:0 auto; }
     #branding { margin-bottom:1em; }
-    #site-title {}
-    #site-description {}
+    .site-title {}
+    .site-description {}
     
     #header .widget-area { padding:1em; clear:left; }
     .hentry { clear:both }

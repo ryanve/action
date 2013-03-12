@@ -6,7 +6,7 @@ namespace theme;
 
 ?>
 
-    <header id="header" role="banner">
+    <header id="header" class="site-header" role="banner">
 
         <?php do_action( '@header' ); ?>
 

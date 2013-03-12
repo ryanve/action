@@ -9,12 +9,12 @@ namespace theme;
 ?>
 
         <hgroup id="branding" itemscope itemtype="http://schema.org/Organization">
-            <h1 id="site-title">
+            <h1 class="site-title">
                 <a accesskey="1" itemprop="url" rel="home" href="<?php echo home_url(); ?>">
                     <span itemprop="name"><?php bloginfo('name'); ?></span>
                 </a>
             </h1>
-            <h2 id="site-description">
+            <h2 class="site-description">
                 <span itemprop="description"><?php bloginfo('description'); ?></span>
             </h2>
         </hgroup>
