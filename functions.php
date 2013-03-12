@@ -359,10 +359,10 @@ add_action( 'init', function () {
         $css = array( 'base' => null );
         $css['main'] = is_child_theme() ? null : 'screen,projection,tty,tv';
         foreach ( $css as $handle => $media ) {
-            $file = "css/$handle.css";
+            $file = "/css/$handle.css";
             foreach( array( 'get_stylesheet_directory', 'get_template_directory' ) as $fn ) {
-                if ( \file_exists( path_join( \call_user_func($fn), $file ) ) ) { #wp
-                    $file = rtrim( \call_user_func($fn . '_uri'), '/' ) . "/$file";
+                if ( \file_exists( \rtrim( \call_user_func($fn), '/' ) . $file ) ) {
+                    $file = \rtrim( \call_user_func($fn . '_uri'), '/' ) . $file;
                     wp_enqueue_style( $handle, $file, array(), null, $media );
                     break;
                 }
