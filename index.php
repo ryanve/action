@@ -1,7 +1,7 @@
 <?php
 namespace theme;
 
-\ob_start(function ( $html ) {
+\ob_start(function( $html ) {
     # The outbut buffer usage here is experimental and powerful.
     # All content must go between ob_start and ob_get_flush.
     return apply_filters( '@output', $html );

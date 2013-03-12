@@ -33,7 +33,7 @@ isset( $content_width ) or $content_width = get_option( 'large_size_w' );
 
 
 # Basic contextual support.
-add_filter('body_class', function ($array) {
+add_filter('body_class', function($array) {
     return \array_unique( \array_merge($array, array(
         is_child_theme() ? 'child-theme' : 'parent-theme'
       , is_singular() ? 'singular' : 'plural'
@@ -41,14 +41,14 @@ add_filter('body_class', function ($array) {
 });
 
 # Actions to be run on the 'after_setup_theme' hook:
-add_action('after_setup_theme', function () {
+add_action('after_setup_theme', function() {
     \defined('WP_DEBUG') && WP_DEBUG or remove_action( 'wp_head', 'wp_generator' ); # tighten security
     add_theme_support( 'automatic-feed-links' ); # required
     add_theme_support( 'post-thumbnails' ); # "featured image"
     add_editor_style(); # codex.wordpress.org/Function_Reference/add_editor_style
 }, 0);
 
-add_filter('@html_tag', function () {
+add_filter('@html_tag', function() {
     # Emulate language_attributes() b/c it has no "get" version.
     # Include its 'language_attributes' filter for plugin usage.
     $attrs = 'dir="' . (is_rtl() ? 'rtl' : 'ltr') . '" lang="' . get_bloginfo('language') . '"';
@@ -57,25 +57,24 @@ add_filter('@html_tag', function () {
     return "<html $attrs>";
 }, 0);
 
-add_action('@body', apply_filters('@body_actions', function () {
+add_action('@body', apply_filters('@body_actions', function() {
 
     static $ran; # prevent from running more than once
-    if ( $ran = null !== $ran ) return;
+    if ($ran = null !== $ran) return;
 
-    add_action( '@body', 'get_header' , 5 );
-    add_action( '@body', function () {
-        include ( locate_template( 'main.php', false, false ) );
-    }, 10 );
-    add_action( '@body', 'get_sidebar', 20 );
-    add_action( '@body', 'get_footer' , 30 );
-
+    add_action('@body', 'get_header' , 5);
+    add_action('@body', function() {
+        include locate_template('main.php', false, false);
+    }, 10);
+    add_action('@body', 'get_sidebar', 20);
+    add_action('@body', 'get_footer' , 30);
 }), 0);
 
-add_action( '@header', function () {
+add_action('@header', function() {
     locate_template( 'branding.php', true, false );
-}, apply_filters('@branding_priority', 10) );
+}, apply_filters('@branding_priority', 10));
 
-add_action('@header', function () {
+add_action('@header', function() {
 
     $skip = '<a href="#main" accesskey="5">' . __('Skip', 'theme') . '</a>';
     $skip = apply_filters( '@menu_skip_anchor', $skip );
@@ -97,37 +96,40 @@ add_action('@header', function () {
 
 }, apply_filters( '@menu_priority', 10));
 
-add_action('@header', function () {
+add_action('@header', function() {
     is_active_sidebar('header') and get_sidebar('header');
 });
 
-add_action('@footer', function () {
+add_action('@footer', function() {
     is_active_sidebar('footer') and get_sidebar('footer');
 });
 
-add_action( 'widgets_init', function () {
+add_action( 'widgets_init', function() {
     $areas = (array) apply_filters( '@widget_areas', array(
-        # codex.wordpress.org/Function_Reference/register_sidebar
         array( 'id' => 'sidebar', 'name' => '.sidebar-widget-area' )
       , array( 'id' => 'header' , 'name' => '.header-widget-area' )
       , array( 'id' => 'footer' , 'name' => '.footer-widget-area' )
     ));
-    foreach ( $areas as $a )
-        # Merge sensible defaults:
-        $a and register_sidebar( \array_merge( array( 'before_widget' => '<li class="widget %2$s">' ), $a ) );
+    # codex.wordpress.org/Function_Reference/register_sidebar
+    # Merge in sensible defaults:
+    foreach ($areas as $a) {
+        $a and register_sidebar( \array_merge(array(
+            'before_widget' => '<li class="widget %2$s">'
+        ), $a));
+    }
 });
 
-add_action( 'init', function () {
-    register_nav_menus( array('menu' => 'Menu') );
+add_action('init', function() {
+    register_nav_menus(array('menu' => 'Menu'));
 });
 
-add_action('@main', function () {
+add_action('@main', function() {
     # insert the loop into [role="main"]
     # codex.wordpress.org/Function_Reference/get_template_part
     get_template_part( 'loop', is_singular() ? 'singular' : 'plural' ); #wp
 }, apply_filters('@loop_priority', 10));
 
-add_filter('previous_posts_link_attributes', function ( $attrs = '' ) {
+add_filter('previous_posts_link_attributes', function( $attrs = '' ) {
     $attrs or $attrs = '';
     if ( ! \is_string($attrs) )
         return $attrs;
@@ -136,7 +138,7 @@ add_filter('previous_posts_link_attributes', function ( $attrs = '' ) {
     return \implode( ' ', $attrs );
 });
 
-add_filter('next_posts_link_attributes', function ( $attrs = '' ) {
+add_filter('next_posts_link_attributes', function( $attrs = '' ) {
     $attrs or $attrs = '';
     if ( ! \is_string($attrs) )
         return $attrs;
@@ -145,44 +147,42 @@ add_filter('next_posts_link_attributes', function ( $attrs = '' ) {
     return \implode( ' ', $attrs );
 });
 
-
-add_action('@loop', function () {
+add_action('@loop', function() {
 
     static $ran; # prevent from running more than once
-    if ( $ran = null !== $ran ) return;
+    if ($ran = null !== $ran) return;
     
-    add_action('@loop', function () {
+    add_action('@loop', function() {
         # codex.wordpress.org/Function_Reference/locate_template
         is_singular() or locate_template( 'loop-header.php', true, false );
     }, 5);
 
-    add_action('@loop', function () {
+    add_action('@loop', function() {
         # the actual loop
         if ( ! have_posts() )
             locate_template( 'loop-empty.php', true, false );
         else for ( $path = locate_template( 'entry.php', false, false ); have_posts(); ) {
             the_post();
-            include( $path );
+            include $path;
         }
     }, 10);
 
-    add_action('@loop', function () {
+    add_action('@loop', function() {
         # codex.wordpress.org/Function_Reference/locate_template
         locate_template( 'loop-nav.php', true, false );
     }, 20);
     
-    add_action('@loop_nav', apply_filters('@loop_nav_actions', is_singular() ? function () {
+    add_action('@loop_nav', apply_filters('@loop_nav_actions', is_singular() ? function() {
         previous_post_link( '%link' );
         next_post_link( '%link' );
-    } : function () {
+    } : function() {
         $prev = '<span>' . __('Prev', 'theme') . '</span>';
         $next = '<span>' . __('Next', 'theme') . '</span>';
         posts_nav_link( ' ', $prev, $next );
     }));
-
 }, 0);
 
-add_action('@entry', apply_filters('@entry_actions', function () {
+add_action('@entry', apply_filters('@entry_actions', function() {
 
     static $ran; # prevent from running more than once
     if ( $ran = null !== $ran ) return;
@@ -191,40 +191,40 @@ add_action('@entry', apply_filters('@entry_actions', function () {
     # truthy => content | falsey => excerpt
     $content_mode = apply_filters( '@content_mode', is_singular() );
     
-    $content_mode or current_theme_supports( 'post-thumbnails' ) && add_filter('@thumbnail', function () {
+    $content_mode or current_theme_supports( 'post-thumbnails' ) && add_filter('@thumbnail', function() {
         if ( $size = apply_filters( '@thumbnail_size', 'thumbnail' ) )
             if ( $img = get_the_post_thumbnail( null, $size, array( 'itemprop' => 'image' ) ) )
                 return ( $url = get_permalink() ) && \strip_tags( $img, '<img>' ) === $img
                     ? "<a itemprop='url' rel='bookmark' href='$url'>$img</a>" : $img;
     }, 0);
 
-    add_action('@entry', function () {# insert entry-header.php
-        include ( locate_template( 'entry-header.php', false, false ) );
+    add_action('@entry', function() {# insert entry-header.php
+        include locate_template( 'entry-header.php', false, false );
     }, 5);
 
-    add_action('@entry', $content_mode ? function () {
-        include ( locate_template( 'entry-content.php', false, false ) );
-    } : function () {
-        static $summ; # cache template location b/c repeated calls are likely here
-        include ( $summ = $summ ? $summ : locate_template( 'entry-summary.php', false, false ) );
+    add_action('@entry', $content_mode ? function() {
+        include locate_template( 'entry-content.php', false, false );
+    } : function() {
+        static $summ; # cache path b/c repeated calls are likely here
+        include $summ = $summ ?: locate_template( 'entry-summary.php', false, false );
     }, 10);
 
-    $content_mode and add_action('@entry', function () {
-        include ( locate_template( 'entry-footer.php', false, false ) );
+    $content_mode and add_action('@entry', function() {
+        include locate_template( 'entry-footer.php', false, false );
     }, 15);
     
-    is_singular() and add_action('@entry', function () {
+    is_singular() and add_action('@entry', function() {
         # codex.wordpress.org/Function_Reference/comments_template
         comments_template( '/comments.php', true );
     }, 20);
 }), 0);
 
-add_filter('@entry_attrs', function ( $attrs = '' ) {
+add_filter('@entry_attrs', function( $attrs = '' ) {
     $class = \implode( ' ', get_post_class() );
     return "class='$class' itemscope itemtype='http://schema.org/Article'";
 }, 0);
 
-add_filter('post_class', function ( $arr = array() ) {
+add_filter('post_class', function( $arr = array() ) {
     $arr = (array) $arr;
     # This compares using the format from: Settings > General > Date Format
     # Maybe we should use Y-m-d or provide a filter like:
@@ -233,7 +233,7 @@ add_filter('post_class', function ( $arr = array() ) {
     return \array_unique( $arr );
 });
 
-add_action('@entry_header', function () {
+add_action('@entry_header', function() {
     echo apply_filters( '@thumbnail', null );
     $markup  = '<h1 class="entry-title">';
     $markup .= '<a itemprop="url" rel="bookmark" href="' . get_permalink() . '">';
@@ -241,7 +241,7 @@ add_action('@entry_header', function () {
     echo apply_filters( '@headline', $markup );
 }, 5);
 
-add_action('@entry_header', function () {
+add_action('@entry_header', function() {
 
     global $authordata;        
     $markup = "<dl class='byline meta-list'>";
@@ -252,7 +252,7 @@ add_action('@entry_header', function () {
         and ( $link = apply_filters( 'the_author_posts_link', $link ) ) #wp: the_author_posts_link()
         and $markup .= '<dt class="author-label">' . __('By', 'theme') . '</dt><dd class="author-value vcard">' . $link . '</dd>';
 
-    $time_item = function ( $arr ) {
+    $time_item = function( $arr ) {
         \extract( $arr );
         $date = \call_user_func( $fn ); # Settings > General > Date Format
         $ymd = \call_user_func( $fn, 'Y-m-d' );
@@ -267,6 +267,7 @@ add_action('@entry_header', function () {
     
     # microformats.org/wiki/hentry
     # schema.org/Article
+    # github.com/ryanve/action/issues/1
         
     $markup .= $time_item(array( 
            'fn' => 'get_the_date'
@@ -288,10 +289,9 @@ add_action('@entry_header', function () {
         
     $markup .= '</dl>';
     echo apply_filters( '@byline', $markup );
-
 }, 7);
 
-add_action ('@entry_footer', function () {
+add_action ('@entry_footer', function() {
 
     global $wp_taxonomies;
     static $taxos;
@@ -319,14 +319,14 @@ add_action ('@entry_footer', function () {
             }
         }
     }
-    $markup = '<dl class="meta-list entry-taxos">' . $markup . '</dl>';
 
+    $markup = '<dl class="meta-list entry-taxos">' . $markup . '</dl>';
     $markup = apply_filters( '@entry_terms', $markup, $taxos );
     echo $markup;
-
 }, 20);
 
-add_action('wp_footer', function () {
+# Maybe this should be ported to a plugin:
+add_action('wp_footer', function() {
     $url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']; ?>
 
     <div class="diagnostic">
@@ -343,7 +343,7 @@ add_action('wp_footer', function () {
 # Actions to be run on the 'init' hook
 # CPTs and taxonomies should register on init.
 # Scripts/styles should register/enqueue on init.
-add_action( 'init', function () {
+add_action( 'init', function() {
     
     # Register Modernizr
     $modernizr_uri = apply_filters( '@modernizr_uri', 'http://airve.github.com/js/modernizr/modernizr_shiv.min.js' );
@@ -352,9 +352,10 @@ add_action( 'init', function () {
     # Get URI in child theme or else parent theme.
     $locate_uri = function($file) {
         $file = '/' . ltrim($file, '/');
-        foreach( array('get_stylesheet_directory', 'get_template_directory') as $fn )
+        foreach( array('get_stylesheet_directory', 'get_template_directory') as $fn ) {
             if ( \file_exists( \rtrim( \call_user_func($fn), '/' ) . $file ) )
                 return \rtrim( \call_user_func($fn . '_uri'), '/' ) . $file;
+        }
     };
 
     # Frontend-specific actions:
@@ -386,44 +387,35 @@ add_action( 'init', function () {
     }
 });
 
-add_filter( '@output', function ( $html ) {
-
-    # The '@output' filter is mainly designed for use 
-    # with the PHP DOMDocument interface, but I didn't 
-    # use DOMDocument in the default filters in case
-    # of lack of support or invalid markup.
-    # @link php.net/manual/en/class.domdocument.php
-
-    # remove excessive whitespace for better readability
-    $html = \preg_replace( '/\n+\s*\n+/', "\n\n", $html );
-
-    return $html;
-
+add_filter('@output', function($html) {
+    # The '@output' filter enables filtering via DOMDocument
+    # Remove excessive whitespace for better readability:
+    return \preg_replace( '/\n+\s*\n+/', "\n\n", $html );
 });
 
 # early priority <head> actions
 # debating whether to use filters (like below) and/or to make
 # them named functions so child themes can use remove_action
-add_action ('wp_head', function () {
+add_action('wp_head', function() {
      $tag = '<meta charset="utf-8">';
      echo ltrim( apply_filters( '@meta_charset', $tag ) . "\n" );
-}, -5 ); 
+}, -5); 
 
-add_action ('wp_head', function () {
+add_action('wp_head', function() {
     $tag = '<title>' . get_the_title() . '</title>';
     echo ltrim( apply_filters( '@title_tag', $tag ) . "\n\n" );
-}, -3 ); 
+}, -3); 
 
-add_action ('wp_head', function () {
+add_action('wp_head', function() {
     $tag = '<meta name="viewport" content="width=device-width,initial-scale=1.0">';
     echo ltrim( apply_filters( '@meta_viewport', $tag ) . "\n" );
-}, -1 ); 
+}, -1); 
 
 # comments callback ( see comments.php )
 # codex.wordpress.org/Function_Reference/wp_list_comments
 # wp-includes/comment-template.php
-add_filter('@list_comments', function ( $arr ) {
-    null === $arr['callback'] and $arr['callback'] = function ( $comment, $arr, $depth ) {
+add_filter('@list_comments', function( $arr ) {
+    null === $arr['callback'] and $arr['callback'] = function( $comment, $arr, $depth ) {
         $GLOBALS['comment'] = $comment;
         $GLOBALS['comment_depth'] = $depth;
         $attrs;
@@ -435,39 +427,38 @@ add_filter('@list_comments', function ( $arr ) {
     return $arr;
 });
 
-add_filter('@comment_attrs', \function_exists('\\phat\\attrs') ? function () {
+add_filter('@comment_attrs', \function_exists( '\\phat\\attrs' ) ? function() {
     # core.trac.wordpress.org/ticket/23236
     $attrs = array(); 
     $id = get_comment_ID();
     is_singular() and $attrs['id'] = 'comment-' . $id;
-    $attrs['class'] = \implode( ' ', get_comment_class( '', $id ) );
+    $attrs['class'] = \implode(' ', get_comment_class( '', $id ));
     if ( 'comment' === get_comment_type($id) ) {
         $attrs['itemprop'] = 'comment';
         $attrs['itemscope'] = '';
         $attrs['itemtype'] = 'http://schema.org/UserComments';
     }
     return  \phat\attrs( $attrs );
-} : function () {
+} : function() {
     $attrs = array(); 
     $id = get_comment_ID();
     is_singular() and $attrs[] = "id='comment-$id'";
-    $class = \implode( ' ', get_comment_class( '', $id ) );
+    $class = \implode(' ', get_comment_class( '', $id ));
     $class and $attrs[] = "class='$class'";
     if ( 'comment' === get_comment_type( $id ) ) {
         $attrs[] = 'itemprop="comment"';
         $attrs[] = 'itemscope';
         $attrs[] = 'itemtype="http://schema.org/UserComments"';
     }
-    return implode( ' ', $attrs );
+    return \implode(' ', $attrs);
 }, 1);
 
-
-add_action('@comment', apply_filters('@comment_actions', function () {
+add_action('@comment', apply_filters('@comment_actions', function() {
 
     static $ran; # prevent from running more than once
     if ( $ran = null !== $ran ) return;
 
-    add_action('@comment', function () {
+    add_action('@comment', function() {
         global $comment;
         $markup = '<header class="comment-header">';
         $markup .= apply_filters( '@comment_avatar', get_avatar( $comment, 60 ) );
@@ -480,14 +471,14 @@ add_action('@comment', apply_filters('@comment_actions', function () {
         echo apply_filters( '@comment_header', $markup );
     }, 5);
     
-    add_action('@comment', function () {
+    add_action('@comment', function() {
         $markup = '<div class="comment-content" itemprop="commentText">';
         $markup .= get_comment_text( get_comment_ID() );
         $markup .= '</div>';
         echo $markup;
     }, 10);
     
-    add_action('@comment', function () {
+    add_action('@comment', function() {
         global $comment;
         if ( ! $comment->comment_approved ) {
             $markup = __('Your comment is awaiting moderation.', 'theme');
@@ -497,9 +488,8 @@ add_action('@comment', apply_filters('@comment_actions', function () {
     }, 10);
 }), 0);
 
-add_filter('the_author_posts_link', function ( $tag ) {
+# @link github.com/ryanve/action/issues/1
+add_filter('the_author_posts_link', function( $tag ) {
     # add hcard classes to the link if there's not already any classes
-    if ( false !== strpos( $tag, 'class=' ) )
-        return $tag;
-    return str_replace( ' href=', ' class="url fn n" href=', $tag );
+    return \strpos($tag, 'class=') ? $tag : str_replace(' href=', ' class="url fn n" href=', $tag);
 });
