@@ -325,21 +325,6 @@ add_action ('@entry_footer', function() {
     echo $markup;
 }, 20);
 
-# Maybe this should be ported to a plugin:
-add_action('wp_footer', function() {
-    $url = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']; ?>
-
-    <div class="diagnostic">
-        <h3>Testing</h3>
-        <ul>
-            <li><a accesskey="x" rel="nofollow" href="http://html5.validator.nu/?doc=<?php echo $url; ?>">validate</a></li>
-            <li><a accesskey="o" rel="nofollow" href="http://gsnedders.html5.org/outliner/process.py?url=<?php echo $url; ?>">outline</a></li>
-            <li><a accesskey="d" rel="nofollow" href="http://www.google.com/webmasters/tools/richsnippets?url=<?php echo $url; ?>">data</a></li>
-        </ul>
-    </div>
-
-<?php }, 0);
-
 # Actions to be run on the 'init' hook
 # CPTs and taxonomies should register on init.
 # Scripts/styles should register/enqueue on init.
