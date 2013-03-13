@@ -400,7 +400,7 @@ add_action('wp_head', function() {
 # codex.wordpress.org/Function_Reference/wp_list_comments
 # wp-includes/comment-template.php
 add_filter('@list_comments', function( $arr ) {
-    null === $arr['callback'] and $arr['callback'] = function( $comment, $arr, $depth ) {
+    empty( $arr['callback'] ) and $arr['callback'] = function( $comment, $arr, $depth ) {
         $GLOBALS['comment'] = $comment;
         $GLOBALS['comment_depth'] = $depth;
         $attrs;
