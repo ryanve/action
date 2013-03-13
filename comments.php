@@ -34,8 +34,8 @@ if ( post_password_required() || ! post_type_supports( get_post_type(), 'comment
                                 ?></h2>
 
                                 <ol class="xoxo comments"><?php
-                                        # see the '@list_comments' filter in functions.php
-                                        wp_list_comments( apply_filters( '@list_comments', array( 'style' => 'ol', 'avatar_size' => 60 ) ) ); 
+                                    # see the '@list_comments' filter in functions.php
+                                    wp_list_comments( apply_filters( '@list_comments', array() ) ); 
                                 ?></ol><!-- /.xoxo -->
 
                                 <?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) { // "paged" comments ?>

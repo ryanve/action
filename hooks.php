@@ -396,21 +396,22 @@ add_action('wp_head', function() {
     echo ltrim( apply_filters( '@meta_viewport', $tag ) . "\n" );
 }, -1); 
 
-# comments callback ( see comments.php )
+# see comments.php
 # codex.wordpress.org/Function_Reference/wp_list_comments
-# wp-includes/comment-template.php
 add_filter('@list_comments', function( $arr ) {
-    empty( $arr['callback'] ) and $arr['callback'] = function( $comment, $arr, $depth ) {
-        $GLOBALS['comment'] = $comment;
-        $GLOBALS['comment_depth'] = $depth;
-        $attrs;
-        $attrs = apply_filters( '@comment_attrs', $attrs );
-        echo "<li><article $attrs>"; 
-        do_action( '@comment' );
-        echo '</article>'; 
-    };
-    return $arr;
-});
+    return wp_parse_args($arr, array(
+        'style' => 'ol'
+      , 'avatar_size' => 60 
+      , 'callback' => function( $comment, $arr, $depth ) {
+            $GLOBALS['comment'] = $comment;
+            $GLOBALS['comment_depth'] = $depth;
+            $attrs = apply_filters( '@comment_attrs', null );
+            echo "<li><article $attrs>"; 
+            do_action( '@comment' );
+            echo '</article>'; 
+        }
+    ));
+}, 0);
 
 add_filter('@comment_attrs', \function_exists( '\\phat\\attrs' ) ? function() {
     # core.trac.wordpress.org/ticket/23236
