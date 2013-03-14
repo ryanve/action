@@ -15,8 +15,10 @@ namespace theme;
         <?php if ( is_tag() || is_category() || is_tax() ) { ?>
 
             <header class="loop-header tax-header">
-                <h1 class="loop-title tax-title"><a href=""><?php single_term_title(); ?></a></h1>
-                <div class="loop-desc tax-desc"><?php echo term_description( '', get_query_var( 'taxonomy' ) ); ?></div>
+                <h1 class="loop-title tax-title"><?php single_term_title(); ?></h1>
+                <div class="loop-desc tax-desc"><?php 
+                    echo term_description( '', get_query_var( 'taxonomy' ) ); 
+                ?></div>
             </header>
 
         <?php } elseif ( is_author() ) { ?>
