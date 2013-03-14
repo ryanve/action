@@ -295,7 +295,8 @@ add_action('@entry_header', function() {
         and ( $link = get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ) # href
         and ( $link = "<a href='$link' class='url fn n' itemprop='author' rel='author'>" . get_the_author() .'</a>' )
         and ( $link = apply_filters( 'the_author_posts_link', $link ) ) #wp: the_author_posts_link()
-        and $markup .= '<dt class="author-label">' . __('By', 'theme') . '</dt><dd class="author-value vcard">' . $link . '</dd>';
+        and $markup .= '<dt class="author-label">' . __('By', 'theme')
+            . '</dt><dd class="author-value vcard">' . $link . '</dd>';
 
     $time_item = function( $arr ) {
         \extract( $arr );
@@ -336,7 +337,7 @@ add_action('@entry_header', function() {
     echo apply_filters( '@byline', $markup );
 }, 7);
 
-add_action ('@entry_footer', function() {
+add_action('@entry_footer', function() {
 
     global $wp_taxonomies;
     static $taxos;
