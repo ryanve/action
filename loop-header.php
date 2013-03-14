@@ -23,10 +23,17 @@ namespace theme;
 
         <?php } elseif ( is_author() ) { ?>
 
-            <header class="loop-header user-header vcard"><!-- microformats.org/wiki/hcard -->
-                <h1 class="loop-title user-title fn n"><?php the_author_meta( 'display_name' ); ?></h1>
-                <div class="profile-pic"><?php echo apply_filters( '@profile-pic', null ); ?></div>
-                <div class="loop-desc user-desc"><?php the_author_meta( 'description' ); ?></div>
+            <!-- microformats.org/wiki/hcard -->
+            <header class="loop-header user-header vcard">
+                <h1 class="loop-title user-title fn n"><?php
+                    echo get_queried_object()->display_name;
+                 ?></h1>
+                <div class="profile-pic"><?php 
+                    echo apply_filters( '@profile-pic', null ); 
+                ?></div>
+                <div class="loop-desc user-desc"><?php 
+                    echo get_queried_object()->user_description;
+                ?></div>
             </header>
 
         <?php } elseif ( is_date() ) { ?>
