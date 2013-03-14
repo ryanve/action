@@ -481,16 +481,12 @@ add_action('wp_head', function() {
 }, -3); 
 
 add_action('wp_head', function() {
-
-    $meta = \array_filter( apply_filters( '@meta_tags', array(
+    foreach ( apply_filters( '@meta', array(
         'viewport' => array( 'name' => 'viewport', 'content' => 'width=device-width,initial-scale=1.0' )
-      , 'description' => array( 'name' => 'description' )
-    )));
-
-    foreach ( $meta as $hook => &$tag ) {
+    )) as $tag ) {
         if ( \is_string( $tag ) ) {
             $tag = \strip_tags( $tag, '<meta>' );
-        } elseif ( isset($tag['content']) ) {
+        } elseif ( $tag && isset($tag['content']) ) {
             $attrs = array();
             foreach( $tag as $k => $v ) {
                 if ( false !== $v && \is_scalar($v) )
@@ -501,7 +497,6 @@ add_action('wp_head', function() {
         } else {
             continue;
         }
-        $tag = \ctype_alpha($k) ? \rtrim( apply_filters( '@meta_' . $k . '_tag', $tag ) ) : $tag;
         if ( $tag )
             echo "$tag\n";
     }
