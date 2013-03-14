@@ -30,7 +30,13 @@ namespace theme;
         <?php } elseif ( is_date() ) { ?>
 
             <header class="loop-header date-header">
-                <h1 class="loop-title date-title"><?php echo implode('-', array_filter( explode( '/', $_SERVER['REQUEST_URI'] ), 'is_numeric' ) ); ?></h1>
+                <h1 class="loop-title date-title"><?php \call_user_func(function() {
+                    $parts = \explode( '/', \ltrim($_SERVER['REQUEST_URI'], '/') );
+                    $title = array();
+                    while ( \is_numeric($n = \array_shift($parts)) )
+                        $title[] = $n;
+                    echo \implode( '-', $title );
+                }); ?></h1>
                 <div class="loop-desc date-desc"><?php _e('Archives.', 'theme'); ?></div>
             </header>
 
