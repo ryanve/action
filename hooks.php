@@ -53,6 +53,7 @@ add_filter('@html_tag', function() {
     # Include its 'language_attributes' filter for plugin usage.
     $attrs = 'dir="' . (is_rtl() ? 'rtl' : 'ltr') . '" lang="' . get_bloginfo('language') . '"';
     $attrs = apply_filters( 'language_attributes', $attrs );
+    $attrs .= ' itemscope itemtype="http://schema.org/WebPage"';
     $attrs = apply_filters( '@html_attrs', $attrs );
     return "<html $attrs>";
 }, 0);
@@ -423,21 +424,86 @@ add_filter('@output', function($html) {
 });
 
 # early priority <head> actions
-# debating whether to use filters (like below) and/or to make
-# them named functions so child themes can use remove_action
 add_action('wp_head', function() {
      $tag = '<meta charset="utf-8">';
      echo ltrim( apply_filters( '@meta_charset', $tag ) . "\n" );
 }, -5); 
 
+# dns-prefetch markup
 add_action('wp_head', function() {
-    $tag = '<title>' . get_the_title() . '</title>';
-    echo ltrim( apply_filters( '@title_tag', $tag ) . "\n\n" );
+    $uris = (array) apply_filters( '@dns_prefetches', array() );
+    echo \implode('', \array_reduce( $uris, function( $result, $uri ) {
+        \ctype_graph( $uri )
+            and ( $uri = \explode( '//', $uri ) )
+            and isset( $uri[1] ) # only deal with full uris
+            and ( $uri = \strtok( $uri[1], '/' ) ) # strip to authority
+            and ( false === \strpos( $uri, $_SERVER['SERVER_NAME'] ) ) # don't prefetch self
+            and ! \preg_match( '#[^\w@:_.-]#', $uri ) # ensure remaining uri is entirely safe
+            and $result[$uri] = "<link rel='dns-prefetch' href='//$uri'>\n";
+        return $result;
+    }, array() ));
+}, -4); 
+
+# dns-prefetch uris
+add_action('@dns_prefetches', function( $uris ) {
+    global $wp_scripts, $wp_styles;
+    foreach ( array( $wp_scripts, $wp_styles ) as $o ) {
+        \is_object($o)
+            and !empty($o->queue)
+            and !empty($o->registered)
+            and $uris = \array_merge($uris, \array_intersect_key(
+                (array) \wp_list_pluck( $o->registered, 'src' )
+              , \array_flip( \array_values((array) $o->queue) )
+            ));
+    }
+    return $uris;
+});
+
+/*add_action('@dns_prefetches', function( $uris ) {
+    global $wp_scripts, $wp_styles;
+    return \array_reduce( array( $wp_scripts, $wp_styles ), function( $uris, $o ) {
+        return \is_object($o) && !empty($o->queue) && !empty($o->registered) ? \array_merge($uris,
+            \array_intersect_key(
+                (array) \wp_list_pluck( $o->registered, 'src' )
+              , \array_flip( \array_values((array) $o->queue) )
+            )
+        ) : $uris;
+    }, (array) $uris );
+});*/
+
+add_action('wp_head', function() {
+    $tag = apply_filters( '@title_attrs', 'itemprop="name"' );
+    $tag = ( $tag ? "<title $tag>" : '<title>' ) . get_the_title() . '</title>';
+    $tag = apply_filters( '@title_tag', $tag );
+    if ( $tag and $tag = \trim( $tag ) )
+       echo "\n$tag\n\n";
 }, -3); 
 
 add_action('wp_head', function() {
-    $tag = '<meta name="viewport" content="width=device-width,initial-scale=1.0">';
-    echo ltrim( apply_filters( '@meta_viewport', $tag ) . "\n" );
+
+    $meta = \array_filter( apply_filters( '@meta_tags', array(
+        'viewport' => array( 'name' => 'viewport', 'content' => 'width=device-width,initial-scale=1.0' )
+      , 'description' => array( 'name' => 'description' )
+    )));
+
+    foreach ( $meta as $hook => &$tag ) {
+        if ( \is_string( $tag ) ) {
+            $tag = \strip_tags( $tag, '<meta>' );
+        } elseif ( isset($tag['content']) ) {
+            $attrs = array();
+            foreach( $tag as $k => $v ) {
+                if ( false !== $v && \is_scalar($v) )
+                    $attrs[] = true === $v || '' === ($v = $v ? esc_attr($v) : $v) ? $k : "$k='$v'";
+            }
+            $attrs = \implode( ' ', $attrs );
+            $tag = $attrs ? "<meta $attrs>" : null;
+        } else {
+            continue;
+        }
+        $tag = \ctype_alpha($k) ? \rtrim( apply_filters( '@meta_' . $k . '_tag', $tag ) ) : $tag;
+        if ( $tag )
+            echo "$tag\n";
+    }
 }, -1); 
 
 # see comments.php

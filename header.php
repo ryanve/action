@@ -6,7 +6,7 @@ namespace theme;
 
 ?>
 
-    <header id="header" class="site-header" role="banner">
+    <header id="header" class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
 
         <?php do_action( '@header' ); ?>
 

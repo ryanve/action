@@ -8,13 +8,13 @@ namespace theme;
 # everything is added via the '@header' action located in header.php
 ?>
 
-        <hgroup class="site-branding" itemscope itemtype="http://schema.org/Organization">
-            <h1 class="site-title">
+        <hgroup class="site-branding" itemprop="provider publisher" itemscope itemtype="http://schema.org/Organization">
+            <h1 class="h site-title">
                 <a accesskey="1" itemprop="url" rel="home" href="<?php echo home_url(); ?>">
                     <span itemprop="name"><?php bloginfo('name'); ?></span>
                 </a>
             </h1>
-            <h2 class="site-description">
+            <h2 class="h site-description">
                 <span itemprop="description"><?php bloginfo('description'); ?></span>
             </h2>
         </hgroup>
