@@ -70,14 +70,11 @@
         width:auto; height:auto; margin:0; 
     }
 
-
 /* ==========================================================================
    $entries
    ========================================================================== */
 
-    .hentry { margin:2em 0; }
-    .hentry:first-child { margin-top:0; }
-    .hentry:last-child { margin-bottom:0; }
+    .hentry + .hentry { margin-top:2em; }
     .sticky {}
     
     .attachment-thumbnail.wp-post-image { /* featured image */

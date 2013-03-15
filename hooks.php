@@ -585,3 +585,9 @@ add_filter('the_author_posts_link', function( $tag ) {
     # add hcard classes to the link if there's not already any classes
     return \strpos($tag, 'class=') ? $tag : str_replace(' href=', ' class="url fn n" href=', $tag);
 });
+
+add_filter('get_search_form', function( $markup ) {
+    return $markup ? \str_replace( 'screen-reader-text', 'assistive', $markup ) : $markup;
+});
+
+#end
