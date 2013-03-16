@@ -2,7 +2,7 @@
  * Theme Name: action
  * Theme URI: http://actiontheme.com
  * Description: Extendable HTML5 theme.
- * Version: 1.0.0-pre
+ * Version: 0.9.8
  * Author: Ryan Van Etten
  * Author URI: http://ryanvanetten.com
  * Tags: microformats, flexible-width, right-sidebar, light, white
@@ -70,11 +70,14 @@
         width:auto; height:auto; margin:0; 
     }
 
+
 /* ==========================================================================
    $entries
    ========================================================================== */
 
-    .hentry + .hentry { margin-top:2em; }
+    .hentry { margin:2em 0; }
+    .hentry:first-child { margin-top:0; }
+    .hentry:last-child { margin-bottom:0; }
     .sticky {}
     
     .attachment-thumbnail.wp-post-image { /* featured image */
@@ -162,16 +165,11 @@
     .plural .loop-nav [rel~="prev"]:before { content:"< "; font-weight: bold; }
     .plural .loop-nav [rel~="next"]:after { content:" >"; font-weight: bold; }
     
-    #main { clear:left; float:left; margin:1em 0; }
+    #main { clear:left; margin:1.5em 0; }
 
     @media all and (min-width:40em) {
+        :not(.full-width) #main { width:62.5%; float:left; clear:left; } /* 640/1024 */
+        :not(.full-width) .sidebar-widget-area { width:29.296875%; float:right; clear:right; } /* 300/1024 */
         .site-branding { float:left; }
         #menu { float:right; margin:0 0 2em 4%; }
-        .sidebar-widgets-active:not(.full-width) #main {
-            width:62.5%; /* 640/1024 */
-         } 
-        .sidebar-widgets-active:not(.full-width) .sidebar-widget-area { 
-            width:29.296875%;  /* 300/1024 */
-            float:right; clear:right;
-        } 
     }

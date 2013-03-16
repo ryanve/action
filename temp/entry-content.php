@@ -1,0 +1,1 @@
+<?php namespace theme;?>                        <div class="grouping entry-content" itemprop="articleBody"><?php                     the_content();                ?></div><!-- .entry-content -->

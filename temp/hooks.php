@@ -31,6 +31,15 @@ isset( $content_width ) or $content_width = get_option( 'large_size_w' );
 # @link  markjaquith.wordpress.com/2011/10/06/translating-wordpress-plugins-and-themes-dont-get-clever/
 # todo: load textdomain
 
+
+# Basic contextual support.
+add_filter('body_class', function($array) {
+    return \array_unique( \array_merge($array, array(
+        is_child_theme() ? 'child-theme' : 'parent-theme'
+      , is_singular() ? 'singular' : 'plural'
+    )));
+});
+
 # Actions to be run on the 'after_setup_theme' hook:
 add_action('after_setup_theme', function() {
     \defined('WP_DEBUG') && WP_DEBUG or remove_action( 'wp_head', 'wp_generator' ); # tighten security
@@ -39,30 +48,12 @@ add_action('after_setup_theme', function() {
     add_editor_style(); # codex.wordpress.org/Function_Reference/add_editor_style
 }, 0);
 
-# Basic contextual support.
-add_filter('body_class', function($array) {
-    global $wp_registered_sidebars;
-    if ( !empty($wp_registered_sidebars))
-        foreach ($wp_registered_sidebars as $k => $v)
-            is_active_sidebar($k) and $array[] = "$k-widgets-active";
-    return \array_unique( \array_merge(array(
-          is_child_theme() ? 'child-theme' : 'parent-theme'
-        , is_singular() ? 'singular' : 'plural'
-    ), $array));
-});
-
 add_filter('@html_tag', function() {
     # Emulate language_attributes() b/c it has no "get" version.
     # Include its 'language_attributes' filter for plugin usage.
     $attrs = 'dir="' . (is_rtl() ? 'rtl' : 'ltr') . '" lang="' . get_bloginfo('language') . '"';
-    $attrs = apply_filters('language_attributes', $attrs);
-    $class = get_body_class();
-    \array_unshift($class, 'no-js', 'custom');
-    $class = \implode(' ', \array_unique($class));
-    add_filter('body_class', '__return_empty_array'); #wp
-    $attrs .= " class='$class'";
-    $attrs .= ' itemscope itemtype="http://schema.org/WebPage"';
-    $attrs = apply_filters('@html_attrs', $attrs);
+    $attrs = apply_filters( 'language_attributes', $attrs );
+    $attrs = apply_filters( '@html_attrs', $attrs );
     return "<html $attrs>";
 }, 0);
 
@@ -90,7 +81,7 @@ add_action('@header', function() {
     $skip and $skip = \trim( \strip_tags( $skip, '<a>' ) );
     $skip = $skip ? '<li class="assistive focusable">' . $skip . '</li>' : '';
     
-    $attrs = 'id="menu" role="navigation" class="site-nav invert-anchors"';
+    $attrs = 'id="menu" role="navigation" class="sectioning site-nav invert-anchors"';
     $attrs = apply_filters( '@menu_attrs', $attrs );
 
     echo apply_filters('@menu', \str_repeat( ' ', 8 )
@@ -100,7 +91,7 @@ add_action('@header', function() {
           , 'container'      => false
           , 'echo'           => false
           , 'menu_class'     => 'nav'
-          , 'items_wrap'     => '<ul>' . $skip . '%3$s</ul>'
+          , 'items_wrap'     => '<ul class="grouping">' . $skip . '%3$s</ul>'
     )) . '</nav>' . "\n\n");
 
 }, apply_filters( '@menu_priority', 10));
@@ -191,50 +182,6 @@ add_action('@loop', function() {
     }));
 }, 0);
 
-add_action('@loop_header', function() {
-
-    $data = array();
-
-    if ( is_category() || is_tag() || is_tax() ) {
-        $data['case'] = 'tax';
-        $data['name'] = single_term_title( '', false );
-        $data['description'] = term_description( '', get_query_var( 'taxonomy' ) );
-    } elseif ( is_author() ) {
-        $data = get_queried_object();
-        $data = array( 'case' => 'user', 'name' => $data->display_name, 'description' => $data->user_description );
-    } elseif ( is_search() ) {
-        $data['case'] = 'search';
-        $data['name'] = __( 'Search: ', 'theme' ) . get_search_query();
-    } elseif ( is_date() ) {
-        $data['case'] = 'date';
-        $parts = \explode( '/', \ltrim($_SERVER['REQUEST_URI'], '/') );
-        $data['name'] = array();
-        while ( \is_numeric( $n = \array_shift($parts) ) )
-            $data['name'][] = $n;
-        $data['name'] = \implode( '-', $data['name'] );
-        $data['description'] = __( 'Archives.', 'theme' );
-    } elseif ( is_post_type_archive() ) {
-        $data['name'] = post_type_archive_title();
-        $data['description'] = get_post_type_object( get_query_var('post_type') )->description;
-    }
-    
-    $render = function( $prop, $tagname = 'div' ) use ($data) {
-        $class = "loop-$prop";
-        empty( $data['case'] ) or $class .= ' ' . $data['case'] . "-$prop";
-        return "<$tagname itemprop='$prop' class='$class'>" . $data[$prop] . "</$tagname>";
-    };
-
-    if ( $data = apply_filters( '@loop_data', $data ) ) {
-        \extract( $data );
-        $markup = '';
-        isset( $name ) and $markup = (empty( $image ) ? '' : (
-            ( $src = \strip_tags($image) ) ? "<img itemprop='image' src='$src' alt='" . $image . "'>" : $image
-        )) . $render( 'name', 'h1' );
-        isset( $description ) and $markup .= $render( 'description', 'div' );
-        echo $markup;
-    }
-}, 5);
-
 add_action('@entry', apply_filters('@entry_actions', function() {
 
     static $ran; # prevent from running more than once
@@ -288,7 +235,7 @@ add_filter('post_class', function( $arr = array() ) {
 
 add_action('@entry_header', function() {
     echo apply_filters( '@thumbnail', null );
-    $markup  = '<h1 class="entry-title">';
+    $markup  = '<h1 class="h entry-title">';
     $markup .= '<a itemprop="url" rel="bookmark" href="' . get_permalink() . '">';
     $markup .= '<span class="headline name">' . get_the_title() . '</span></a></h1>';
     echo apply_filters( '@headline', $markup );
@@ -297,14 +244,13 @@ add_action('@entry_header', function() {
 add_action('@entry_header', function() {
 
     global $authordata;        
-    $markup = "<dl class='byline meta-list'>";
+    $markup = "<dl class='grouping byline meta-list'>";
     
     \is_object( $authordata )
         and ( $link = get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ) # href
         and ( $link = "<a href='$link' class='url fn n' itemprop='author' rel='author'>" . get_the_author() .'</a>' )
         and ( $link = apply_filters( 'the_author_posts_link', $link ) ) #wp: the_author_posts_link()
-        and $markup .= '<dt class="author-label">' . __('By', 'theme')
-            . '</dt><dd class="author-value vcard">' . $link . '</dd>';
+        and $markup .= '<dt class="author-label">' . __('By', 'theme') . '</dt><dd class="author-value vcard">' . $link . '</dd>';
 
     $time_item = function( $arr ) {
         \extract( $arr );
@@ -345,15 +291,15 @@ add_action('@entry_header', function() {
     echo apply_filters( '@byline', $markup );
 }, 7);
 
-add_action('@entry_footer', function() {
+add_action ('@entry_footer', function() {
 
     global $wp_taxonomies;
     static $taxos;
 
     echo apply_filters('@entry_pages', wp_link_pages(array(
         'echo'   => 0
-      , 'before' => '<nav class="entry-pages meta-list"><h4 class="meta-label pages-label">' 
-                    . __('Pages', 'theme') . '</h4><div class="meta-value pages-value">'
+      , 'before' => '<nav class="sectioning entry-pages meta-list"><h4 class="meta-label pages-label">' 
+                    . __('Pages', 'theme') . '</h4><div class="grouping meta-value pages-value">'
       , 'after'  => '</div></nav>'
     )));
 
@@ -369,12 +315,12 @@ add_action('@entry_footer', function() {
                 $void = $terms ? '' : ' void';
                 $markup .= "<dt class='meta-label taxo-label $class-label$void'>$label</dt>";
                 $markup .= "<dd class='meta-value taxo-value $class-value$void'>";
-                $markup .= '<ul class="term-list">' . $terms . '</ul></dd>';
+                $markup .= '<ul class="grouping term-list">' . $terms . '</ul></dd>';
             }
         }
     }
 
-    $markup = '<dl class="meta-list entry-taxos">' . $markup . '</dl>';
+    $markup = '<dl class="grouping meta-list entry-taxos">' . $markup . '</dl>';
     $markup = apply_filters( '@entry_terms', $markup, $taxos );
     echo $markup;
 }, 20);
@@ -433,81 +379,21 @@ add_filter('@output', function($html) {
 });
 
 # early priority <head> actions
+# debating whether to use filters (like below) and/or to make
+# them named functions so child themes can use remove_action
 add_action('wp_head', function() {
      $tag = '<meta charset="utf-8">';
      echo ltrim( apply_filters( '@meta_charset', $tag ) . "\n" );
 }, -5); 
 
-# dns-prefetch markup
 add_action('wp_head', function() {
-    $uris = (array) apply_filters( '@dns_prefetches', array() );
-    echo \implode('', \array_reduce( $uris, function( $result, $uri ) {
-        \ctype_graph( $uri )
-            and ( $uri = \explode( '//', $uri ) )
-            and isset( $uri[1] ) # only deal with full uris
-            and ( $uri = \strtok( $uri[1], '/' ) ) # strip to authority
-            and ( false === \strpos( $uri, $_SERVER['SERVER_NAME'] ) ) # don't prefetch self
-            and ! \preg_match( '#[^\w@:_.-]#', $uri ) # ensure remaining uri is entirely safe
-            and $result[$uri] = "<link rel='dns-prefetch' href='//$uri'>\n";
-        return $result;
-    }, array() ));
-}, -4); 
-
-# dns-prefetch uris
-add_action('@dns_prefetches', function( $uris ) {
-    global $wp_scripts, $wp_styles;
-    foreach ( array( $wp_scripts, $wp_styles ) as $o ) {
-        \is_object($o)
-            and !empty($o->queue)
-            and !empty($o->registered)
-            and $uris = \array_merge($uris, \array_intersect_key(
-                (array) \wp_list_pluck( $o->registered, 'src' )
-              , \array_flip( \array_values((array) $o->queue) )
-            ));
-    }
-    return $uris;
-});
-
-/*add_action('@dns_prefetches', function( $uris ) {
-    global $wp_scripts, $wp_styles;
-    return \array_reduce( array( $wp_scripts, $wp_styles ), function( $uris, $o ) {
-        return \is_object($o) && !empty($o->queue) && !empty($o->registered) ? \array_merge($uris,
-            \array_intersect_key(
-                (array) \wp_list_pluck( $o->registered, 'src' )
-              , \array_flip( \array_values((array) $o->queue) )
-            )
-        ) : $uris;
-    }, (array) $uris );
-});*/
-
-add_action('wp_head', function() {
-    $tag = apply_filters( '@title_attrs', 'itemprop="name"' );
-    $tag = ( $tag ? "<title $tag>" : '<title>' ) . get_the_title() . '</title>';
-    $tag = apply_filters( '@title_tag', $tag );
-    if ( $tag and $tag = \trim( $tag ) )
-       echo "\n$tag\n\n";
+    $tag = '<title>' . get_the_title() . '</title>';
+    echo ltrim( apply_filters( '@title_tag', $tag ) . "\n\n" );
 }, -3); 
 
 add_action('wp_head', function() {
-    foreach ( apply_filters( '@meta', array(
-        'viewport' => array( 'name' => 'viewport', 'content' => 'width=device-width,initial-scale=1.0' )
-    )) as $tag ) {
-        if ( \is_string( $tag ) ) {
-            $tag = \strip_tags( $tag, '<meta>' );
-        } elseif ( $tag && isset($tag['content']) ) {
-            $attrs = array();
-            foreach( $tag as $k => $v ) {
-                if ( false !== $v && \is_scalar($v) )
-                    $attrs[] = true === $v || '' === ($v = $v ? esc_attr($v) : $v) ? $k : "$k='$v'";
-            }
-            $attrs = \implode( ' ', $attrs );
-            $tag = $attrs ? "<meta $attrs>" : null;
-        } else {
-            continue;
-        }
-        if ( $tag )
-            echo "$tag\n";
-    }
+    $tag = '<meta name="viewport" content="width=device-width,initial-scale=1.0">';
+    echo ltrim( apply_filters( '@meta_viewport', $tag ) . "\n" );
 }, -1); 
 
 # see comments.php
@@ -532,7 +418,7 @@ add_filter('@comment_attrs', \function_exists( '\\phat\\attrs' ) ? function() {
     $attrs = array(); 
     $id = get_comment_ID();
     is_singular() and $attrs['id'] = 'comment-' . $id;
-    $attrs['class'] = \implode(' ', get_comment_class( '', $id ));
+    $attrs['class'] = \implode(' ', get_comment_class( 'sectioning', $id ));
     if ( 'comment' === get_comment_type($id) ) {
         $attrs['itemprop'] = 'comment';
         $attrs['itemscope'] = '';
@@ -543,7 +429,7 @@ add_filter('@comment_attrs', \function_exists( '\\phat\\attrs' ) ? function() {
     $attrs = array(); 
     $id = get_comment_ID();
     is_singular() and $attrs[] = "id='comment-$id'";
-    $class = \implode(' ', get_comment_class( '', $id ));
+    $class = \implode(' ', get_comment_class( 'sectioning', $id ));
     $class and $attrs[] = "class='$class'";
     if ( 'comment' === get_comment_type( $id ) ) {
         $attrs[] = 'itemprop="comment"';
@@ -562,7 +448,7 @@ add_action('@comment', apply_filters('@comment_actions', function() {
         global $comment;
         $markup = '<header class="comment-header">';
         $markup .= apply_filters( '@comment_avatar', get_avatar( $comment, 60 ) );
-        $markup .= '<dl class="meta-list">'; 
+        $markup .= '<dl class="grouping meta-list">'; 
         $markup .= '<dt>' . __('By', 'theme') . '</dt>'; 
         $markup .= '<dd itemprop="creator">' . get_comment_author_link() . '</dd>';
         $markup .= '<dt class="published-label">' . __('Published', 'theme') . '</dt>';
@@ -572,7 +458,7 @@ add_action('@comment', apply_filters('@comment_actions', function() {
     }, 5);
     
     add_action('@comment', function() {
-        $markup = '<div class="comment-content" itemprop="commentText">';
+        $markup = '<div class="grouping comment-content" itemprop="commentText">';
         $markup .= get_comment_text( get_comment_ID() );
         $markup .= '</div>';
         echo $markup;
@@ -593,9 +479,3 @@ add_filter('the_author_posts_link', function( $tag ) {
     # add hcard classes to the link if there's not already any classes
     return \strpos($tag, 'class=') ? $tag : str_replace(' href=', ' class="url fn n" href=', $tag);
 });
-
-add_filter('get_search_form', function( $markup ) {
-    return $markup ? \str_replace( 'screen-reader-text', 'assistive', $markup ) : $markup;
-});
-
-#end
