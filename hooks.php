@@ -588,6 +588,9 @@ add_action('@comment', apply_filters('@comment_actions', function() {
     }, 10);
 }), 0);
 
+# Remove WP gallery <style> tags. (wp-includes/media.php)
+add_filter('use_default_gallery_style', '__return_false');
+
 # @link github.com/ryanve/action/issues/1
 add_filter('the_author_posts_link', function( $tag ) {
     # add hcard classes to the link if there's not already any classes
