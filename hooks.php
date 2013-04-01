@@ -283,6 +283,7 @@ add_filter('post_class', function( $arr = array() ) {
     # Maybe we should use Y-m-d or provide a filter like:
     # $format = apply_filters( '@time_compare_format', '' );
     $arr[] = get_the_date() === get_the_modified_date() ? 'unrevised' : 'revised';
+    $arr[] = has_post_thumbnail() ? 'has-thumbnail' : 'lacks-thumbnail';
     return \array_unique( $arr );
 });
 
