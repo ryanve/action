@@ -390,7 +390,8 @@ add_action( 'init', function() {
     $modernizr_uri and wp_register_script( 'modernizr', $modernizr_uri, array(), null, false );
 
     # Get URI in child theme or else parent theme.
-    $locate_uri = function($file) {
+    $locate_uri = function($file, $ext = '.css') {
+        $ext === substr($file, -strlen($ext)) or $file .= $ext;
         $file = '/' . ltrim($file, '/');
         foreach( array('get_stylesheet_directory', 'get_template_directory') as $fn ) {
             if ( \file_exists( \rtrim( \call_user_func($fn), '/' ) . $file ) )
@@ -401,12 +402,12 @@ add_action( 'init', function() {
     # Frontend-specific actions:
     if ( !is_admin() ) {
         # Enqueue CSS
-        $css = array( 'base' => null );
-        $css['style'] = is_child_theme() ? null : 'screen,projection,tty,tv';
-        foreach ( $css as $handle => $media ) {
-            $file = $locate_uri( "$handle.css" );
-            $file and wp_enqueue_style( $handle, $file, array(), null, $media );
-        }
+        $css = array(); # (handle, uri, deps, ver, media)
+        $css[] = array('base', null, array(), null, null); 
+        $css[] = array('style', null, array('base'), null, is_child_theme() ? null : 'screen,projection,tty,tv');
+        foreach ( $css as &$params )
+            ($params[1] = $locate_uri($params[0])) and call_user_func_array( 'wp_register_style', $params );
+        wp_enqueue_style('style');
         
         # Enqueue Modernizr
         $modernizr_uri and wp_enqueue_script( 'modernizr' );
