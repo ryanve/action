@@ -429,7 +429,6 @@ add_action( 'init', function() {
 });
 
 add_filter('@output', function($html) {
-    # The '@output' filter enables filtering via DOMDocument
     # Remove excessive whitespace for better readability:
     return \preg_replace( '/\n+\s*\n+/', "\n\n", $html );
 });
@@ -469,18 +468,6 @@ add_action('@dns_prefetches', function( $uris ) {
     }
     return $uris;
 });
-
-/*add_action('@dns_prefetches', function( $uris ) {
-    global $wp_scripts, $wp_styles;
-    return \array_reduce( array( $wp_scripts, $wp_styles ), function( $uris, $o ) {
-        return \is_object($o) && !empty($o->queue) && !empty($o->registered) ? \array_merge($uris,
-            \array_intersect_key(
-                (array) \wp_list_pluck( $o->registered, 'src' )
-              , \array_flip( \array_values((array) $o->queue) )
-            )
-        ) : $uris;
-    }, (array) $uris );
-});*/
 
 add_action('wp_head', function() {
     $tag = apply_filters( '@title_attrs', 'itemprop="name"' );
