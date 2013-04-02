@@ -67,14 +67,12 @@ add_filter('@html_tag', function() {
 }, 0);
 
 add_action('@body', apply_filters('@body_actions', function() {
-    static $ran; # prevent from running more than once
-    if ($ran = null !== $ran)
-        return;
-    add_action('@body', 'get_header' , 5);
-    add_action('@body', function() {
-        include locate_template('main.php', false, false);
-    }, 10);
-    add_action('@body', 'get_footer' , 30);
+    foreach (array(
+        array(5, 'get_header')
+      , array(10, function() { include locate_template('main.php', false, false); })
+      , array(30, 'get_footer')
+    ) as $fn)
+        has_action('@body', $fn[1]) or add_action('@body', $fn[1], $fn[0]);
 }), 0);
 
 add_action('@header', function() {
