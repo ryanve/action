@@ -531,19 +531,7 @@ add_filter('@list_comments', function( $arr ) {
     ));
 }, 0);
 
-add_filter('@comment_attrs', \function_exists( '\\phat\\attrs' ) ? function() {
-    # core.trac.wordpress.org/ticket/23236
-    $attrs = array(); 
-    $id = get_comment_ID();
-    is_singular() and $attrs['id'] = 'comment-' . $id;
-    $attrs['class'] = \implode(' ', get_comment_class( '', $id ));
-    if ( 'comment' === get_comment_type($id) ) {
-        $attrs['itemprop'] = 'comment';
-        $attrs['itemscope'] = '';
-        $attrs['itemtype'] = 'http://schema.org/UserComments';
-    }
-    return  \phat\attrs( $attrs );
-} : function() {
+add_filter('@comment_attrs', function() {
     $attrs = array(); 
     $id = get_comment_ID();
     is_singular() and $attrs[] = "id='comment-$id'";
