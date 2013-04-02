@@ -34,9 +34,6 @@
     a small { font-weight:normal; }
     small a, i a, em a, code a { font-weight:inherit; }
     img, a.block { border:0; }
-
-    /* Void underlines added via visual editor misuse. */
-    span[style] { text-decoration:none !important; }
     
     /* $sizing/proximity */
     body { font-size:1em; line-height:1.6; }
@@ -135,7 +132,7 @@
    $editor
    bit.ly/wp-theme-review#WordPress-Generated_CSS_Classes
    ========================================================================== */
-
+   
     .wp-caption {}
     .wp-caption[style] { width:inherit !important; }
     article figure + figure, .wp-caption + .wp-caption { margin-top:1.5em; }
@@ -151,6 +148,9 @@
     .aligncenter { margin-left:auto; margin-right:auto; }
     .alignleft { float:left; margin-right:4%; }
     .alignright { float:right; margin-left:4%; }
+    
+    /* Void underlines added via visual editor misuse. */
+    span[style] { text-decoration:none !important; }
 
 /* ==========================================================================
    $layout
