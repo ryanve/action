@@ -44,7 +44,7 @@ add_filter('body_class', function($array) {
     global $wp_registered_sidebars;
     if ( !empty($wp_registered_sidebars))
         foreach ($wp_registered_sidebars as $k => $v)
-            is_active_sidebar($k) and $array[] = "$k-widgets-active";
+            is_active_sidebar($k) and $array[] = "has-$k-widgets";
     return \array_unique( \array_merge(array(
           is_child_theme() ? 'child-theme' : 'parent-theme'
         , is_singular() ? 'singular' : 'plural'
@@ -61,7 +61,7 @@ add_filter('@html_tag', function() {
     $class = \implode(' ', \array_unique($class));
     add_filter('body_class', '__return_empty_array'); #wp
     $attrs .= " class='$class'";
-    $attrs .= ' itemscope itemtype="http://schema.org/WebPage"';
+    $attrs .= ' itemscope'; # implied http://schema.org/WebPage
     $attrs = apply_filters('@html_attrs', $attrs);
     return "<html $attrs>";
 }, 0);
@@ -75,7 +75,7 @@ add_action('@body', apply_filters('@body_actions', function() {
     add_action('@body', function() {
         include locate_template('main.php', false, false);
     }, 10);
-    add_action('@body', 'get_sidebar', 20);
+    #add_action('@body', 'get_sidebar', 20);
     add_action('@body', 'get_footer' , 30);
 }), 0);
 
@@ -113,10 +113,10 @@ add_action('@footer', function() {
     is_active_sidebar('footer') and get_sidebar('footer');
 });
 
-add_action( 'widgets_init', function() {
+add_action('widgets_init', function() {
     $areas = (array) apply_filters( '@widget_areas', array(
-        array( 'id' => 'sidebar', 'name' => '.sidebar-widget-area' )
-      , array( 'id' => 'header' , 'name' => '.header-widget-area' )
+        array( 'id' => 'header' , 'name' => '.header-widget-area' )
+      , array( 'id' => 'main'   , 'name' => '.main-widget-area' )
       , array( 'id' => 'footer' , 'name' => '.footer-widget-area' )
     ));
     # codex.wordpress.org/Function_Reference/register_sidebar
@@ -132,11 +132,17 @@ add_action('init', function() {
     register_nav_menus(array('menu' => 'Menu'));
 });
 
-add_action('@main', function() {
+add_action('@main', apply_filters('@main_actions', function() {
     # insert the loop into [role="main"]
-    # codex.wordpress.org/Function_Reference/get_template_part
     get_template_part( 'loop', is_singular() ? 'singular' : 'plural' ); #wp
-}, apply_filters('@loop_priority', 10));
+    if ( is_active_sidebar('main') ) { ?>
+
+        <aside class="widget-area main-widget-area">
+            <ul><?php dynamic_sidebar('main'); ?></ul>
+        </aside>
+
+<?php }
+}));
 
 add_filter('previous_posts_link_attributes', function( $attrs = '' ) {
     $attrs or $attrs = '';
@@ -234,6 +240,10 @@ add_action('@loop_header', function() {
         echo $markup;
     }
 }, 5);
+
+# Clean excerpt whitespace
+add_filter('the_excerpt', 'normalize_whitespace'); # wp
+add_filter('the_excerpt', 'trim');
 
 add_action('@entry', apply_filters('@entry_actions', function() {
 
@@ -499,6 +509,9 @@ add_action('wp_head', function() {
     }
 }, -1); 
 
+# Remove WP embedded .recentcomments style. (wp-includes/default-widgets.php)
+add_filter('show_recent_comments_widget_style', '__return_false');
+
 # see comments.php
 # codex.wordpress.org/Function_Reference/wp_list_comments
 add_filter('@list_comments', function( $arr ) {
@@ -554,7 +567,7 @@ add_action('@comment', apply_filters('@comment_actions', function() {
         $markup .= '<dl class="meta-list">'; 
         $markup .= '<dt>' . __('By', 'theme') . '</dt>'; 
         $markup .= '<dd itemprop="creator">' . get_comment_author_link() . '</dd>';
-        $markup .= '<dt class="published-label">' . __('Published', 'theme') . '</dt>';
+        $markup .= '<dt class="published-label">' . __('Posted', 'theme') . '</dt>';
         $markup .= '<dd class="published-value" itemprop="commentTime">' . get_comment_date() . '</dd>';
         $markup .= '</dl></header>';
         echo apply_filters( '@comment_header', $markup );

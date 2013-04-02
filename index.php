@@ -18,7 +18,7 @@ namespace theme;
 <?php wp_head(); # load all head content via this hook ?>
 </head>
 
-<body <?php # Re: github.com/ryanve/action/commit/ee589a0bc03f5720e3e28404a6118d9934755805
+<body id="body" <?php # Re: github.com/ryanve/action/commit/ee589a0bc03f5720e3e28404a6118d9934755805
     echo apply_filters( '@body_attrs', 'class="' . \implode( ' ', get_body_class() ) . '"' ); 
 ?>>
 

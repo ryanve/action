@@ -1,14 +1,10 @@
 <?php
-namespace theme;
+namespace theme; 
 
-#  @link  codex.wordpress.org/Function_Reference/register_sidebars
-#  @link  codex.wordpress.org/Function_Reference/register_sidebar
-?>
+if ( is_active_sidebar('main') ) { ?>
 
-<?php if ( is_active_sidebar('sidebar') ) { ?>
-
-    <aside class="widget-area sidebar-widget-area">
-        <ul><?php dynamic_sidebar('sidebar'); ?></ul>
-    </aside>
+        <aside class="widget-area main-widget-area">
+            <ul><?php dynamic_sidebar('main'); ?></ul>
+        </aside>
 
 <?php } ?>

@@ -1,8 +1,5 @@
-<?php
-namespace theme;
+<?php namespace theme; ?>
 
-?>
-
-                <div class="entry-summary"><?php 
+                <div class="entry-summary" itemprop="description"><?php 
                     the_excerpt(); 
-                ?></div><!-- .entry-summary -->
+                ?></div>
