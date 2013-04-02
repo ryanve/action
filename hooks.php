@@ -258,11 +258,9 @@ add_action('@entry', apply_filters('@entry_actions', function() {
         include locate_template('entry-header.php', false, false);
     }, 5);
 
-    add_action('@entry', $content_mode ? function() {
-        include locate_template('entry-content.php', false, false);
-    } : function() {
-        static $summ; # cache path b/c repeated calls are likely here
-        include $summ = $summ ?: locate_template('entry-summary.php', false, false);
+    $template = locate_template($content_mode ? 'entry-content.php' : 'entry-summary.php' , false, false);
+    add_action('@entry', function() use ($template) {
+        include $template;
     }, 10);
 
     $content_mode and add_action('@entry', function() {
