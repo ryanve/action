@@ -97,16 +97,15 @@
    ========================================================================== */
 
     .sticky {}
-    .hentry + .hentry { margin-top:1.6em; }
-    .show-excerpts .hentry + .hentry { margin-top:2.6em; }
+    .hentry + .hentry { margin-top:2.6em; }
+    .hide-excerpts .hentry + .hentry { margin-top:1.6em; }
     .attachment-thumbnail.wp-post-image { max-width:240px; float:left; margin:0 2% 1em 0; }
 
     .entry-title { margin:0 0 .2em; }
     .byline { margin:.5em 0; }
     .byline address { display:inline-block; font-style:normal; }
     .entry-summary p:first-child { margin-top:0; }
-    .plural .byline, .entry-summary { display:none; }
-    .show-excerpts .entry-summary { display:block; }
+    .plural .byline, .hide-excerpts .entry-summary { display:none; }
     .entry-summary ~ .entry-meta { display:none; } /* hide meta for excerpt views */
 
     .meta-list > dt, .meta-list > dd, .meta-label, .meta-value { display:inline-block; margin:0; }
@@ -162,7 +161,7 @@
     
     .site-header { margin:0 auto; }
     .site-branding { margin-bottom:1em; }
-    .site-description { display:none; }
+    .hide-tagline .site-description { display:none; } 
     .site-footer { clear:both; margin:1em auto; padding:1em; }
     .header-widget-area { clear:left; }
     
