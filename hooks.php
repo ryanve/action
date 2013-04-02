@@ -151,11 +151,10 @@ add_action('@main', apply_filters('@main_actions', function() {
     });
 }, null);
 
-add_action('@loop', function() {
-
-    static $ran; # prevent from running more than once
+add_action('@loop', apply_filters('@loop_actions', function() {
+    static $ran; 
     if ($ran = null !== $ran)
-        return;
+        return; # prevent from running more than once
     
     add_action('@loop', function() {
         # codex.wordpress.org/Function_Reference/locate_template
@@ -173,7 +172,6 @@ add_action('@loop', function() {
     }, 10);
 
     add_action('@loop', function() {
-        # codex.wordpress.org/Function_Reference/locate_template
         locate_template('loop-nav.php', true, false);
     }, 20);
     
@@ -185,7 +183,7 @@ add_action('@loop', function() {
         $next = '<span>' . __('Next', 'theme') . '</span>';
         posts_nav_link(' ', $prev, $next);
     }));
-}, 0);
+}), 0);
 
 add_action('@loop_header', function() {
 
@@ -527,9 +525,9 @@ add_filter('@comment_attrs', function() {
 }, 1);
 
 add_action('@comment', apply_filters('@comment_actions', function() {
-    static $ran; # prevent from running more than once
-    if ( $ran = null !== $ran )
-        return;
+    static $ran; 
+    if ($ran = null !== $ran)
+        return; # prevent from running more than once
 
     add_action('@comment', function() {
         global $comment;
