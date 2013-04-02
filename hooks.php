@@ -85,6 +85,14 @@ add_action('@header', function() {
 
 add_action('@header', function() {
 
+    # Favor IDs over classes
+    add_filter('nav_menu_item_id', '__return_false');
+    add_filter('nav_menu_css_class', function($arr, $item = null) {
+        if ( \is_array($arr) && \is_object($item) && isset($item->ID) )
+            \in_array($item = 'menu-item-' . $item->ID, $arr) or $arr[] = $item;
+        return $arr;
+    }, 10, 2);
+
     $skip = '<a href="#main" accesskey="5">' . __('Skip', 'theme') . '</a>';
     $skip = apply_filters( '@menu_skip_anchor', $skip );
     $skip and $skip = \trim( \strip_tags( $skip, '<a>' ) );
