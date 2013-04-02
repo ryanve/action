@@ -85,7 +85,7 @@ add_action('@header', function() {
 
 add_action('@header', function() {
 
-    # Favor IDs over classes
+    # Favor classes over IDs.
     add_filter('nav_menu_item_id', '__return_false');
     add_filter('nav_menu_css_class', function($arr, $item = null) {
         if ( \is_array($arr) && \is_object($item) && isset($item->ID) )
