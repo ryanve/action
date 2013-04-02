@@ -21,8 +21,8 @@
     ::-moz-selection { background:#ed3;color:#7d00f8; text-shadow:none; }
          ::selection { background:#ed3;color:#7d00f8; text-shadow:none; }
          
-    /* $colors are based on the Munsell color system */
-    @media screen, tv {
+    html { color:#334; background:#ffd; }
+    @media screen, tv {/* $colors are based on the Munsell color system */
         a { color:#0082b2; border-bottom:1px dashed #ddc; text-decoration:none; }
         a:hover { color:#7d00f8; border-bottom:1px dashed #7d00f8/*9f00c5*/; }
         a:hover img { opacity:0.88; }
@@ -32,30 +32,28 @@
     .skin-dark { background:#111; color:#ddc; }
     .skin-dark a { color:#00a59c/*b1d700*/; border-bottom-color:#344; }
     .skin-dark a:hover { color:#f2ab00; border-bottom-color:#f2ab00/*e20064*/; }
-
     img, a.block { border:0; }
 
     /* Void underlines added via visual editor misuse. */
     span[style] { text-decoration:none !important; }
     
-    html { color:#334; background:#ffd; }
+    /* $sizing/proximity */
     body { font-size:1em; line-height:1.6; }
-    
     ul,ol { padding-left:2em; } /* vs. 40px browser default */
-    dd+dt { margin-top:inherit }
-    h1,h2 { margin-top:.618em; margin-bottom:.618em }
-    h3,h4,h5,h6 { margin-top:1.146em; margin-bottom:1em }
-    h1 { font-size:1.618em }
-    h2 { font-size:1.382em }
-    h3 { font-size:1.146em }
-    h4 { font-size:1em }
-    h5 { font-size:.944em }
-    h6 { font-size:.854em }
+    dd+dt { margin-top:inherit; }
+    h1,h2 { margin:.618em 0; }
+    h3,h4,h5,h6 { margin-top:1.146em; margin-bottom:1em; }
+    h1 { font-size:1.618em; }
+    h2 { font-size:1.382em; }
+    h3 { font-size:1.146em; }
+    h4 { font-size:1em; }
+    h5 { font-size:.944em; }
+    h6 { font-size:.854em; }
     @media (min-width:30em) {
         .entry-content,.loop-nav { font-size:1.1em; }
-        h1 { font-size:2em }
-        h2 { font-size:1.5em }
-        h3 { font-size:1.236em }
+        h1 { font-size:2em; }
+        h2 { font-size:1.5em; }
+        h3 { font-size:1.236em; }
     }
          
 /* ==========================================================================
@@ -98,38 +96,29 @@
    $entries
    ========================================================================== */
 
+    .sticky {}
     .hentry + .hentry { margin-top:1.6em; }
     .show-excerpts .hentry + .hentry { margin-top:2.6em; }
-    .sticky {}
-    
-    .attachment-thumbnail.wp-post-image {
-        /* featured image */
-        max-width:240px; float:left; margin:0 2% 1em 0; 
-    }
-    
+    .attachment-thumbnail.wp-post-image { max-width:240px; float:left; margin:0 2% 1em 0; }
+
     .entry-title { margin:0 0 .2em; }
-    .byline address { display:inline-block; font-style:normal; }
     .byline { margin:.5em 0; }
+    .byline address { display:inline-block; font-style:normal; }
     .entry-summary p:first-child { margin-top:0; }
-    .plural .byline,.entry-summary { display:none; }
-    .hide-excerpts .entry-summary { display:none; }
+    .plural .byline, .entry-summary { display:none; }
     .show-excerpts .entry-summary { display:block; }
-    
-    /* Hide .entry-meta for excerpt views. */
-    .entry-summary ~ .entry-meta { display:none; }
-    
+    .entry-summary ~ .entry-meta { display:none; } /* hide meta for excerpt views */
+
     .meta-list > dt, .meta-list > dd, .meta-label, .meta-value { display:inline-block; margin:0; }
     .meta-list > dt, .meta-label { margin-right:.2em; }
     .meta-list > dt + dd, .meta-label + .meta-value { margin-left:.3em; }
     .meta-list > dd + dt, .meta-value + .meta-label { margin-left:.8em; }
     .meta-list > dt:after, .meta-label:after  { content: ":"; }
     .void { display:none !important; }
-    
     .meta-label { font-size:inherit; font-weight:bold; }
 
     .entry-pages { margin-bottom:0; }
     .entry-pages + .entry-taxos  { margin-top:0; }
-    
     .entry-taxos > dt, .entry-taxos > .meta-label { display:block; float:left; }
     .entry-taxos > dd + dt, .entry-taxos > .meta-value + .meta-label { margin-left:0; }
     .entry-taxos > dd, .entry-taxos > .meta-value { display:block; }
@@ -150,22 +139,16 @@
 
     .wp-caption {}
     .wp-caption[style] { width:inherit !important; }
-    /*
-    .hentry img { max-width:100%!important; }
-    */
     article figure + figure, .wp-caption + .wp-caption { margin-top:1.5em; }
     figcaption, .wp-caption-text { padding-top:.5em; padding-bottom:.5em; }
     figcaption:first-child { padding-top:0; padding-bottom:0; } /* revert if caption is on top */
     .wp-caption-text { margin:0; }
-    
+
     .gallery-size-thumbnail .gallery-caption { display:none; }
     dl.gallery-item { float:left; max-width:30%; margin:.5em 3% .5em 0; padding:0; }
     dd.gallery-caption { margin-left:0; }
-   
-    .alignnone, .alignleft, .alignright, .aligncenter, article .gallery {
-        display:block; 
-        margin:1.1em 0; 
-    }
+
+    .alignnone, .alignleft, .alignright, .aligncenter, article .gallery { display:block; margin:1.1em 0; }
     .aligncenter { margin-left:auto; margin-right:auto; }
     .alignleft { float:left; margin-right:4%; }
     .alignright { float:right; margin-left:4%; }
@@ -174,35 +157,15 @@
    $layout
    ========================================================================== */
    
-    body {
-        margin:0 auto; /* centering */
-        width:96%; /* implies 2% padding */        
-    }
+    body { margin:0 auto; width:96%; } /* implies 2% padding */        
     .widget-area { max-width:40em; }
     
     .site-header { margin:0 auto; }
-    
     .site-branding { margin-bottom:1em; }
     .site-description { display:none; }
-    
-    /* background-image example:    
-    @media (min-width:0) {
-        .site-title span { visibility:hidden; overflow:hidden; }
-        .site-title { font-size:1em; }
-        .site-title a {
-            border:0;
-            display:block;
-            min-height:12em;
-            background-image:url(http://cdn.airve.com/logo/action/action-a_300_red.png); 
-            background-repeat:no-repeat;
-            background-size:contain;
-        }
-        .site-title a:hover { opacity:0.88; }
-    }
-    */
-    
-    
+    .site-footer { clear:both; margin:1em auto; padding:1em; }
     .header-widget-area { clear:left; }
+    
     .widget-area > ul { list-style-type:square; padding-left:0; }
     .widgettitle { margin:.4em 0; }
     li.widget { display:block; margin:2em 0; }
@@ -219,17 +182,7 @@
     
     #main { clear:left; float:left; margin:1em auto; display:block; }
     #main + * { clear:both; }
-
-    /*
-    @media (min-width:40em) {
-        .main-widget-area .widget { clear:both; float:left; display:block; width:46.875%; margin:1em 0; }
-        .main-widget-area .widget:nth-child(even) { margin-left:6.25%; clear:none; }
-    }
-    */
-
-    .site-footer { clear:both; margin:1em auto; padding:1em; }
     
-    /* Layouts */
     @media (min-width:60em) {
         .l-lheader body { width:100%; }
         .l-lheader .site-header h1 { margin-top:0; }
@@ -254,4 +207,16 @@
     @media (min-width:80em) {
         .l-lheader.full-width #main { max-width:60em; }
     }
-    
+
+    /* ==== background-image example:
+    @media (min-width:0) {
+        .site-title span { visibility:hidden; overflow:hidden; }
+        .site-title { font-size:1em; }
+        .site-title a {
+            display:block; border:0; min-height:12em;
+            background-image:url(http://cdn.airve.com/logo/action/action-a_300_red.png); 
+            background-size:contain; background-repeat:no-repeat;
+        }
+        .site-title a:hover { opacity:0.88; }
+    }
+    ======= */
