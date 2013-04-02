@@ -85,14 +85,6 @@ add_action('@header', function() {
 
 add_action('@header', function() {
 
-    # Favor classes over IDs.
-    add_filter('nav_menu_item_id', '__return_false');
-    add_filter('nav_menu_css_class', function($arr, $item = null) {
-        if ( \is_array($arr) && \is_object($item) && isset($item->ID) )
-            \in_array($item = 'menu-item-' . $item->ID, $arr) or $arr[] = $item;
-        return $arr;
-    }, 10, 2);
-
     $skip = '<a href="#main" accesskey="5">' . __('Skip', 'theme') . '</a>';
     $skip = apply_filters( '@menu_skip_anchor', $skip );
     $skip and $skip = \trim( \strip_tags( $skip, '<a>' ) );
@@ -537,7 +529,7 @@ add_filter('@list_comments', function( $arr ) {
     ));
 }, 0);
 
-add_filter('@comment_attrs', \function_exists( '\\phat\\attrs' ) ? function() {
+add_filter('@comment_attrs', \function_exists( '\\airve\\Phat::attrs' ) ? function() {
     # core.trac.wordpress.org/ticket/23236
     $attrs = array(); 
     $id = get_comment_ID();
@@ -548,7 +540,7 @@ add_filter('@comment_attrs', \function_exists( '\\phat\\attrs' ) ? function() {
         $attrs['itemscope'] = '';
         $attrs['itemtype'] = 'http://schema.org/UserComments';
     }
-    return  \phat\attrs( $attrs );
+    return \airve\Phat::attrs( $attrs );
 } : function() {
     $attrs = array(); 
     $id = get_comment_ID();
