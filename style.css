@@ -22,16 +22,17 @@
          ::selection { background:#ed3;color:#7d00f8; text-shadow:none; }
          
     html { color:#334; background:#ffd; }
-    @media screen, tv {/* $colors are based on the Munsell color system */
-        a { color:#0082b2; border-bottom:1px dashed #ddc; text-decoration:none; }
-        a:hover { color:#7d00f8; border-bottom:1px dashed #7d00f8/*9f00c5*/; }
-        a:hover img { opacity:0.88; }
-        :not(code):not(small) a { font-weight:bold; }
-        a small { font-weight:normal; }
-    }
     .skin-dark { background:#111; color:#ddc; }
+
+    /* $link colors are based on the Munsell color system */
+    a { color:#0082b2; border-bottom:1px dashed #ddc; text-decoration:none; font-weight:bold; }
+    a:hover { color:#7d00f8; border-bottom:1px dashed #7d00f8/*9f00c5*/; }
     .skin-dark a { color:#00a59c/*b1d700*/; border-bottom-color:#344; }
     .skin-dark a:hover { color:#f2ab00; border-bottom-color:#f2ab00/*e20064*/; }
+    
+    a:hover img { opacity:0.88; }
+    a small { font-weight:normal; }
+    small a, i a, em a, code a { font-weight:inherit; }
     img, a.block { border:0; }
 
     /* Void underlines added via visual editor misuse. */
@@ -62,7 +63,7 @@
 
     .site-nav { font-weight:bold; margin:1.5em 0; }
     .site-nav ul { padding-left:0; }
-    .site-nav li { max-width:320px; }
+    .site-nav li { max-width:20em; }
     .site-nav li, .site-nav a { display:block; }
     .site-nav a { padding:.5em; }
     .site-nav li + li { margin-top:2px; }
@@ -84,7 +85,7 @@
        .assistive          is preferred for theme usage. */
     .assistive, .screen-reader-text {
         position:absolute; clip:rect(0 0 0 0); overflow:hidden; 
-        width: 1px; height:1px; margin:-1px; border:0; padding:0;
+        width:1px; height:1px; margin:-1px; border:0; padding:0;
     }
     .assistive.focusable:active, .screen-reader-text.focusable:active, 
     .assistive.focusable:focus, .screen-reader-text.focusable:focus {
