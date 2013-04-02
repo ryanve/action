@@ -239,16 +239,15 @@ add_filter('the_excerpt', 'trim');
 
 add_action('@entry', apply_filters('@entry_actions', function() {
 
-    static $ran; # prevent from running more than once
-    if ( $ran = null !== $ran )
-        return;
-    
+    static $ran, $content_mode; 
     # allow the '@content_mode' to be changed between iterations
     # truthy => content | falsey => excerpt
-    $content_mode = apply_filters( '@content_mode', is_singular() );
-    
-    $content_mode or current_theme_supports('post-thumbnails') && add_filter('@thumbnail', function() {
-        if ($size = apply_filters('@thumbnail_size', 'thumbnail'))
+    $content_mode = (bool) apply_filters('@content_mode', is_singular());
+    if ($ran = null !== $ran)
+        return; # prevent adding the hooks more than once
+
+    current_theme_supports('post-thumbnails') && add_filter('@thumbnail', function() use (&$content_mode) {
+        if ( ! $content_mode and $size = apply_filters('@thumbnail_size', 'thumbnail'))
             if ($img = get_the_post_thumbnail(null, $size, array('itemprop' => 'image')))
                 return ($url = get_permalink()) && \strip_tags($img, '<img>') === $img
                     ? "<a itemprop='url' rel='bookmark' href='$url'>$img</a>" : $img;
@@ -258,17 +257,15 @@ add_action('@entry', apply_filters('@entry_actions', function() {
         include locate_template('entry-header.php', false, false);
     }, 5);
 
-    $template = locate_template($content_mode ? 'entry-content.php' : 'entry-summary.php' , false, false);
-    add_action('@entry', function() use ($template) {
-        include $template;
+    add_action('@entry', function() use (&$content_mode) {
+        include locate_template($content_mode ? 'entry-content.php' : 'entry-summary.php', false, false);
     }, 10);
 
-    $content_mode and add_action('@entry', function() {
-        include locate_template('entry-footer.php', false, false);
+    add_action('@entry', function() use (&$content_mode) {
+        $content_mode and include locate_template('entry-footer.php', false, false);
     }, 15);
     
     is_singular() and add_action('@entry', function() {
-        # codex.wordpress.org/Function_Reference/comments_template
         comments_template('/comments.php', true);
     }, 20);
 }), 0);
