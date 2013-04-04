@@ -71,7 +71,7 @@ add_filter('@html_tag', function() {
 add_action('@body', apply_filters('@body_actions', function() {
     foreach (array(
         array(5, 'get_header')
-      , array(10, function() { include locate_template('main.php', false, false); })
+      , array(10, function() { locate_template('main.php', true, false); })
       , array(30, 'get_footer')
     ) as $fn)
         has_action('@body', $fn[1]) or add_action('@body', $fn[1], $fn[0]);
@@ -159,7 +159,6 @@ add_action('@loop', apply_filters('@loop_actions', function() {
         return; # prevent from running more than once
     
     add_action('@loop', function() {
-        # codex.wordpress.org/Function_Reference/locate_template
         is_singular() or locate_template('loop-header.php', true, false);
     }, 5);
 
@@ -167,9 +166,9 @@ add_action('@loop', apply_filters('@loop_actions', function() {
         # the actual loop
         if ( ! have_posts())
             locate_template('loop-empty.php', true, false);
-        else for ($path = locate_template('entry.php', false, false ); have_posts();) {
+        else for ($path = locate_template('entry.php', false); have_posts();) {
             the_post();
-            include $path;
+            require $path;
         }
     }, 10);
 
@@ -258,15 +257,15 @@ add_action('@entry', apply_filters('@entry_actions', function() {
     }, 0);
 
     add_action('@entry', function() {
-        include locate_template('entry-header.php', false, false);
+        locate_template('entry-header.php', true, false);
     }, 5);
 
     add_action('@entry', function() use (&$content_mode) {
-        include locate_template($content_mode ? 'entry-content.php' : 'entry-summary.php', false, false);
+        locate_template($content_mode ? 'entry-content.php' : 'entry-summary.php', true, false);
     }, 10);
 
     add_action('@entry', function() use (&$content_mode) {
-        $content_mode and include locate_template('entry-footer.php', false, false);
+        $content_mode and locate_template('entry-footer.php', true, false);
     }, 15);
     
     is_singular() and add_action('@entry', function() {
