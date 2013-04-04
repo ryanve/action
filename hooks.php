@@ -197,13 +197,13 @@ add_action('@loop_header', function() {
         $data['description'] = term_description( '', get_query_var( 'taxonomy' ) );
     } elseif (is_author()) {
         $data = get_queried_object();
-        $data = array( 'case' => 'user', 'name' => $data->display_name, 'description' => $data->user_description );
+        $data = array('case' => 'user', 'name' => $data->display_name, 'description' => $data->user_description);
     } elseif (is_search()) {
         $data['case'] = 'search';
-        $data['name'] = __( 'Search: ', 'theme' ) . get_search_query();
+        $data['name'] = __('Search: ', 'theme') . get_search_query();
     } elseif (is_date()) {
         $data['case'] = 'date';
-        $parts = \explode( '/', \ltrim($_SERVER['REQUEST_URI'], '/') );
+        $parts = \explode('/', \ltrim($_SERVER['REQUEST_URI'], '/'));
         $data['name'] = array();
         while (\is_numeric($n = \array_shift($parts)))
             $data['name'][] = $n;
@@ -211,22 +211,28 @@ add_action('@loop_header', function() {
         $data['description'] = __('Archives.', 'theme');
     } elseif (is_post_type_archive()) {
         $data['name'] = post_type_archive_title();
-        $data['description'] = get_post_type_object( get_query_var('post_type') )->description;
+        $data['description'] = get_post_type_object(get_query_var('post_type'))->description;
     }
-    
-    $render = function($prop, $tagname = 'div') use ($data) {
-        $class = "loop-$prop";
-        empty($data['case']) or $class .= ' ' . $data['case'] . "-$prop";
-        return "<$tagname itemprop='$prop' class='$class'>" . $data[$prop] . "</$tagname>";
-    };
 
     if ($data = apply_filters('@loop_data', $data)) {
-        \extract($data);
-        $markup = '';
-        isset($name) and $markup = (empty($image) ? '' : (
-            ($src = \strip_tags($image)) ? "<img itemprop='image' src='$src' alt='" . $image . "'>" : $image
-        )) . $render('name', 'h1');
-        isset($description) and $markup .= $render('description', 'div');
+        $data = \array_replace(\array_fill_keys(array('name', 'image', 'case'), null), $data);
+        $data['case'] = $data['case'] ? \preg_replace('#[^\w\s-]+#', '', $data['case']) : '';
+        $data['class'] = 'loop ' . $data['case'] . ' ';
+        $makeClass = function($prop) use ($data) {
+            return \trim(\preg_replace('#\s+#', '-' . $prop . ' ', $data['class']));
+        };
+
+        ($markup = $data['image'] = $data['image'] ?: '')
+            and \ctype_graph($src = \strip_tags($data['image']))
+            and ($alt = \htmlentities(\strip_tags($data['name']), ENT_QUOTES, null, false))
+            and $markup = '<img itemprop="image" class="' . $makeClass('image') . "\" src='$src' alt='$alt'>";
+
+        foreach (array('name' => 'h1', 'description' => 'div') as $prop => $tagname) {
+            if (isset($data[$prop])) {
+                $class = $makeClass($prop);
+                $markup .= "<$tagname itemprop='$prop' class='$class'>" . $data[$prop] . "</$tagname>";
+            }
+        }
         echo $markup;
     }
 }, 5);
