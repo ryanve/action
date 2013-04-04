@@ -57,6 +57,8 @@ add_filter('@html_tag', function() {
     $attrs = 'dir="' . (is_rtl() ? 'rtl' : 'ltr') . '" lang="' . get_bloginfo('language') . '"';
     $attrs = apply_filters('language_attributes', $attrs);
     $class = get_body_class();
+    \in_array('void-avatars', $class) and add_filter('@comment_avatar', '__return_false');
+    \in_array('void-thumbnails', $class) and add_filter('@thumbnail', '__return_false');
     \array_unshift($class, 'no-js', 'custom');
     $class = \implode(' ', \array_unique($class));
     add_filter('body_class', '__return_empty_array'); #wp
@@ -242,7 +244,7 @@ add_action('@entry', apply_filters('@entry_actions', function() {
     if ($ran = null !== $ran)
         return; # prevent adding the hooks more than once
 
-    current_theme_supports('post-thumbnails') && add_filter('@thumbnail', function() use (&$content_mode) {
+    current_theme_supports('post-thumbnails') and add_filter('@thumbnail', function() use (&$content_mode) {
         if ( ! $content_mode and $size = apply_filters('@thumbnail_size', 'thumbnail'))
             if ($img = get_the_post_thumbnail(null, $size, array('itemprop' => 'image')))
                 return ($url = get_permalink()) && \strip_tags($img, '<img>') === $img
