@@ -109,7 +109,7 @@ add_action('@header', function() {
           , 'items_wrap'     => '<ul>' . $skip . '%3$s</ul>'
     )) . '</nav>' . "\n\n");
 
-}, apply_filters( '@menu_priority', 10));
+}, apply_filters('@menu_priority', 10));
 
 add_action('@header', function() {
     is_active_sidebar('header') and get_sidebar('header');
@@ -121,6 +121,7 @@ add_action('@footer', function() {
 
 add_action('widgets_init', function() {
     $areas = (array) apply_filters('@widget_areas', array(
+        # Correlate names to CSS selectors:
         array('id' => 'header' , 'name' => '.header-widget-area')
       , array('id' => 'main'   , 'name' => '.main-widget-area')
       , array('id' => 'footer' , 'name' => '.footer-widget-area')
@@ -134,14 +135,57 @@ add_action('widgets_init', function() {
     }
 });
 
+# CPTs/taxos/menus/js/css should register on init.
 add_action('init', function() {
+
+    # Register menus
     register_nav_menus(array('menu' => 'Menu'));
+    
+    # Register Modernizr
+    $modernizr_uri = apply_filters('@modernizr_uri', 'http://airve.github.com/js/modernizr/modernizr_shiv.min.js');
+    $modernizr_uri and wp_register_script('modernizr', $modernizr_uri, array(), null, false);
+
+    # Frontend-specific actions:
+    if ( ! is_admin()) {
+        $locate_uri = function($file, $ext = '.css') {
+            # Look in child theme, then parent theme:
+            $ext === \substr($file, -strlen($ext)) or $file .= $ext;
+            $file = '/' . \ltrim($file, '/');
+            foreach(array('get_stylesheet_directory', 'get_template_directory') as $fn) {
+                if (\file_exists(\rtrim(\call_user_func($fn), '/') . $file))
+                    return \rtrim(\call_user_func($fn . '_uri'), '/') . $file;
+            }
+        };
+
+        # Enqueue CSS
+        $css = array(); # (handle, uri, deps, ver, media)
+        $css[] = array('base', null, array(), null, null); 
+        $css[] = array('style', null, array('base'), null, is_child_theme() ? null : 'screen,projection,tty,tv');
+        foreach ($css as &$params)
+            ($params[1] = $locate_uri($params[0])) and \call_user_func_array('wp_register_style', $params);
+        wp_enqueue_style('style');
+        
+        # Enqueue Modernizr
+        $modernizr_uri and wp_enqueue_script('modernizr');
+        
+        # codex.wordpress.org/Migrating_Plugins_and_Themes_to_2.7/Enhanced_Comment_Display
+        is_singular() and wp_enqueue_script('comment-reply');
+
+        # Google Analytics
+        if ($gaq = apply_filters('@gaq', array())) {
+            if ($gaq = \is_scalar($gaq) ? \json_decode($gaq) : $gaq) {
+                if ($ga_uri = apply_filters('@ga_uri', 'http://www.google-analytics.com/ga.js')) {
+                    wp_enqueue_script('ga', $ga_uri, array(), null, true);
+                    wp_localize_script('ga', '_gaq', $gaq); # wp_localize_script will json_encode
+                }
+            }
+        }
+    }
 });
 
 add_action('@main', apply_filters('@main_actions', function() {
-    # insert the loop into [role="main"]
-    get_template_part( 'loop', is_singular() ? 'singular' : 'plural' ); #wp
-    get_sidebar('main');
+    get_template_part('loop', is_singular() ? 'singular' : 'plural');
+    is_active_sidebar('main') and get_sidebar('main');
 }));
 
 \array_reduce(array('previous', 'next'), function($void, $rel) {
@@ -235,10 +279,6 @@ add_action('@loop_header', function() {
         echo $markup;
     }
 }, 5);
-
-# Clean excerpt whitespace
-add_filter('the_excerpt', 'normalize_whitespace'); # wp
-add_filter('the_excerpt', 'trim');
 
 add_action('@entry', apply_filters('@entry_actions', function() {
 
@@ -377,70 +417,27 @@ add_action('@entry_footer', function() {
     }
 
     $markup = '<dl class="meta-list entry-taxos">' . $markup . '</dl>';
-    $markup = apply_filters('@entry_terms', $markup, $taxos);
-    echo $markup;
+    echo apply_filters('@entry_terms', $markup, $taxos);
 }, 20);
 
-# Actions to be run on the 'init' hook
-# CPTs and taxonomies should register on init.
-# Scripts/styles should register/enqueue on init.
-add_action('init', function() {
-    
-    # Register Modernizr
-    $modernizr_uri = apply_filters('@modernizr_uri', 'http://airve.github.com/js/modernizr/modernizr_shiv.min.js');
-    $modernizr_uri and wp_register_script('modernizr', $modernizr_uri, array(), null, false);
+# Clean excerpt whitespace
+add_filter('the_excerpt', 'normalize_whitespace'); # wp
+add_filter('the_excerpt', 'trim');
 
-    # Get URI in child theme or else parent theme.
-    $locate_uri = function($file, $ext = '.css') {
-        $ext === substr($file, -strlen($ext)) or $file .= $ext;
-        $file = '/' . ltrim($file, '/');
-        foreach(array('get_stylesheet_directory', 'get_template_directory') as $fn) {
-            if (\file_exists(\rtrim( \call_user_func($fn), '/') . $file))
-                return \rtrim(\call_user_func($fn . '_uri'), '/') . $file;
-        }
-    };
-
-    # Frontend-specific actions:
-    if ( ! is_admin()) {
-        # Enqueue CSS
-        $css = array(); # (handle, uri, deps, ver, media)
-        $css[] = array('base', null, array(), null, null); 
-        $css[] = array('style', null, array('base'), null, is_child_theme() ? null : 'screen,projection,tty,tv');
-        foreach ($css as &$params)
-            ($params[1] = $locate_uri($params[0])) and \call_user_func_array('wp_register_style', $params);
-        wp_enqueue_style('style');
-        
-        # Enqueue Modernizr
-        $modernizr_uri and wp_enqueue_script('modernizr');
-        
-        # required for theme approval
-        # codex.wordpress.org/Migrating_Plugins_and_Themes_to_2.7/Enhanced_Comment_Display
-        is_singular() and wp_enqueue_script('comment-reply');
-    
-        # Google Analytics
-        if ($gaq = apply_filters('@gaq', array())) {
-            # WP runs json_encode on data provided to wp_localize_script
-            # so decode it if it looks like it's already encoded.
-            \is_scalar($gaq) and $gaq = \json_decode($gaq);
-            $ga_uri = apply_filters('@ga_uri', 'http://www.google-analytics.com/ga.js');
-            $ga_uri and wp_enqueue_script('ga', $ga_uri, array(), null, true);
-            wp_localize_script('ga', '_gaq', $gaq);
-        }
-    }
+# @link github.com/ryanve/action/issues/1
+# add hcard classes to the link if there's not already any classes
+add_filter('the_author_posts_link', function($tag) {
+    return \strpos($tag, 'class=') ? $tag : \str_replace(' href=', ' class="url fn n" href=', $tag);
 });
 
-add_filter('@output', function($html) {
-    # Remove excessive whitespace for better readability:
-    return \trim(\preg_replace('/\n+\s*\n+/', "\n\n", $html));
-});
-
-# early priority <head> actions
+# Urgent <head> actions:
+# meta[charset]
 add_action('wp_head', function() {
      $tag = '<meta charset="utf-8">';
-     echo ltrim(apply_filters('@meta_charset', $tag) . "\n");
+     echo \ltrim(apply_filters('@meta_charset', $tag) . "\n");
 }, -5); 
 
-# dns-prefetch markup
+# [dns-prefetch] markup
 add_action('wp_head', function() {
     $uris = (array) apply_filters('@dns_prefetches', array());
     echo \implode('', \array_reduce($uris, function($result, $uri) {
@@ -455,7 +452,7 @@ add_action('wp_head', function() {
     }, array()));
 }, -4); 
 
-# dns-prefetch uris
+# [dns-prefetch] uris
 add_action('@dns_prefetches', function($uris) {
     global $wp_scripts, $wp_styles;
     foreach (array($wp_scripts, $wp_styles) as $o) {
@@ -470,14 +467,16 @@ add_action('@dns_prefetches', function($uris) {
     return $uris;
 });
 
+# title
 add_action('wp_head', function() {
     $tag = apply_filters('@title_attrs', 'itemprop="name"');
     $tag = ($tag ? "<title $tag>" : '<title>') . get_the_title() . '</title>';
-    $tag = apply_filters( '@title_tag', $tag );
+    $tag = apply_filters('@title_tag', $tag);
     if ($tag and $tag = \trim($tag))
        echo "\n$tag\n\n";
 }, -3); 
 
+# meta
 add_action('wp_head', function() {
     foreach (apply_filters('@meta', array(
         'viewport' => array('name' => 'viewport', 'content' => 'width=device-width,initial-scale=1.0')
@@ -499,6 +498,9 @@ add_action('wp_head', function() {
             echo "$tag\n";
     }
 }, -1); 
+
+# Remove WP gallery <style> tags. (wp-includes/media.php)
+add_filter('use_default_gallery_style', '__return_false');
 
 # Remove WP embedded .recentcomments style. (wp-includes/default-widgets.php)
 add_filter('show_recent_comments_widget_style', '__return_false');
@@ -550,15 +552,13 @@ add_action('@comment', apply_filters('@comment_actions', function() {
     }, 5);
     
     add_action('@comment', function() {
-        $markup = '<div class="comment-content" itemprop="commentText">';
-        $markup .= get_comment_text(get_comment_ID());
-        $markup .= '</div>';
-        echo $markup;
+        $markup = get_comment_text(get_comment_ID());
+        echo '<div class="comment-content" itemprop="commentText">' . $markup . '</div>';
     }, 10);
     
     add_action('@comment', function() {
         global $comment;
-        if ( ! $comment->comment_approved) {
+        if (empty($comment->comment_approved)) {
             $markup = __('Your comment is awaiting moderation.', 'theme');
             $markup = "<p class='alert' role='alert'>$markup</p>";
             echo apply_filters('@comment_moderation', $markup);
@@ -566,17 +566,13 @@ add_action('@comment', apply_filters('@comment_actions', function() {
     }, 10);
 }), 0);
 
-# Remove WP gallery <style> tags. (wp-includes/media.php)
-add_filter('use_default_gallery_style', '__return_false');
+#add_filter('get_search_form', function($markup) {
+#    return $markup ? \str_replace('screen-reader-text', 'assistive', $markup) : $markup;
+#});
 
-# @link github.com/ryanve/action/issues/1
-add_filter('the_author_posts_link', function($tag) {
-    # add hcard classes to the link if there's not already any classes
-    return \strpos($tag, 'class=') ? $tag : str_replace(' href=', ' class="url fn n" href=', $tag);
+add_filter('@output', function($html) {
+    # Remove excessive whitespace for better readability:
+    return \trim(\preg_replace('/\n+\s*\n+/', "\n\n", $html));
 });
-
-//add_filter('get_search_form', function($markup) {
-//    return $markup ? \str_replace( 'screen-reader-text', 'assistive', $markup ) : $markup;
-//});
 
 #end
