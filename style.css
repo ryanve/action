@@ -14,41 +14,54 @@
    $text
    baymard.com/blog/formatting-links-for-usability
    nngroup.com/articles/guidelines-for-visualizing-links/
-   en.wikipedia.org/wiki/Munsell_color_system
+   ux.stackexchange.com/a/35847
    ========================================================================== */
+   
+    /* css3please.com, stackoverflow.com/a/9670311/770127 */
+    * { transition:color 0.1s ease-out, background 0.1s ease-out; }
+    a { transition:border-color 0.1s ease-out; }
+    img { transition:opacity 0.1s ease-out; }
 
     /* $selection rules must be declared separately */
-    ::-moz-selection { background:#ed3;color:#7d00f8; text-shadow:none; }
-         ::selection { background:#ed3;color:#7d00f8; text-shadow:none; }
+    ::-moz-selection { background:#ed3;color:#221; text-shadow:none; }
+         ::selection { background:#ed3;color:#221; text-shadow:none; }
          
-    html { color:#334; background:#ffd; }
+    html { color:#222; background:#fffddd; }
+    /* just testing these: */
+    .skin-bone { background:#e3dac9; }
+    .skin-snow { background:#fffafa; }
     .skin-dark { background:#111; color:#ddc; }
 
     /* $link colors are based on the Munsell color system */
-    a { color:#0082b2; border-bottom:1px dashed #ddc; text-decoration:none; font-weight:bold; }
-    a:hover { color:#7d00f8; border-bottom:1px dashed #7d00f8/*9f00c5*/; }
-    .skin-dark a { color:#00a59c/*b1d700*/; border-bottom-color:#344; }
-    .skin-dark a:hover { color:#f2ab00; border-bottom-color:#f2ab00/*e20064*/; }
-    
+    a { text-decoration:none; font-weight:bold; border-bottom:1px dashed #ddc; }
+    a { color:#00a3ac; } /* 0093af / 0082b2 /  / b1d700 / 9f00c5 / 006ebf / 7d00f8 */
+    a:hover { color:#7d00f8; border-bottom-color:#7d00f8; }
+    /*e20064 - 9f00c5 - b1d700 b900a6*/
+
+    .skin-snow a { color:#7d00f8; }
+    .skin-dark a { color:#00a59c; border-bottom-color:#344; }
+    .skin-snow a:hover { color:#d00081; border-bottom-color:#d00081; }
+    .skin-dark a:hover { color:#f2ab00; border-bottom-color:#f2ab00; }
+
     a:hover img { opacity:0.88; }
     a small { font-weight:normal; }
     small a, i a, em a, code a { font-weight:inherit; }
     img, a.block { border:0; }
     
     /* $sizing/proximity */
-    body { font-size:1em; line-height:1.6; }
+    body { font-size:1em; line-height:1.618; }
     ul,ol { padding-left:2em; } /* vs. 40px browser default */
     dd+dt { margin-top:inherit; }
-    h1,h2 { margin:.618em 0; }
+    h1,h2 { margin:.618em 0; line-height:1.236; }
     h3,h4,h5,h6 { margin-top:1.146em; margin-bottom:1em; }
     h1 { font-size:1.618em; }
     h2 { font-size:1.382em; }
-    h3 { font-size:1.146em; }
+    h3 { font-size:1.146em; line-height:1.745; }
     h4 { font-size:1em; }
     h5 { font-size:.944em; }
     h6 { font-size:.854em; }
     @media (min-width:30em) {
-        .entry-content,.loop-nav { font-size:1.1em; }
+        .entry-content,.loop-nav { font-size:1.1em; line-height:2; }
         h1 { font-size:2em; }
         h2 { font-size:1.5em; }
         h3 { font-size:1.236em; }
@@ -95,15 +108,16 @@
    ========================================================================== */
 
     .sticky {}
-    .hentry + .hentry { margin-top:2.6em; }
-    .hide-excerpts .hentry + .hentry { margin-top:1.6em; }
-    .attachment-thumbnail.wp-post-image { max-width:240px; float:left; margin:0 2% 1em 0; }
-
+    .hentry { clear:left; }
+    .hentry + .hentry { margin-top:2em; }
+    .attachment-thumbnail.wp-post-image { max-width:300px; float:left; margin:0 2% 1em 0; }
+    
     .entry-title { margin:0 0 .2em; }
     .byline { margin:.5em 0; }
     .byline address { display:inline-block; font-style:normal; }
     .entry-summary p:first-child { margin-top:0; }
-    .plural .byline, .hide-excerpts .entry-summary, .entry-summary ~ .entry-meta { display:none; }
+    .plural .byline, .hide-excerpts .entry-summary, .entry-summary ~ .entry-meta, 
+    .unrevised .byline [class*="modified-"] { display:none; }
 
     .meta-list > dt, .meta-list > dd, .meta-label, .meta-value { display:inline-block; margin:0; }
     .meta-list > dt, .meta-label { margin-right:.2em; }
@@ -161,6 +175,8 @@
     
     .site-header { margin:0 auto; }
     .site-branding { margin-bottom:1em; }
+    .site-title {}
+    .site-description { font-weight:inherit; }
     .hide-tagline .site-description { display:none; }
     .site-footer { clear:both; margin:1em auto; padding:1em; }
     .header-widget-area { clear:left; }
@@ -188,6 +204,9 @@
         .l-lheader .site-header { float:left; width:12.5em; margin:0 1em 0 0; padding:1em; }
         .l-lheader main { clear:none; float:left; padding:0 1em; width:66.6666em; max-width:40em; }
         .l-lheader.full-width main, .l-lmenu.attachment main { max-width:50em; }
+        
+        /* Raise line-height for wider line-width  */
+        .l-lheader.full-width body, .l-rmenu:not(.l-rsidebar) body { line-height:2; }
         
         .l-rmenu  body { width:96%; max-width:60em; }
         .l-rmenu .site-header { float:none; width:100%; padding:0; margin-top:.618em; }
