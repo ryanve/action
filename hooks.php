@@ -571,8 +571,8 @@ add_action('@comment', apply_filters('@comment_actions', function() {
 #});
 
 add_filter('@output', function($html) {
-    # Remove excessive whitespace for better readability:
-    return \trim(\preg_replace('/\n+\s*\n+/', "\n\n", $html));
+    # Remove excess whitespace to improve readability:
+    return \preg_replace('/\n+\s*\n+/', "\n\n", \trim($html));
 });
 
 #end
