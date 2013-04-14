@@ -33,22 +33,27 @@ isset($content_width) or $content_width = get_option('large_size_w');
 
 # Actions to be run on the 'after_setup_theme' hook:
 add_action('after_setup_theme', function() {
-    \defined('WP_DEBUG') && WP_DEBUG or remove_action('wp_head', 'wp_generator'); # tighten security
+    \defined('WP_DEBUG') && WP_DEBUG ? \add_filter('@modes', function($arr) {
+        return $arr ? \array_unique( !($arr[] = 'debug') ?: $arr) : array('debug');
+    }) : remove_action('wp_head', 'wp_generator'); # tighten security
+
     add_theme_support('automatic-feed-links'); # required
     add_theme_support('post-thumbnails'); # "featured image"
     add_editor_style(); # codex.wordpress.org/Function_Reference/add_editor_style
 }, 0);
 
 # Basic contextual support.
-add_filter('body_class', function($array) {
+add_filter('body_class', function($arr) {
     global $wp_registered_sidebars;
     if ( ! empty($wp_registered_sidebars))
         foreach ($wp_registered_sidebars as $k => $v)
-            is_active_sidebar($k) and $array[] = "has-$k-widgets";
+            is_active_sidebar($k) and $arr[] = "has-$k-widgets";
+    foreach (\apply_filters('@modes', array()) as $v)
+        \strlen($v = sanitize_key($v)) and $arr[] = 'mode-' . $v;
     return \array_unique(\array_merge(array(
           is_child_theme() ? 'child-theme' : 'parent-theme'
         , is_singular() ? 'singular' : 'plural'
-    ), $array));
+    ), $arr));
 });
 
 add_filter('@html_tag', function() {
