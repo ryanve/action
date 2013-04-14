@@ -18,35 +18,33 @@
    ========================================================================== */
    
     /* css3please.com, stackoverflow.com/a/9670311/770127 */
-    * { transition:color 0.1s ease-out, background 0.1s ease-out; }
-    a { transition:border-color 0.1s ease-out; }
+    a, html { transition:background 0.1s ease-out; }
+    a { transition:color 0.1s ease-out, border-color 0.1s ease-out; }
     img { transition:opacity 0.1s ease-out; }
 
     /* $selection rules must be declared separately */
-    ::-moz-selection { background:#ed3;color:#221; text-shadow:none; }
-         ::selection { background:#ed3;color:#221; text-shadow:none; }
+    ::-moz-selection { background:#ee4; color:#221; text-shadow:none; }
+         ::selection { background:#ee4; color:#221; text-shadow:none; }
          
-    html { color:#222; background:#fffddd; }
-    /* just testing these: */
-    .skin-bone { background:#e3dac9; }
-    .skin-snow { background:#fffafa; }
-    .skin-dark { background:#111; color:#ddc; }
-
     /* $link colors are based on the Munsell color system */
+    html { background:#fffddd; color:#222; }
     a { text-decoration:none; font-weight:bold; border-bottom:1px dashed #ddc; }
-    a { color:#00a3ac; } /* 0093af / 0082b2 /  / b1d700 / 9f00c5 / 006ebf / 7d00f8 */
+    a { color:#00a3ac; }
     a:hover { color:#7d00f8; border-bottom-color:#7d00f8; }
-    /*e20064 - 9f00c5 - b1d700 b900a6*/
 
+    .skin-snow { background:#fffafa; }
     .skin-snow a { color:#7d00f8; }
-    .skin-dark a { color:#00a59c; border-bottom-color:#344; }
     .skin-snow a:hover { color:#d00081; border-bottom-color:#d00081; }
+
+    .skin-dark { background:#111; color:#ddc; }
+    .skin-dark a { color:#00a59c; border-bottom-color:#344; }
     .skin-dark a:hover { color:#f2ab00; border-bottom-color:#f2ab00; }
 
-    a:hover img { opacity:0.88; }
+    img { border:0; }
+    a:hover img { opacity:0.9; }
+    a img { display:block; } /* prevents opacity lines */
     a small { font-weight:normal; }
-    small a, i a, em a, code a { font-weight:inherit; }
-    img, a.block { border:0; }
+    small a, i a, em a, code a, kbd a { font-weight:inherit; }
     
     /* $sizing/proximity */
     body { font-size:1em; line-height:1.618; }
@@ -199,6 +197,7 @@
     main + * { clear:both; }
     
     @media (min-width:60em) {
+        /* layout modifiers start with l- */
         .l-lheader body { width:100%; }
         .l-lheader .site-header h1 { margin-top:0; }
         .l-lheader .site-header { float:left; width:12.5em; margin:0 1em 0 0; padding:1em; }
@@ -214,14 +213,18 @@
         .l-rmenu .site-nav { float:right; margin:0 0 2em 4%; }
         .l-rmenu main { clear:left; float:none; width:100%; max-width:100%; padding:0; } 
         .l-rmenu .site-footer { padding-left:0; padding-right:0; }
+        
     
         .l-rsidebar body { max-width:64em; }
+        .l-rsidebar.l-lheader body { max-width:100%; }
+        .l-rsidebar.l-lheader main { max-width:64em; }
         .l-rsidebar.l-rmenu:not(.full-width) .site-nav { width:18.75em; }
         .l-rsidebar:not(.full-width) .loop { width:62.5%; float:left; padding:0; }
         .l-rsidebar:not(.full-width) .main-widget-area {
             width:29.296875%; max-width:18.75em; margin:0; float:right; clear:none; 
          }
     }
+
     @media (min-width:80em) {
         .l-lheader.full-width main { max-width:60em; }
     }
