@@ -115,7 +115,7 @@
     .byline address { display:inline-block; font-style:normal; }
     .entry-summary p:first-child { margin-top:0; }
     .plural .byline, .hide-excerpts .entry-summary, .entry-summary ~ .entry-meta, 
-    .unrevised .byline [class*="modified-"] { display:none; }
+    article.unrevised .byline [class*="modified-"] { display:none; }
 
     .meta-list > dt, .meta-list > dd, .meta-label, .meta-value { display:inline-block; margin:0; }
     .meta-list > dt, .meta-label { margin-right:.2em; }
@@ -203,18 +203,17 @@
         .l-lheader .site-header { float:left; width:12.5em; margin:0 1em 0 0; padding:1em; }
         .l-lheader main { clear:none; float:left; padding:0 1em; width:66.6666em; max-width:40em; }
         .l-lheader.full-width main, .l-lmenu.attachment main { max-width:50em; }
-        
-        /* Raise line-height for wider line-width  */
+
+        /* Increase line-height to account for wider line-width  */
         .l-lheader.full-width body, .l-rmenu:not(.l-rsidebar) body { line-height:2; }
-        
+
         .l-rmenu  body { width:96%; max-width:60em; }
         .l-rmenu .site-header { float:none; width:100%; padding:0; margin-top:.618em; }
         .l-rmenu .site-branding { float:left; }
         .l-rmenu .site-nav { float:right; margin:0 0 2em 4%; }
         .l-rmenu main { clear:left; float:none; width:100%; max-width:100%; padding:0; } 
         .l-rmenu .site-footer { padding-left:0; padding-right:0; }
-        
-    
+
         .l-rsidebar body { max-width:64em; }
         .l-rsidebar.l-lheader body { max-width:100%; }
         .l-rsidebar.l-lheader main { max-width:64em; }
