@@ -45,25 +45,26 @@ add_action('after_setup_theme', function() {
     # see _custom_background_cb in wp-includes/theme.php
     add_theme_support('custom-background', array(
         'wp-head-callback' => function() {
+            $image = get_background_image();
+            $image and $image = set_url_scheme($image);
+            $style = $image ? \array_reduce(array(
+                    array('repeat', array('repeat', 'no-repeat', 'repeat-x', 'repeat-y'), 'repeat', '')
+                  , array('position_x', array('left', 'center', 'right'), 'position', 'top ')
+                  , array('attachment', array('scroll', 'fixed'), 'attachment', '')
+                ), function($image, $arr) {
+                    $option = \get_theme_mod('background_' . $arr[0]);
+                    $option = \in_array($option, $arr[1]) ? $option : $arr[1][0];
+                    $image[] = 'background-' . $arr[2] . ':' . $arr[3] . $option . ';';
+                    return $image;
+                }, array('background-image' => "background-image:url('$image');")
+            ) : array();
             $color = get_background_color();
-            $color = $color ? "background-color:#$color;" : false;
-            $image = set_url_scheme(get_background_image());
-
-            $image and $image = \implode('', \array_reduce(array(
-                array('repeat', array('repeat', 'no-repeat', 'repeat-x', 'repeat-y'), 'repeat', '')
-              , array('position_x', array('left', 'center', 'right'), 'position', 'top ')
-              , array('attachment', array('scroll', 'fixed'), 'attachment', '')
-            ), function($image, $arr) {
-                $option = \get_theme_mod('background_' . $arr[0]);
-                $option = \in_array($option, $arr[1]) ? $option : $arr[1][0];
-                $image[] = 'background-' . $arr[2] . ':' . $arr[3] . $option . ';';
-                return $image;
-            }, array('background-image' => "background-image:url('$image');")));
-
-            if ($style = ($color xor $image) ? ($color ?: $image) : ($color ? "$color $image" : false)) {
+            $color and $style[] = "background-color:#$color;";
+            if ($style and $selector = apply_filters('@background_selector', '.custom-background')) {
+                $style = $selector . '{' . \implode('', $style) . '}';
                 $media = apply_filters('@background_media', 'screen');
-                $style = "<style>@media $media{.custom-background{" . $style . '}}</style>' . "\n";
-                echo apply_filters('@background_style', $style);
+                $media and $style = "@media $media{" . $style . '}';
+                echo apply_filters('@background_style', "<style>$style</style>\n");
             }
         }
     ));
