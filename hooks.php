@@ -37,9 +37,36 @@ add_action('after_setup_theme', function() {
         return $arr ? \array_unique( !($arr[] = 'debug') ?: $arr) : array('debug');
     }) : remove_action('wp_head', 'wp_generator'); # tighten security
 
+    add_editor_style(); # codex.wordpress.org/Function_Reference/add_editor_style
     add_theme_support('automatic-feed-links'); # required
     add_theme_support('post-thumbnails'); # "featured image"
-    add_editor_style(); # codex.wordpress.org/Function_Reference/add_editor_style
+
+    # codex.wordpress.org/Custom_Backgrounds
+    # see _custom_background_cb in wp-includes/theme.php
+    add_theme_support('custom-background', array(
+        'wp-head-callback' => function() {
+            $color = get_background_color();
+            $color = $color ? "background-color:#$color;" : false;
+            $image = set_url_scheme(get_background_image());
+
+            $image and $image = \implode('', \array_reduce(array(
+                array('repeat', array('repeat', 'no-repeat', 'repeat-x', 'repeat-y'), 'repeat', '')
+              , array('position_x', array('left', 'center', 'right'), 'position', 'top ')
+              , array('attachment', array('scroll', 'fixed'), 'attachment', '')
+            ), function($image, $arr) {
+                $option = \get_theme_mod('background_' . $arr[0]);
+                $option = \in_array($option, $arr[1]) ? $option : $arr[1][0];
+                $image[] = 'background-' . $arr[2] . ':' . $arr[3] . $option . ';';
+                return $image;
+            }, array('background-image' => "background-image:url('$image');")));
+
+            if ($style = ($color xor $image) ? ($color ?: $image) : ($color ? "$color $image" : false)) {
+                $media = apply_filters('@background_media', 'screen');
+                $style = "<style>@media $media{.custom-background{" . $style . '}}</style>' . "\n";
+                echo apply_filters('@background_style', $style);
+            }
+        }
+    ));
 }, 0);
 
 # Basic contextual support.
