@@ -1,5 +1,5 @@
 <?php namespace theme; ?>
 
-            <nav class="loop-nav invert-anchors"><?php 
+            <nav class="loop-nav arrestive"><?php 
                 do_action('@loop_nav'); 
             ?></nav>
