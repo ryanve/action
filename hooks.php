@@ -124,11 +124,11 @@ add_action(apply_filters('@menu_location', '@header'), function() {
     }, 10, 2);
 
     $skip = '<a href="#main" accesskey="5">' . __('Skip', 'theme') . '</a>';
-    $skip = apply_filters( '@menu_skip_anchor', $skip );
-    $skip and $skip = \trim( \strip_tags( $skip, '<a>' ) );
-    $skip = $skip ? '<li class="assistive focusable">' . $skip . '</li>' : '';
+    $skip = apply_filters('@menu_skip_anchor', $skip);
+    $skip and $skip = \trim(\strip_tags( $skip, '<a>') );
+    $skip = $skip ? '<li class="assistive">' . $skip . '</li>' : '';
 
-    $menu = 'id="menu" role="navigation" class="site-nav invert-anchors"';
+    $menu = 'id="menu" role="navigation" class="site-nav arrestive"';
     $menu = apply_filters('@menu_attrs', $menu);
     $menu = "<nav $menu><h2 class='assistive menu-toggle'>Menu</h2>";
     $menu = \str_repeat(' ', 8) . $menu . wp_nav_menu(array(
@@ -185,12 +185,12 @@ add_action('init', function() {
         };
 
         # Enqueue CSS
-        $css = array(); # (handle, uri, deps, ver, media)
-        $css[] = array('base', null, array(), null, null); 
-        $css[] = array('style', null, array('base'), null, is_child_theme() ? null : 'screen,projection,tty,tv');
+        $css = array(); # (path, handle, uri, deps, ver, media)
+        $css[] = array('base', '/css/base', array(), null, null); 
+        $css[] = array('main', '/css/main', array('base'), null, is_child_theme() ? null : 'screen');
         foreach ($css as &$params)
-            ($params[1] = $locate_uri($params[0])) and \call_user_func_array('wp_register_style', $params);
-        wp_enqueue_style('style');
+            ($params[1] = $locate_uri($params[1])) and \call_user_func_array('wp_register_style', $params);
+        wp_enqueue_style('main');
         
         # Enqueue Modernizr
         $modernizr_uri and wp_enqueue_script('modernizr');
@@ -593,9 +593,9 @@ add_action('@comment', apply_filters('@comment_actions', function() {
     }, 10);
 }), 0);
 
-#add_filter('get_search_form', function($markup) {
-#    return $markup ? \str_replace('screen-reader-text', 'assistive', $markup) : $markup;
-#});
+add_filter('get_search_form', function($markup) {
+    return $markup ? \str_replace('screen-reader-text', 'assistive', $markup) : $markup;
+});
 
 add_filter('@output', function($html) {
     # Remove excess whitespace to improve readability:
