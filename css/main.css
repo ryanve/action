@@ -190,7 +190,7 @@
         .l-rsidebar.l-rmenu:not(.full-width) .site-nav { width:18.75em; }
         .l-rsidebar:not(.full-width) .loop { width:62.5%; float:left; padding:0; }
         .l-rsidebar:not(.full-width) .main-widget-area {
-            width:29.296875%; max-width:18.75em; margin:0; float:right; clear:none; 
+            width:29.296875%; max-width:18.75em; margin:0; float:right; clear:right; 
          }
     }
 
