@@ -123,7 +123,7 @@ add_action(apply_filters('@menu_location', '@header'), function() {
         return $arr;
     }, 10, 2);
 
-    $skip = '<a href="#main" accesskey="5">' . __('Skip', 'theme') . '</a>';
+    $skip = '<a href="#main">' . __('Skip', 'theme') . '</a>';
     $skip = apply_filters('@menu_skip_anchor', $skip);
     $skip and $skip = \trim(\strip_tags( $skip, '<a>') );
     $skip = $skip ? '<li class="assistive">' . $skip . '</li>' : '';
