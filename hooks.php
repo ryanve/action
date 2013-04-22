@@ -175,15 +175,15 @@ add_action('init', function() {
     # handle, uri, deps, ver, media
     $is_child = is_child_theme();
     $index = trailingslashit(get_template_directory_uri());
-    wp_register_style('parent-base', $index . 'css/base.css', array(), null, null);
-    wp_register_style('parent-main', $index . 'css/main.css', array('parent-base'), null, $is_child ? null : 'screen');
+    wp_register_style('parent-base', $index . 'base.css', array(), null, null);
+    wp_register_style('parent-style', $index . 'style.css', array('parent-base'), null, $is_child ? null : 'screen');
 
     # Frontend-specific actions:
     if ( ! is_admin()) {
 
         # Enqueue CSS
         # github.com/ryanve/action/issues/2
-        $is_child or wp_enqueue_style('parent-main');
+        $is_child or wp_enqueue_style('parent-style');
         
         # codex.wordpress.org/Migrating_Plugins_and_Themes_to_2.7/Enhanced_Comment_Display
         is_singular() and wp_enqueue_script('comment-reply');
