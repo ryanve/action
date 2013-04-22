@@ -70,14 +70,6 @@
     .site-nav a { padding:.5em; }
     .site-nav li + li { margin-top:2px; }
     .site-nav li ul { display:block; margin:2px 0; }
-    
-/* ==========================================================================
-   $helper
-   ========================================================================== */
-
-    .clear { clear:both; } .lclear { clear:left; } .rclear { clear:right; }
-    .block { display:block; }
-    .inline, .inline > li { display:inline; }
 
 /* ==========================================================================
    $entries
