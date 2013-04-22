@@ -10,7 +10,7 @@ namespace theme;
 
         <hgroup class="site-branding" itemprop="provider publisher" itemscope itemtype="http://schema.org/Organization">
             <h1 class="site-title">
-                <a accesskey="1" itemprop="url" rel="home" href="<?php echo home_url(); ?>">
+                <a itemprop="url" rel="home" href="<?php echo home_url(); ?>">
                     <span itemprop="name"><?php bloginfo('name'); ?></span>
                 </a>
             </h1>
