@@ -170,27 +170,20 @@ add_action('init', function() {
 
     # Register menus
     register_nav_menus(array('menu' => 'Menu'));    
+    
+    # Register CSS
+    # handle, uri, deps, ver, media
+    $is_child = is_child_theme();
+    $index = trailingslashit(get_template_directory_uri());
+    wp_register_style('parent-base', $index . 'css/base.css', array(), null, null);
+    wp_register_style('parent-main', $index . 'css/main.css', array('parent-base'), null, $is_child ? null : 'screen');
 
     # Frontend-specific actions:
     if ( ! is_admin()) {
-        $locate_uri = function($file, $ext = '.css') {
-            # Look in child theme, then parent theme:
-            $ext === \substr($file, -strlen($ext)) or $file .= $ext;
-            $file = '/' . \ltrim($file, '/');
-            foreach(array('get_stylesheet_directory', 'get_template_directory') as $fn) {
-                if (\file_exists(\rtrim(\call_user_func($fn), '/') . $file))
-                    return \rtrim(\call_user_func($fn . '_uri'), '/') . $file;
-            }
-        };
 
         # Enqueue CSS
         # github.com/ryanve/action/issues/2
-        $css = array(); # (path, handle, uri, deps, ver, media)
-        $css[] = array('base', '/css/base', array(), null, null); 
-        $css[] = array('main', '/css/main', array('base'), null, is_child_theme() ? null : 'screen');
-        foreach ($css as &$params)
-            ($params[1] = $locate_uri($params[1])) and \call_user_func_array('wp_register_style', $params);
-        wp_enqueue_style('main');
+        $is_child or wp_enqueue_style('parent-main');
         
         # codex.wordpress.org/Migrating_Plugins_and_Themes_to_2.7/Enhanced_Comment_Display
         is_singular() and wp_enqueue_script('comment-reply');
