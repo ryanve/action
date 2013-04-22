@@ -102,12 +102,20 @@ add_filter('@html_tag', function() {
 }, 0);
 
 add_action('@body', apply_filters('@body_actions', function() {
+
+    $skip = '<a class="assistive" href="#main">' . __('skip', 'theme') . '</a>';
+    $skip = apply_filters('@skip_anchor', $skip);
+    if ($skip and $skip = \trim(\strip_tags($skip, '<a>'))) {
+        echo "\n" . \str_repeat(' ', 4) . $skip . "\n\n";
+    }
+
     foreach (array(
         array(5, 'get_header')
       , array(10, function() { locate_template('main.php', true, false); })
       , array(30, 'get_footer')
-    ) as $fn)
+    ) as $fn) {
         has_action('@body', $fn[1]) or add_action('@body', $fn[1], $fn[0]);
+    }
 }), 0);
 
 add_action('@header', function() {
@@ -123,17 +131,12 @@ add_action(apply_filters('@menu_location', '@header'), function() {
         return $arr;
     }, 10, 2);
 
-    $skip = '<a href="#main">' . __('Skip', 'theme') . '</a>';
-    $skip = apply_filters('@menu_skip_anchor', $skip);
-    $skip and $skip = \trim(\strip_tags( $skip, '<a>') );
-    $skip = $skip ? '<li class="assistive">' . $skip . '</li>' : '';
-
     $menu = 'id="menu" role="navigation" class="site-nav arrestive"';
     $menu = apply_filters('@menu_attrs', $menu);
     $menu = "<nav $menu><h2 class='assistive menu-toggle'>Menu</h2>";
     $menu = \str_repeat(' ', 8) . $menu . wp_nav_menu(array(
         'theme_location' => 'menu', 'container' => false, 'echo' => false
-      , 'menu_class' => 'nav', 'items_wrap' => '<ul>' . $skip . '%3$s</ul>'
+      , 'menu_class' => 'nav', 'items_wrap' => '<ul>%3$s</ul>'
     )) . "</nav>\n\n";
     echo apply_filters('@menu', $menu);
 }, apply_filters('@menu_priority', 10));
