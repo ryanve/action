@@ -56,8 +56,17 @@
     a:focus { color:#00a877; }
     a:hover { color:#e20064; }
     
-    a:not(:hover) { border-color:#ddc }
-    .skin-dark a:not(:hover) { border-color:#334 }
+    a:not(:hover) { border-color:#bbb }
+    .skin-dark a:not(:hover) { border-color:#444 }
+    
+    .skin-dark { background:#000; color:#ccc }
+    .skin-dark a:hover { color:#f2ab00 }
+    
+    .void-color a { color:#111; }
+    .void-color.skin-dark a { color:#eee; }
+    .void-color a:focus { color:#666; }
+    .void-color a:hover { color:#fffddd; background:#111; border-color:#111; }
+    .void-color.skin-dark a:hover { color:#111; background:#eee; border-color:#eee; }
          
 /* ==========================================================================
    $menu
