@@ -169,11 +169,7 @@ add_action('widgets_init', function() {
 add_action('init', function() {
 
     # Register menus
-    register_nav_menus(array('menu' => 'Menu'));
-    
-    # Register Modernizr
-    $modernizr_uri = apply_filters('@modernizr_uri', 'http://airve.github.com/js/modernizr/modernizr_shiv.min.js');
-    $modernizr_uri and wp_register_script('modernizr', $modernizr_uri, array(), null, false);
+    register_nav_menus(array('menu' => 'Menu'));    
 
     # Frontend-specific actions:
     if ( ! is_admin()) {
@@ -195,9 +191,6 @@ add_action('init', function() {
         foreach ($css as &$params)
             ($params[1] = $locate_uri($params[1])) and \call_user_func_array('wp_register_style', $params);
         wp_enqueue_style('main');
-        
-        # Enqueue Modernizr
-        $modernizr_uri and wp_enqueue_script('modernizr');
         
         # codex.wordpress.org/Migrating_Plugins_and_Themes_to_2.7/Enhanced_Comment_Display
         is_singular() and wp_enqueue_script('comment-reply');
