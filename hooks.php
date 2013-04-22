@@ -149,8 +149,8 @@ add_action('@footer', function() {
 add_action('widgets_init', function() {
     $areas = (array) apply_filters('@widget_areas', array(
         # Correlate names to CSS selectors:
-        array('id' => 'header' , 'name' => '.header-widget-area')
-      , array('id' => 'main'   , 'name' => '.main-widget-area')
+        array('id' => 'main'   , 'name' => '.main-widget-area')
+      , array('id' => 'header' , 'name' => '.header-widget-area')
       , array('id' => 'footer' , 'name' => '.footer-widget-area')
     ));
     # codex.wordpress.org/Function_Reference/register_sidebar
@@ -185,6 +185,7 @@ add_action('init', function() {
         };
 
         # Enqueue CSS
+        # github.com/ryanve/action/issues/2
         $css = array(); # (path, handle, uri, deps, ver, media)
         $css[] = array('base', '/css/base', array(), null, null); 
         $css[] = array('main', '/css/main', array('base'), null, is_child_theme() ? null : 'screen');
@@ -593,6 +594,7 @@ add_action('@comment', apply_filters('@comment_actions', function() {
     }, 10);
 }), 0);
 
+# Use .assistive rather than declaring duplicate rules for .screen-reader-text
 add_filter('get_search_form', function($markup) {
     return $markup ? \str_replace('screen-reader-text', 'assistive', $markup) : $markup;
 });
