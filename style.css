@@ -2,14 +2,14 @@
  * Theme Name: action
  * Theme URI: http://actiontheme.com
  * Description: Extendable HTML5 theme.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Author: Ryan Van Etten
  * Author URI: http://ryanvanetten.com
  * Tags: microformats, flexible-width, right-sidebar, light, white
  * License: MIT
  * License URI: http://opensource.org/licenses/MIT
  */
-
+ 
 /*!
  * main styles for "action" theme (relies on ./base.css)
  * @link    github.com/ryanve/action/issues/2
@@ -24,25 +24,24 @@
    ux.stackexchange.com/a/35847
    ========================================================================== */
 
-    .dash-anchors a, .solid-anchors a { text-decoration:none; border-bottom-width:1px; }
+    .dotted-anchors a, .dash-anchors a, .solid-anchors a { text-decoration:none; border-bottom-width:1px; }
+    .dotted-anchors a { border-bottom-style:dotted; }
     .dash-anchors a { border-bottom-style:dashed; }
     .solid-anchors a { border-bottom-style:solid; }
     /*
     .bold-anchors a { font-weight:bold; }
     .bold-anchors a small { font-weight:normal; }
     */
-    /*
     a { font-weight:bold; }
     a small { font-weight:normal; }
-    */
     small a, i a, em a, cite a, code a, kbd a { font-weight:inherit; }
     
     .void-anchor-border a { border:0!important; }
     .void-anchor-decor a { text-decoration:none; }
     
-    /*@media screen and (color) {
+    @media screen and (color) {
         a:not(:hover) { text-decoration:none; }
-    }*/
+    }
 
     a img { opacity:0.9 }
     
@@ -51,33 +50,42 @@
     ul,ol { padding-left:2em; } /* vs. 40px browser default */
     dd+dt { margin-top:inherit; }
     
-    @media (min-width:30em) {
-        .entry-content,.loop-nav { font-size:1.1em; }
+    @media (min-width:30em) and (min-height:20em) {
+        .entry-summary,.entry-content,.loop-nav { font-size:1.1em; }
     }
     
    /* $color
+      bit.ly/wcag2contrast
+      leaverou.github.io/contrast-ratio/
       ------------------------------------------------------ */
 
-    ::-moz-selection { background:#ee4; color:#221 }
-         ::selection { background:#ee4; color:#221 }
+    ::-moz-selection { background:#ee3; color:#111; }
+         ::selection { background:#ee3; color:#111; }
          
     /* dark gray on off-white */
-    html { color:#333; background:#fffddd; }
-    
-    /* $link colors are from Munsell color system */
-    a { color:#00a59c; }
-    a:focus { color:#00a877; }
-    a:hover { color:#e20064; }
+    html { color:#444; background:#fffddd; }
+    .skin-dark { background:#000; color:#bbb; }
     
     a:not(:hover) { border-color:#bbb }
     .skin-dark a:not(:hover) { border-color:#444 }
     
-    .skin-dark { background:#000; color:#ccc }
-    .skin-dark a:hover { color:#f2ab00 }
+    /* 17c d30 d09  */
+    a { color:#17c; }
+    /*
+    a:focus { color:#fffddd; background:#17c; border-color:#17c; }
+    a:hover { color:#d09; border-color:#d09; }
+    */
+    
+    a:focus { color:#fffddd; background:#17c; }
+    a:hover { color:#fffddd; background:#17c; border-color:#17c; text-decoration:none; }
+    a:focus:hover, .skin-dark a:focus:hover { background:#17a; border-color:#17a; }
+
+    .skin-dark a:focus, .skin-dark a:hover { color:#000; }
+    .skin-dark a:focus:hover { background:#d09; border-color:#d09;  }
     
     .void-color a { color:#111; }
     .void-color.skin-dark a { color:#eee; }
-    .void-color a:focus { color:#666; }
+    .void-color a:focus { color:#fffddd; background:#444; }
     .void-color a:hover { color:#fffddd; background:#111; border-color:#111; }
     .void-color.skin-dark a:hover { color:#111; background:#eee; border-color:#eee; }
          
@@ -90,7 +98,7 @@
     .site-nav li { max-width:20em; }
     .site-nav li, .site-nav a { display:block; }
     .site-nav a { padding:.5em; }
-    .site-nav li + li { margin-top:2px; }
+    /* .site-nav li + li { margin-top:2px; } */
     .site-nav li ul { display:block; margin:2px 0; }
 
 /* ==========================================================================
@@ -100,11 +108,12 @@
     .sticky {}
     .hentry { clear:left; }
     .hentry + .hentry { margin-top:2em; }
-    .attachment-thumbnail.wp-post-image { max-width:300px; float:left; margin:0 2% 1em 0; }
     
+    .thumbnail-anchor { display:block; float:left; max-width:300px; margin:.5em 4% 1em 0; }
     .entry-title { margin:0 0 .2em; }
     .byline { margin:.5em 0; }
     .byline address { display:inline-block; font-style:normal; }
+    .entry-summary { clear:none; }
     .entry-summary p:first-child { margin-top:0; }
     .plural .byline, .hide-excerpts .entry-summary, .entry-summary ~ .entry-meta, 
     article.unrevised .byline [class*="modified-"] { display:none; }
@@ -160,7 +169,7 @@
     .widget-area { max-width:40em; }
     
     .site-header { margin:0 auto; }
-    .site-branding { margin-bottom:1em; }
+    .site-branding { margin-bottom:1.5em; }
     .site-title {}
     .site-description { font-weight:inherit; }
     .hide-tagline .site-description { display:none; }
