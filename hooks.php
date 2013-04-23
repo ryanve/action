@@ -310,7 +310,7 @@ add_action('@entry', apply_filters('@entry_actions', function() {
         if ( ! $content_mode and $size = apply_filters('@thumbnail_size', 'thumbnail'))
             if ($img = get_the_post_thumbnail(null, $size, array('itemprop' => 'image')))
                 return ($url = get_permalink()) && \strip_tags($img, '<img>') === $img
-                    ? "<a itemprop='url' rel='bookmark' href='$url'>$img</a>" : $img;
+                    ? "<a class='thumbnail-anchor' itemprop='url' rel='bookmark' href='$url'>$img</a>" : $img;
     }, 0);
 
     add_action('@entry', function() {
