@@ -131,13 +131,18 @@ add_action(apply_filters('@menu_location', '@header'), function() {
         return $arr;
     }, 10, 2);
 
-    $menu = 'id="menu" role="navigation" class="site-nav arrestive"';
-    $menu = apply_filters('@menu_attrs', $menu);
+    $items = apply_filters('@menu_items', '%3$s'); # for li pre-/appends
+    $menu = apply_filters('@menu_attrs', 'id="menu" role="navigation" class="site-nav arrestive"');
     $menu = "<nav $menu><h2 class='assistive menu-toggle'>Menu</h2>";
-    $menu = \str_repeat(' ', 8) . $menu . wp_nav_menu(array(
-        'theme_location' => 'menu', 'container' => false, 'echo' => false
-      , 'menu_class' => 'nav', 'items_wrap' => '<ul>%3$s</ul>'
-    )) . "</nav>\n\n";
+    $menu .= wp_nav_menu(array(
+        'theme_location' => 'menu'
+      , 'container' => false
+      , 'echo' => false
+      , 'menu_class' => 'nav'
+      , 'items_wrap' => '<ul>' . $items . '</ul>'
+    ));
+    $menu .= '</nav>';
+    $menu = \str_repeat(' ', 8) . $menu . "\n\n";
     echo apply_filters('@menu', $menu);
 }, apply_filters('@menu_priority', 10));
 
