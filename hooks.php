@@ -139,7 +139,7 @@ add_action(apply_filters('@menu_location', '@header'), function() {
       , 'container' => false
       , 'echo' => false
       , 'menu_class' => 'nav'
-      , 'items_wrap' => '<ul>' . $items . '</ul>'
+      , 'items_wrap' => '<ul class="menu-list">' . $items . '</ul>'
     ));
     $menu .= '</nav>';
     $menu = \str_repeat(' ', 8) . $menu . "\n\n";
