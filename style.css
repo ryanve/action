@@ -5,7 +5,7 @@
  * Version: 1.1.5
  * Author: Ryan Van Etten
  * Author URI: http://ryanvanetten.com
- * Tags: microformats, flexible-width, right-sidebar, light, white
+ * Tags: microformats, flexible-width, light, white
  * License: MIT
  * License URI: http://opensource.org/licenses/MIT
  */
@@ -92,8 +92,8 @@
     .site-nav li { max-width:20em; }
     .site-nav li, .site-nav a { display:block; }
     .site-nav a { padding:.5em; }
-    /* .site-nav li + li { margin-top:2px; } */
     .site-nav li ul { display:block; margin:2px 0; }
+    .invert-anchors .site-nav li + li { margin-top:2px; }
 
 /* =editor
    bit.ly/wp-theme-review#WordPress-Generated_CSS_Classes
