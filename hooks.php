@@ -170,10 +170,10 @@ add_action('widgets_init', function() {
 });
 
 # CPTs/taxos/menus/js/css should register on init.
+# Early-priority init actions:
 add_action('init', function() {
-
     # Register menus
-    register_nav_menus(array('menu' => 'Menu'));    
+    register_nav_menus(array('menu' => 'Menu'));
     
     # Register CSS
     # handle, uri, deps, ver, media
@@ -182,23 +182,23 @@ add_action('init', function() {
     wp_register_style('parent-base', $index . 'base.css', array(), null, null);
     wp_register_style('parent-style', $index . 'style.css', array('parent-base'), null, $is_child ? null : 'screen');
 
-    # Frontend-specific actions:
-    if ( ! is_admin()) {
+    # Enqueue CSS
+    # github.com/ryanve/action/issues/2
+    $is_child || is_admin() or wp_enqueue_style('parent-style');
+}, 1);
 
-        # Enqueue CSS
-        # github.com/ryanve/action/issues/2
-        $is_child or wp_enqueue_style('parent-style');
-        
-        # codex.wordpress.org/Migrating_Plugins_and_Themes_to_2.7/Enhanced_Comment_Display
-        is_singular() and wp_enqueue_script('comment-reply');
+# Frontend-only normal-priority init actions:
+is_admin() or add_action('init', function() {
 
-        # Google Analytics
-        if ($gaq = apply_filters('@gaq', array())) {
-            if ($gaq = \is_scalar($gaq) ? \json_decode($gaq) : $gaq) {
-                if ($ga_uri = apply_filters('@ga_uri', 'http://www.google-analytics.com/ga.js')) {
-                    wp_enqueue_script('ga', $ga_uri, array(), null, true);
-                    wp_localize_script('ga', '_gaq', $gaq); # wp_localize_script will json_encode
-                }
+    # codex.wordpress.org/Migrating_Plugins_and_Themes_to_2.7/Enhanced_Comment_Display
+    is_singular() and wp_enqueue_script('comment-reply');
+    
+    # near plugin territory / useful to child themes / has no effect by default
+    if ($gaq = apply_filters('@gaq', array())) {
+        if ($gaq = \is_scalar($gaq) ? \json_decode($gaq) : $gaq) {
+            if ($ga_uri = apply_filters('@ga_uri', 'http://www.google-analytics.com/ga.js')) {
+                wp_enqueue_script('ga', $ga_uri, array(), null, true);
+                wp_localize_script('ga', '_gaq', $gaq); # wp_localize_script will json_encode
             }
         }
     }
