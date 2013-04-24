@@ -1,7 +1,4 @@
-<?php 
-namespace theme;
-
-?>
+<?php namespace theme; ?>
 
 
                         <footer class="entry-meta" role="contentinfo"><?php 

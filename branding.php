@@ -1,11 +1,8 @@
 <?php 
 namespace theme;
-
-# this gets inserted into the site header via the '@header' action 
-# hook in functions.php - I put in into a separate file so that it 
-# would be easy to override in components in a child theme and so 
-# that it'd be easier to control the sequence of header content b/c
-# everything is added via the '@header' action located in header.php
+# this gets inserted into the site header via the '@header' action. I put
+# it into a separate file so that it would be easy to override just this
+# component in a child theme and to facilitate sequence via '@header'
 ?>
 
         <hgroup class="site-branding" itemprop="provider publisher" itemscope itemtype="http://schema.org/Organization">

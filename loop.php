@@ -5,5 +5,5 @@
             
             <?php do_action('@loop'); ?>
 
-        </div><!-- .loop -->
+        </div>
         

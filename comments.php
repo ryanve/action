@@ -1,7 +1,7 @@
 <?php
 namespace theme;
 # adapted from @link bit.ly/github-twentytwelve
-# try to be as simple and semantic as possible
+# Try to be as simple and semantic as possible.
 
 if ('comments.php' === \basename($_SERVER['SCRIPT_FILENAME']))
 	exit;
@@ -11,11 +11,9 @@ if (post_password_required() || ! post_type_supports(get_post_type(), 'comments'
 ?>
 
 <?php 
-    # There is currently no official microformat for comments. 
-    # hcomment is used in comment.php for symmetry with hentry in loop.php
-    # Should .comments be on the container or the list? .hfeed? See links above.
-    # Todo: maybe add filter(s) for the attrs.
     # github.com/ryanve/action/issues/1
+    # There is currently no official microformat for comments. 
+    # hcomment is used in comment.php for symmetry with hentry.
     # microformats.org/wiki/hcomment
     # microformats.org/wiki/xoxo
 ?>

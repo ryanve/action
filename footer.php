@@ -1,6 +1,5 @@
-<?php 
-namespace theme;
-?>
+<?php namespace theme; ?>
+
 
     <footer id="footer" class="site-footer">
 

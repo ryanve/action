@@ -1,7 +1,6 @@
 <?php 
 namespace theme;
-
-# see '@entry' and '@entry_attrs' hooks in functions.php
+# see '@entry' in hooks.php
 ?>
 
             <article <?php echo apply_filters('@entry_attrs', ''); ?>>

@@ -1,9 +1,8 @@
-<?php
-namespace theme;
-
-# See required hooks:
-# codex.wordpress.org/Theme_Review#Template_Tags_and_Hooks
+<?php 
+namespace theme; 
+# [id] is included for jumps (not CSS)
 ?>
+
 
     <header id="header" class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
 

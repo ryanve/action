@@ -25,11 +25,10 @@ isset($content_width) or $content_width = get_option('large_size_w');
 \is_numeric($content_width) or $content_width = 1024;
 
 # Use the generic 'theme' as the textdomain such that it is easier to 
-# repurpose code in other themes.
+# repurpose code in other themes. Few translations are needed here.
 # @link  codex.wordpress.org/I18n_for_WordPress_Developers
 # @link  ottopress.com/2012/internationalization-youre-probably-doing-it-wrong/
 # @link  markjaquith.wordpress.com/2011/10/06/translating-wordpress-plugins-and-themes-dont-get-clever/
-# todo: load textdomain
 
 # Actions to be run on the 'after_setup_theme' hook:
 add_action('after_setup_theme', function() {
