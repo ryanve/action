@@ -368,11 +368,11 @@ add_action('@entry_header', function() {
     $time_item = function($arr) {
         \extract($arr);
         $date = \call_user_func($fn); # Settings > General > Date Format
-        $ymd = \call_user_func($fn, 'Y-m-d');
-        $idx = get_year_link(\strtok($ymd, '-'));
+        $w3c = \call_user_func($fn, DATE_W3C); # php.net/manual/en/class.datetime.php
+        $idx = get_year_link(\strtok($w3c, '-'));
         $rel and $rel = ' rel="index"';
         $date = "<a$rel href='$idx'>$date</a>";
-        $tag = "<time itemprop='$itemprop' class='$class' datetime='$ymd'>$date</time>";
+        $tag = "<time itemprop='$itemprop' class='$class' datetime='$w3c'>$date</time>";
         $tag = apply_filters('@' . $hook . '_tag', $tag, $date);
         $item = '<dt class="' . $hook . '-label time-label">' . $label . '</dt>';
         return $item . '<dd class="' . $hook . '-value time-value">' . $tag . '</dd>';
