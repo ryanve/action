@@ -102,6 +102,7 @@ add_filter('@html_tag', function() {
 
 add_action('@body', apply_filters('@body_actions', function() {
 
+    # github.com/ryanve/action/issues/4
     $skip = '<a class="assistive" href="#main">' . __('skip', 'theme') . '</a>';
     $skip = apply_filters('@skip_anchor', $skip);
     if ($skip and $skip = \trim(\strip_tags($skip, '<a>'))) {
