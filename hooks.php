@@ -491,9 +491,8 @@ add_action('@dns_prefetches', function($uris) {
 
 # title
 add_action('wp_head', function() {
-    $tag = apply_filters('@title_attrs', 'itemprop="name"');
-    $tag = ($tag ? "<title $tag>" : '<title>') . get_the_title() . '</title>';
-    $tag = apply_filters('@title_tag', $tag);
+    $tag = ($tag = \trim(apply_filters('@title_attrs', ''))) ? "<title $tag>" : '<title>';
+    $tag = apply_filters('@title_tag', $tag . get_the_title() . '</title>');
     if ($tag and $tag = \trim($tag))
        echo "\n$tag\n\n";
 }, -3); 
