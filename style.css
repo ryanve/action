@@ -2,7 +2,7 @@
  * Theme Name: action
  * Theme URI: http://actiontheme.com
  * Description: Extendable HTML5 theme.
- * Version: 1.1.4
+ * Version: 1.1.5
  * Author: Ryan Van Etten
  * Author URI: http://ryanvanetten.com
  * Tags: microformats, flexible-width, right-sidebar, light, white
@@ -13,68 +13,65 @@
 /*!
  * main styles for "action" theme (relies on ./base.css)
  * @link    github.com/ryanve/action/issues/2
- * @author  Ryan Van Etten
  * @license MIT
  */
 
-/* ==========================================================================
-   $text
+/* =formatting
+   Be color-agnostic so that color can be modularly cascaded.
    baymard.com/blog/formatting-links-for-usability
    nngroup.com/articles/guidelines-for-visualizing-links/
-   ux.stackexchange.com/a/35847
-   ========================================================================== */
-
-    .dotted-anchors a, .dash-anchors a, .solid-anchors a { text-decoration:none; border-bottom-width:1px; }
-    .dotted-anchors a { border-bottom-style:dotted; }
-    .dash-anchors a { border-bottom-style:dashed; }
-    .solid-anchors a { border-bottom-style:solid; }
-    
+   --------------------------------------------------------------------- */
     a { font-weight:bolder; }
     nav a { font-weight:bold; }
     a small { font-weight:lighter; }
     strong a, small a, b a, i a, em a, cite a, code a, kbd a, s a,
     h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { font-weight:inherit; }
-    
+    a img { opacity:0.9 }
+
+    /* =modifiers */
+    .dot-anchors a, .dash-anchors a, .solid-anchors a { text-decoration:none; border-bottom-width:1px; }
+    .dot-anchors a { border-bottom-style:dotted; }
+    .dash-anchors a { border-bottom-style:dashed; }
+    .solid-anchors a { border-bottom-style:solid; }
     .void-anchor-border a { border:0!important; }
     .void-anchor-decor a { text-decoration:none; }
     
-    @media screen and (color) {
-        a:not(:hover) { text-decoration:none; }
+    @media (color) {
+        :not(.assist) a:not(:hover) { text-decoration:none; }
     }
+ 
+/* =size/proximity
+   --------------------------------------------------------------------- */
+   body { font-size:1em; line-height:1.618; } /* golden ratio */
+   ul, ol { padding-left:2em; } /* vs. 40px default from bit.ly/css2sample */
 
-    a img { opacity:0.9 }
-    
-    /* $sizing/proximity */
-    body { font-size:1em; line-height:1.618; }
-    ul,ol { padding-left:2em; } /* vs. 40px browser default */
-    dd+dt { margin-top:inherit; }
-    
-    @media (min-width:30em) and (min-height:20em) {
-        .entry-summary,.entry-content,.loop-nav { font-size:1.1em; }
-    }
-    
-   /* $color
-      bit.ly/wcag2contrast
-      leaverou.github.io/contrast-ratio/
-      ------------------------------------------------------ */
-
+   article figure + figure { margin-top:1.5em; }
+   figcaption { padding-top:.5em; padding-bottom:.5em; }
+   figcaption:first-child { padding-top:0; padding-bottom:0; } /* revert if caption is on top */
+   
+   @media (min-width:30em) and (min-height:20em) {
+       .entry-summary, .entry-content, .loop-nav { font-size:1.1em; }
+   }
+   
+/* =color
+   Aim for contrast ratios between 4 and 16.
+   leaverou.github.io/contrast-ratio/
+   lea.verou.me/2012/10/easy-color-contrast-ratios/
+   bit.ly/wcag2contrast
+   ux.stackexchange.com/a/35847
+   Colors like #17c #d30 #d09 have consistent contrast on white or black.
+   --------------------------------------------------------------------- */
     ::-moz-selection { background:#ee3; color:#111; }
          ::selection { background:#ee3; color:#111; }
          
-    /* dark gray on off-white */
-    html { color:#444; background:#fffddd; }
+    html { color:#444; background:#fffddd; } /* off-white */
     .skin-dark { background:#000; color:#bbb; }
     
-    a:not(:hover) { border-color:#bbb }
-    .skin-dark a:not(:hover) { border-color:#444 }
+    a:not(:hover) { border-color:#bbb; }
+    .skin-dark a:not(:hover) { border-color:#444; }
     
-    /* 17c d30 d09  */
+    /* border-color applies to border-style/-width and otherwise has no effect */
     a { color:#17c; }
-    /*
-    a:focus { color:#fffddd; background:#17c; border-color:#17c; }
-    a:hover { color:#d09; border-color:#d09; }
-    */
-    
     a:focus { color:#fffddd; background:#17c; }
     a:hover { color:#fffddd; background:#17c; border-color:#17c; text-decoration:none; }
     a:focus:hover, .skin-dark a:focus:hover { background:#17a; border-color:#17a; }
@@ -88,10 +85,8 @@
     .void-color a:hover { color:#fffddd; background:#111; border-color:#111; }
     .void-color.skin-dark a:hover { color:#111; background:#eee; border-color:#eee; }
          
-/* ==========================================================================
-   $menu
-   ========================================================================== */    
-
+/* =menu
+   --------------------------------------------------------------------- */    
     .site-nav { font-weight:bold; margin:1.5em 0; }
     .site-nav ul { padding-left:0; }
     .site-nav li { max-width:20em; }
@@ -100,10 +95,26 @@
     /* .site-nav li + li { margin-top:2px; } */
     .site-nav li ul { display:block; margin:2px 0; }
 
-/* ==========================================================================
-   $entries
-   ========================================================================== */
+/* =editor
+   bit.ly/wp-theme-review#WordPress-Generated_CSS_Classes
+   --------------------------------------------------------------------- */
+    .wp-caption {}
+    .wp-caption[style] { width:inherit!important; }
+    .wp-caption + .wp-caption { margin-top:1.5em; }
+    .wp-caption-text { padding-top:.5em; padding-bottom:.5em; }
+    .wp-caption-text { margin:0; }
 
+    .gallery-size-thumbnail .gallery-caption { display:none; }
+    dl.gallery-item { float:left; max-width:30%; margin:.5em 3% .5em 0; padding:0; }
+    dd.gallery-caption { margin-left:0; }
+
+    .alignnone, .alignleft, .alignright, .aligncenter, article .gallery { display:block; margin:1.1em 0; }
+    .aligncenter { margin-left:auto; margin-right:auto; }
+    .alignleft { float:left; margin-right:4%; }
+    .alignright { float:right; margin-left:4%; }
+    
+/* =entries
+   --------------------------------------------------------------------- */
     .sticky {}
     .hentry { clear:left; }
     .hentry + .hentry { margin-top:2em; }
@@ -138,33 +149,10 @@
     .xoxo { list-style-type:none; padding-left:0; }
     .comment .avatar  { float:left; margin-bottom:1em; margin-right:4%; }
     .bypostauthor {}
-    
-/* ==========================================================================
-   $editor
-   bit.ly/wp-theme-review#WordPress-Generated_CSS_Classes
-   ========================================================================== */
-   
-    .wp-caption {}
-    .wp-caption[style] { width:inherit!important; }
-    article figure + figure, .wp-caption + .wp-caption { margin-top:1.5em; }
-    figcaption, .wp-caption-text { padding-top:.5em; padding-bottom:.5em; }
-    figcaption:first-child { padding-top:0; padding-bottom:0; } /* revert if caption is on top */
-    .wp-caption-text { margin:0; }
 
-    .gallery-size-thumbnail .gallery-caption { display:none; }
-    dl.gallery-item { float:left; max-width:30%; margin:.5em 3% .5em 0; padding:0; }
-    dd.gallery-caption { margin-left:0; }
-
-    .alignnone, .alignleft, .alignright, .aligncenter, article .gallery { display:block; margin:1.1em 0; }
-    .aligncenter { margin-left:auto; margin-right:auto; }
-    .alignleft { float:left; margin-right:4%; }
-    .alignright { float:right; margin-left:4%; }
-
-/* ==========================================================================
-   $layout
-   ========================================================================== */
-   
-    body { margin:0 auto; width:96%; } /* implies 2% padding */        
+/* =layout
+   --------------------------------------------------------------------- */
+    body { margin:0 auto; width:96%; } /* implies 2% padding */
     .widget-area { max-width:40em; }
     
     .site-header { margin:0 auto; }
@@ -192,15 +180,15 @@
     main { clear:left; float:left; margin:1em auto; }
     main + * { clear:both; }
     
+    /* =layout=modifiers */
     @media (min-width:60em) {
-        /* layout modifiers start with l- */
         .l-lheader body { width:100%; }
         .l-lheader .site-header h1 { margin-top:0; }
         .l-lheader .site-header { float:left; width:12.5em; margin:0 1em 0 0; padding:1em; }
         .l-lheader main { clear:none; float:left; padding:0 1em; width:66.6666em; max-width:40em; }
         .l-lheader.full-width main, .l-lmenu.attachment main { max-width:50em; }
 
-        /* Increase line-height to account for wider line-width  */
+        /* account for wider line-width  */
         .l-lheader.full-width body, .l-rmenu:not(.l-rsidebar) body { line-height:2; }
 
         .l-rmenu  body { width:96%; max-width:60em; }
