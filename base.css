@@ -1,6 +1,6 @@
 /*!
  * @link css3base.com/build/normalize,tame,fit,heading,aid,print
- * @time 2013-04-24T12:49:38-07:00
+ * @time 2013-04-24T14:54:08-07:00
  */
 
 /*! 
@@ -45,7 +45,7 @@ h1,h2{margin-top:.618em;margin-bottom:.618em;}h3,h4,h5,h6{margin-top:1.146em;mar
  * @link     github.com/ryanve/css3base
  * @license  MIT
  */
-.void,.hidden{display:none!important;visibility:hidden}.invisible{visibility:hidden}.assistive,.visuallyhidden{clip:rect(0 0 0 0);overflow:hidden;position:absolute;width:1px;height:1px;border:0;margin:-1px;padding:0;} .assist .assistive,.assistive:active,.assistive:focus,.visuallyhidden.focusable:active,.visuallyhidden.focusable:focus{clip:auto;overflow:visible;position:static;width:auto;height:auto;margin:0;} .diagnostic{visibility:hidden}.diagnose .diagnostic{visibility:visible} :not(.diagnose) .diagnostic{display:none}
+.void,.hidden{display:none!important;visibility:hidden}.invisible{visibility:hidden}.assistive,.visuallyhidden{clip:rect(0 0 0 0);overflow:hidden;position:absolute;width:1px;height:1px;border:0;margin:-1px;padding:0;} .assist .assistive,.assistive:active,.assistive:focus,.visuallyhidden.focusable:active,.visuallyhidden.focusable:focus{clip:auto;overflow:visible;position:static;width:auto;height:auto;margin:0;} .diagnostic{display:none;visibility:hidden;} .diagnose .diagnostic{display:initial;visibility:visible;}
 
 
 /*! 
