@@ -2,7 +2,7 @@
 Theme Name: action
 Theme URI: http://actiontheme.com
 Description: Extensible HTML5 parent theme.
-Version: 1.1.7
+Version: 1.1.8
 Author: Ryan Van Etten
 Author URI: http://ryanvanetten.com
 Tags: flexible-width, microformats, custom-menu, custom-background, custom-colors, light, white
@@ -12,8 +12,8 @@ License URI: http://opensource.org/licenses/MIT
  
 /*!
  * main styles for "action" theme (relies on ./base.css)
- * @link    github.com/ryanve/action/issues/2
- * @license MIT
+ * @link  github.com/ryanve/action/issues/2
+ * @link  github.com/ryanve/action/issues/5
  */
 
 /* =formatting

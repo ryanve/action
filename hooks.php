@@ -178,14 +178,14 @@ add_action('init', function() {
     
     # Register CSS
     # handle, uri, deps, ver, media
-    $is_child = is_child_theme();
+    # github.com/ryanve/action/issues/2
+    # github.com/ryanve/action/issues/5
     $index = trailingslashit(get_template_directory_uri());
     wp_register_style('parent-base', $index . 'base.css', array(), null, null);
-    wp_register_style('parent-style', $index . 'style.css', array('parent-base'), null, $is_child ? null : 'screen');
+    wp_register_style('parent-style', $index . 'style.css', array('parent-base'), null, 'screen,projection');
 
     # Enqueue CSS
-    # github.com/ryanve/action/issues/2
-    $is_child || is_admin() or wp_enqueue_style('parent-style');
+    is_child_theme() || is_admin() or wp_enqueue_style('parent-style');
 }, 1);
 
 # Frontend-only normal-priority init actions:
