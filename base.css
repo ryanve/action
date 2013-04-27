@@ -1,6 +1,6 @@
 /*!
  * @link css3base.com/build/normalize,tame,fit,list,heading,aid,print
- * @time 2013-04-26T17:50:09-07:00
+ * @time 2013-04-27T00:33:53-07:00
  */
 
 /*! 
@@ -32,11 +32,11 @@ html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap
 
 /*!
  * list.css  ol|ul|dl helpers
- * @version  2013.04.26
+ * @version  2013.04.27
  * @link     github.com/ryanve/css3base
  * @license  MIT
  */
-.pairs > dt{font-weight:600;display:block;float:left;clear:left}.pairs > dd{font-weight:400;display:block}.pairs > dt:last-child{float:none}.inline > dt,.inline > dd{display:inline-block;float:none;margin-left:0}.inline > dd{margin-right:1em}.inline > dd:last-child{margin-right:0}.pairs > dt:after,.inline > dt:after{content:":";margin-right:.5em;font-weight:600;}ul.serial,ol.serial{display:inline;padding-left:0}.serial > li{display:inline;margin:0}.serial > li + li:before{content:", "}
+.pairs > dt{font-weight:600;display:block;float:left;clear:left}.pairs > dd{font-weight:400;display:block}.pairs > dt:last-child{float:none}.serial > dt,.serial > dd{display:inline-block;float:none;margin:0}.serial > dd{margin-right:1em}.serial > dd:last-child{margin-right:0}.pairs > dt:after,.serial > dt:after{content:":";margin-right:.5em;font-weight:600;}ul.serial,ol.serial{display:inline;padding:0}.serial > li{display:inline;margin:0}.serial > li + li:before{content:", "}
 
 
 /*!
