@@ -18,33 +18,33 @@ if (post_password_required() || ! post_type_supports(get_post_type(), 'comments'
     # microformats.org/wiki/xoxo
 ?>
 
-                        <aside <?php echo ((is_singular() ? 'id="comments"' : '') . (' class="comments"')); ?>>
+                <aside <?php echo ((is_singular() ? 'id="comments"' : '') . (' class="comments"')); ?>>
 
-                            <?php if (have_comments()) { ?>
-                            
-                                <h2 class="loop-title comments-title"><?php 
-                                    comments_number(); 
-                                ?></h2>
+                    <?php if (have_comments()) { ?>
+                    
+                        <h2 class="loop-title comments-title"><?php 
+                            comments_number(); 
+                        ?></h2>
 
-                                <ol class="xoxo comments"><?php
-                                    # see the '@list_comments' filter in functions.php
-                                    wp_list_comments(apply_filters('@list_comments', array())); 
-                                ?></ol><!-- /.xoxo -->
+                        <ol class="xoxo comments"><?php
+                            # see the '@list_comments' filter in functions.php
+                            wp_list_comments(apply_filters('@list_comments', array())); 
+                        ?></ol>
 
-                                <?php if (1 < get_comment_pages_count() && get_option('page_comments')) { ?>
-                                <nav>
-                                    <h3 class="assistive"><?php _e('Comment navigation', 'theme'); ?></h3>
-                                    <?php previous_comments_link(apply_filters('@comments_older', __('&laquo; Older', 'theme'))); ?>
-                                    <?php next_comments_link(apply_filters('@comments_newer', __('Newer &raquo;', 'theme'))); ?>
-                                </nav>
-                                <?php } ?>
+                        <?php if (1 < get_comment_pages_count() && get_option('page_comments')) { ?>
+                        <nav>
+                            <h3 class="assistive"><?php _e('Comment navigation', 'theme'); ?></h3>
+                            <?php previous_comments_link(apply_filters('@comments_older', __('&laquo; Older', 'theme'))); ?>
+                            <?php next_comments_link(apply_filters('@comments_newer', __('Newer &raquo;', 'theme'))); ?>
+                        </nav>
+                        <?php } ?>
 
-                            <?php } ?>
-                            
-                            <?php 
-                                if (comments_open())
-                                    comment_form();
-                                else echo '<p class="status">' . __('Comments are closed.', 'theme') . '</p>';
-                            ?>
+                    <?php } ?>
+                    
+                    <?php 
+                        if (comments_open())
+                            comment_form();
+                        else echo '<p class="status">' . __('Comments are closed.', 'theme') . '</p>';
+                    ?>
 
-                        </aside>
+                </aside>

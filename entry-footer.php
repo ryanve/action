@@ -1,9 +1,9 @@
 <?php namespace theme; ?>
 
 
-                        <footer class="entry-meta" role="contentinfo"><?php 
+                <footer class="entry-footer" role="contentinfo"><?php 
 
-                            do_action('@entry_footer'); 
+                    do_action('@entry_footer'); 
 
-                        ?></footer>
+                ?></footer>
 
