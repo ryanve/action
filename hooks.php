@@ -360,8 +360,9 @@ add_action('@entry_header', function() {
 
 add_action('@entry_header', function() {
 
-    global $authordata;        
-    $markup = "<dl class='byline meta-list'>";
+    global $authordata;
+    $markup = \trim(apply_filters('@byline_attrs', 'class="pairs meta-list byline"'));
+    $markup = $markup ? "<dl $markup>" : '<dl>';
     
     \is_object($authordata)
         and ($link = get_author_posts_url($authordata->ID, $authordata->user_nicename)) # href
@@ -413,33 +414,37 @@ add_action('@entry_footer', function() {
 
     global $wp_taxonomies;
     static $taxos;
-
-    echo apply_filters('@entry_pages', wp_link_pages(array(
-        'echo'   => 0
-      , 'before' => '<nav class="entry-pages meta-list"><h4 class="meta-label pages-label">' 
-                    . __('Pages', 'theme') . '</h4><div class="meta-value pages-value">'
-      , 'after'  => '</div></nav>'
-    )));
-
     isset($taxos) or $taxos = \wp_list_pluck($wp_taxonomies, 'label');
-    $id    = get_the_ID();
+    
+    $id = get_the_ID();
     $type  = get_post_type($id);   
-    $markup = '';
+    $items = array('pages' => \trim(wp_link_pages(array(
+        'echo'   => 0
+      , 'before' => '<dt class="meta-label pages-label">' 
+        . __('Pages', 'theme') . '</dt><dd class="meta-value pages-value">'
+      , 'after'  => '</dd>'
+    ))));
 
     foreach ($taxos as $name => $label) {
         if (is_object_in_taxonomy($type, $name)) {
             if ($class = sanitize_html_class(\mb_strtolower($label))) {
                 $terms = get_the_term_list($id, $name, '<li>', '</li><li>', '</li>');
                 $void = $terms ? '' : ' void';
-                $markup .= "<dt class='meta-label taxo-label $class-label$void'>$label</dt>";
-                $markup .= "<dd class='meta-value taxo-value $class-value$void'>";
-                $markup .= '<ul class="term-list">' . $terms . '</ul></dd>';
+                $items["taxo:$class"] = (
+                    "<dt class='meta-label taxo-label $class-label$void'>$label</dt>"
+                  . "<dd class='meta-value taxo-value $class-value$void'>"
+                  . '<ul class="serial term-list">' . $terms . '</ul></dd>'
+                );
             }
         }
     }
 
-    $markup = '<dl class="meta-list entry-taxos">' . $markup . '</dl>';
-    echo apply_filters('@entry_terms', $markup, $taxos);
+    $terms = $class = null;
+    $items = apply_filters('@entry_meta_items', $items, $taxos) ?: array(); # allow array or falsey
+    $markup = \implode('', $items);
+    $void = $items ? '' : ' void';
+    $markup = "<dl class='pairs meta-list entry-meta$void' role='navigation'>$markup</dl>";
+    echo apply_filters('@entry_meta', $markup, $items, $taxos);
 }, 20);
 
 # Clean excerpt whitespace
@@ -562,12 +567,12 @@ add_action('@comment', apply_filters('@comment_actions', function() {
     add_action('@comment', function() {
         global $comment;
         $markup = '<header class="comment-header">';
-        $markup .= apply_filters( '@comment_avatar', get_avatar( $comment, 60 ) );
-        $markup .= '<dl class="meta-list">'; 
-        $markup .= '<dt>' . __('By', 'theme') . '</dt>'; 
+        $markup .= apply_filters('@comment_avatar', get_avatar($comment, 60));
+        $markup .= '<dl class="pairs meta-list comment-meta">'; 
+        $markup .= '<dt class="meta-label">' . __('By', 'theme') . '</dt>'; 
         $markup .= '<dd itemprop="creator">' . get_comment_author_link() . '</dd>';
-        $markup .= '<dt class="published-label">' . __('Posted', 'theme') . '</dt>';
-        $markup .= '<dd class="published-value" itemprop="commentTime">' . get_comment_date() . '</dd>';
+        $markup .= '<dt class="meta-label published-label">' . __('Posted', 'theme') . '</dt>';
+        $markup .= '<dd class="meta-value published-value" itemprop="commentTime">' . get_comment_date() . '</dd>';
         $markup .= '</dl></header>';
         echo apply_filters('@comment_header', $markup);
     }, 5);
