@@ -1,6 +1,6 @@
 /*!
- * @link css3base.com/build/normalize,tame,fit,heading,aid,print
- * @time 2013-04-25T02:12:35-07:00
+ * @link css3base.com/build/normalize,tame,fit,list,heading,aid,print
+ * @time 2013-04-26T17:50:09-07:00
  */
 
 /*! 
@@ -28,6 +28,15 @@ article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,su
  * @license  MIT
  */
 html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap:break-word;}img,audio,video,canvas,iframe,object,embed{vertical-align:middle}img,audio,video,canvas{height:auto}img,audio,video,canvas,iframe,object,embed,input,textarea,progress,meter,datalist,output{max-width:100%}@media \0screen{img{width:auto}} [style]{max-width:100%} [data-fit-ratio]{position:relative;} [data-fit-ratio="4:3"]{padding:75% 0 0 0;} [data-fit-ratio="16:9"]{padding:56.25% 0 0 0;} [data-fit-ratio] > *{position:absolute;left:0;top:0;height:100%;margin:0;padding:0;border:0;}
+
+
+/*!
+ * list.css  ol|ul|dl helpers
+ * @version  2013.04.26
+ * @link     github.com/ryanve/css3base
+ * @license  MIT
+ */
+.pairs > dt{font-weight:600;display:block;float:left;clear:left}.pairs > dd{font-weight:400;display:block}.pairs > dt:last-child{float:none}.inline > dt,.inline > dd{display:inline-block;float:none;margin-left:0}.inline > dd{margin-right:1em}.inline > dd:last-child{margin-right:0}.pairs > dt:after,.inline > dt:after{content:":";margin-right:.5em;font-weight:600;}ul.serial,ol.serial{display:inline;padding-left:0}.serial > li{display:inline;margin:0}.serial > li + li:before{content:", "}
 
 
 /*!
