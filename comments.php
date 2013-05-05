@@ -26,7 +26,7 @@ if (post_password_required() || ! post_type_supports(get_post_type(), 'comments'
                             comments_number(); 
                         ?></h2>
 
-                        <ol class="xoxo comments"><?php
+                        <ol class="xoxo comments clearfix"><?php
                             # see the '@list_comments' filter in functions.php
                             wp_list_comments(apply_filters('@list_comments', array())); 
                         ?></ol>
@@ -43,7 +43,7 @@ if (post_password_required() || ! post_type_supports(get_post_type(), 'comments'
                     
                     <?php 
                         if (comments_open())
-                            comment_form();
+                            comment_form(apply_filters('@comment_form', array()));
                         else echo '<p class="status">' . __('Comments are closed.', 'theme') . '</p>';
                     ?>
 

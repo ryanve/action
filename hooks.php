@@ -315,7 +315,7 @@ add_action('@entry', apply_filters('@entry_actions', function() {
         if ( ! $content_mode and $size = apply_filters('@thumbnail_size', 'thumbnail'))
             if ($img = get_the_post_thumbnail(null, $size, array('itemprop' => 'image')))
                 return ($url = get_permalink()) && \strip_tags($img, '<img>') === $img
-                    ? "<a class='thumbnail-anchor' itemprop='url' rel='bookmark' href='$url'>$img</a>" : $img;
+                    ? "<a class='thumbnail-anchor image-anchor' itemprop='url' rel='bookmark' href='$url'>$img</a>" : $img;
     }, 0);
 
     add_action('@entry', function() {
@@ -566,14 +566,12 @@ add_action('@comment', apply_filters('@comment_actions', function() {
 
     add_action('@comment', function() {
         global $comment;
-        $markup = '<header class="comment-header">';
-        $markup .= apply_filters('@comment_avatar', get_avatar($comment, 60));
-        $markup .= '<dl class="pairs meta-list comment-meta">'; 
-        $markup .= '<dt class="meta-label">' . __('By', 'theme') . '</dt>'; 
-        $markup .= '<dd itemprop="creator">' . get_comment_author_link() . '</dd>';
-        $markup .= '<dt class="meta-label published-label">' . __('Posted', 'theme') . '</dt>';
-        $markup .= '<dd class="meta-value published-value" itemprop="commentTime">' . get_comment_date() . '</dd>';
-        $markup .= '</dl></header>';
+        $avatar = apply_filters('@comment_avatar', get_avatar($comment, 90));
+        $markup = '<header class="comment-header">' . $avatar;
+        $markup .= '<hgroup class="comment-meta">'; 
+        $markup .= '<h3 class="meta-value" itemprop="author">' . get_comment_author_link() . '</h3>';
+        $markup .= '<h4 class="meta-value published-value time-value" itemprop="commentTime">' . get_comment_date() . '</h4>';
+        $markup .= '</hgroup></header>';
         echo apply_filters('@comment_header', $markup);
     }, 5);
     
