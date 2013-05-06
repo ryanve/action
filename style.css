@@ -137,6 +137,7 @@ License URI: http://opensource.org/licenses/MIT
         display:block; float:left; clear:both;
         margin-bottom:1em; margin-right:4%; 
     }
+    .image-anchor:empty { display:none; float:none; }
 
 /* =layout
    --------------------------------------------------------------------- */

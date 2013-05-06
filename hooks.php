@@ -600,7 +600,7 @@ add_filter('get_search_form', function($markup) {
 });
 
 add_filter('@output', function($html) {
-    # Remove excess whitespace to improve readability:
+    # Remove excess whitespace to ease readability:
     return \preg_replace('/\n+\s*\n+/', "\n\n", \trim($html));
 });
 
