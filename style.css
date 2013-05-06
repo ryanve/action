@@ -2,7 +2,7 @@
 Theme Name: action
 Theme URI: http://actiontheme.com
 Description: Extensible HTML5 parent theme.
-Version: 1.2.2
+Version: 1.2.3
 Author: Ryan Van Etten
 Author URI: http://ryanvanetten.com
 Tags: flexible-width, microformats, custom-menu, custom-background, light, white
@@ -42,6 +42,8 @@ License URI: http://opensource.org/licenses/MIT
     }
  
 /* =size/proximity
+   en.wikipedia.org/wiki/News_style
+   bit.ly/maglossary
    --------------------------------------------------------------------- */
    body { font-size:1em; line-height:1.618; } /* golden ratio */
    ul, ol { padding-left:2em; } /* vs. 40px default from bit.ly/css2sample */
@@ -51,7 +53,13 @@ License URI: http://opensource.org/licenses/MIT
    figcaption:first-child { padding-top:0; padding-bottom:0; } /* revert if caption is on top */
    
    @media (min-width:30em) and (min-height:20em) {
-       .entry-summary, .entry-content, .loop-nav { font-size:1.1em; }
+        .upsize .entry-content,    /* Upsize content when applied to any ancestor. */
+        .upsize > .entry-summary,  /* Upsize excerpt only when applied to parent, e.g. post_class. */
+        main .arrestive { font-size:1.1em; }
+
+        .journalistic > .entry-content > p:first-child,
+        .journalistic .entry-content .standfirst,
+        .journalistic .entry-content .lede { font-size:1.236em; line-height:1.236; }
    }
    
 /* =color
@@ -178,7 +186,7 @@ License URI: http://opensource.org/licenses/MIT
         .l-lheader.full-width main, .l-lmenu.attachment main { max-width:50em; }
 
         /* account for wider line-width  */
-        .l-lheader.full-width body, .l-rmenu:not(.l-rsidebar) body { line-height:2; }
+        /* .l-lheader.full-width body, .l-rmenu:not(.l-rsidebar) body { line-height:2; } */
 
         .l-rmenu  body { width:96%; max-width:60em; }
         .l-rmenu .site-header { float:none; width:100%; padding:0; margin-top:.618em; }
