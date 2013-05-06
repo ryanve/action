@@ -567,11 +567,15 @@ add_action('@comment', apply_filters('@comment_actions', function() {
     add_action('@comment', function() {
         global $comment;
         $avatar = apply_filters('@comment_avatar', get_avatar($comment, 90));
+        $avatar = \strip_tags(\trim($avatar), '<img>');
+        $href = get_comment_author_url();
+        $href = $href ? ' href="' . $href . '"' : '';
+        $avatar = "<a$href class='avatar-anchor image-anchor'>$avatar</a>";
         $markup = '<header class="comment-header">' . $avatar;
         $markup .= '<hgroup class="comment-meta">'; 
         $markup .= '<h3 class="meta-value" itemprop="author">' . get_comment_author_link() . '</h3>';
-        $markup .= '<h4 class="meta-value published-value time-value" itemprop="commentTime">' . get_comment_date() . '</h4>';
-        $markup .= '</hgroup></header>';
+        $markup .= '<h4 class="meta-value published-value time-value" itemprop="commentTime">';
+        $markup .= get_comment_date() . '</h4></hgroup></header>';
         echo apply_filters('@comment_header', $markup);
     }, 5);
     
