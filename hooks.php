@@ -413,11 +413,9 @@ add_action('@entry_header', function() {
 add_action('@entry_footer', function() {
 
     global $wp_taxonomies;
-    static $taxos;
-    isset($taxos) or $taxos = \wp_list_pluck($wp_taxonomies, 'label');
-    
+    $taxos = empty($wp_taxonomies) ? array() : \wp_list_pluck($wp_taxonomies, 'label');
     $id = get_the_ID();
-    $type  = get_post_type($id);   
+    $type  = get_post_type($id);
     $items = array('pages' => \trim(wp_link_pages(array(
         'echo'   => 0
       , 'before' => '<dt class="meta-label pages-label">' 
