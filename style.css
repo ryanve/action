@@ -2,7 +2,7 @@
 Theme Name: action
 Theme URI: http://actiontheme.com
 Description: Extensible HTML5 parent theme.
-Version: 1.2.5
+Version: 1.2.6
 Author: Ryan Van Etten
 Author URI: http://ryanvanetten.com
 Tags: flexible-width, microformats, custom-menu, custom-background, light, white
@@ -21,19 +21,21 @@ License URI: http://opensource.org/licenses/MIT
    baymard.com/blog/formatting-links-for-usability
    nngroup.com/articles/guidelines-for-visualizing-links/
    --------------------------------------------------------------------- */
-    a { font-weight:bolder; }
-    nav a { font-weight:bold; }
-    a small { font-weight:lighter; }
+    a:link { font-weight:bolder; }
+    nav a:link { font-weight:bold; }
+    a:link small { font-weight:lighter; }
     strong a, small a, b a, i a, em a, cite a, code a, kbd a , s a,
     h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { font-weight:inherit; }
     a img { opacity:0.9; }
     label { margin-right:.6em; }
 
     /* =modifiers */
-    .dot-anchors a, .dash-anchors a, .solid-anchors a { text-decoration:none; border-bottom-width:1px; }
-    .dot-anchors a { border-bottom-style:dotted; }
-    .dash-anchors a { border-bottom-style:dashed; }
-    .solid-anchors a { border-bottom-style:solid; }
+    .dot-anchors a:link, 
+    .dash-anchors a:link, 
+    .solid-anchors a:link { text-decoration:none; border-bottom-width:1px; }
+    .dot-anchors a:link { border-bottom-style:dotted; }
+    .dash-anchors a:link { border-bottom-style:dashed; }
+    .solid-anchors a:link { border-bottom-style:solid; }
     .void-anchor-border a { border:0!important; }
     .void-anchor-decor a { text-decoration:none; }
     
@@ -75,21 +77,21 @@ License URI: http://opensource.org/licenses/MIT
          
     html { color:#444; background:#fffddd; } /* off-white */
     .skin-dark { background:#000; color:#bbb; }
-    
-    a:not(:hover) { border-color:#bbb; }
-    .skin-dark a:not(:hover) { border-color:#444; }
+
+    .reduce-color a:not(:hover) { border-color:#bbb; }
+    .reduce-color.skin-dark a:not(:hover) { border-color:#444; }
     
     /* border-color applies to border-style/-width and otherwise has no effect */
-    a { color:#17c; }
+    a:link, a:visited { color:#17c; }
     a:focus { color:#fffddd; background:#17c; }
     a:hover { color:#fffddd; background:#17c; border-color:#17c; text-decoration:none; }
-    a:focus:hover, .skin-dark a:focus:hover { background:#17a; border-color:#17a; }
+    a:hover:focus, .skin-dark a:hover:focus { background:#17a; border-color:#17a; }
 
     .skin-dark a:focus, .skin-dark a:hover { color:#000; }
-    .skin-dark a:focus:hover { background:#d09; border-color:#d09;  }
+    .skin-dark a:focus:hover { background:#d09; border-color:#d09; }
     
-    .void-color a { color:#111; }
-    .void-color.skin-dark a { color:#eee; }
+    .void-color a:link, .void-color a:visited { color:#111; }
+    .void-color.skin-dark a:link, .void-color.skin-dark a:visited { color:#eee; }
     .void-color a:focus { color:#fffddd; background:#444; }
     .void-color a:hover { color:#fffddd; background:#111; border-color:#111; }
     .void-color.skin-dark a:hover { color:#111; background:#eee; border-color:#eee; }
