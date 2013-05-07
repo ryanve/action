@@ -1,6 +1,6 @@
 /*!
  * @link css3base.com/build/normalize,tame,fit,list,heading,aid,print
- * @time 2013-05-06T13:56:50-07:00
+ * @time 2013-05-06T22:31:11-07:00
  */
 
 /*! 
@@ -14,20 +14,20 @@ article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,su
 
 /*!
  * tame.css  mild unobtrusive resets
- * @version  2013.05.05
+ * @version  2013.05.06
  * @link     github.com/ryanve/css3base
  * @license  MIT
  */
-::-moz-selection{text-shadow:none}::selection{text-shadow:none}a{display:inline-block;max-width:100%;}img{vertical-align:middle}hr{border-bottom:0;border-left:0;border-right:0}img,iframe{border:0}fieldset{border:0;padding:0;margin-left:0;margin-right:0}u{text-decoration:none}a u{text-decoration:inherit}span[style]{text-decoration:none!important}
+::-moz-selection{text-shadow:none}::selection{text-shadow:none}a{display:inline-block;max-width:100%;}img{vertical-align:middle}hr{border-bottom:0;border-left:0;border-right:0}img,iframe{border:0}fieldset{border:0;padding:0;margin-left:0;margin-right:0}u{text-decoration:none}a u{text-decoration:inherit}span[style]{text-decoration:none!important}body:before,body:after,.clearfix:before,.clearfix:after{content:" ";display:table}.clearfix:after{clear:both}
 
 
 /*!
  * fit.css   base responsive styles
- * @version  2013.04.30
+ * @version  2013.05.08
  * @link     github.com/ryanve/fit
  * @license  MIT
  */
-html{overflow-x:hidden}body{margin:auto;max-width:100%;overflow:hidden;word-wrap:break-word;}img,audio,video,canvas,iframe,object,embed{vertical-align:middle}img,audio,video,canvas{height:auto}img,audio,video,canvas,iframe,object,embed,input,textarea,progress,meter,datalist,output{max-width:100%}@media \0screen{img{width:auto}} [style]{max-width:100%} [data-fit-ratio]{position:relative;} [data-fit-ratio="4:3"]{padding:75% 0 0 0;} [data-fit-ratio="16:9"]{padding:56.25% 0 0 0;} [data-fit-ratio] *{position:absolute;left:0;top:0;height:100%;margin:0;padding:0;border:0;}
+body{margin:auto;max-width:100%;word-wrap:break-word;}img,audio,video,canvas,iframe,object,embed{vertical-align:middle} [style],iframe,object,embed,input,textarea,progress,meter,datalist,output,img,audio,video,canvas{max-width:100%}img,audio,video,canvas{height:auto}@media \0screen{img{width:auto}} .xconfine{overflow-x:hidden}.yconfine{overflow-y:hidden} [data-fit-ratio]{position:relative;} [data-fit-ratio="4:3"]{padding:75% 0 0 0;} [data-fit-ratio="16:9"]{padding:56.25% 0 0 0;} [data-fit-ratio] *{position:absolute;left:0;top:0;height:100%;margin:0;padding:0;border:0;}
 
 
 /*!
