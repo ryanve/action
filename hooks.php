@@ -89,6 +89,7 @@ add_filter('@html_tag', function() {
     $attrs = 'dir="' . (is_rtl() ? 'rtl' : 'ltr') . '" lang="' . get_bloginfo('language') . '"';
     $attrs = apply_filters('language_attributes', $attrs);
     $class = get_body_class();
+    \in_array('void-tagline', $class) and add_filter('@tagline', '__return_false');
     \in_array('void-avatars', $class) and add_filter('@comment_avatar', '__return_false');
     \in_array('void-thumbnails', $class) and add_filter('@thumbnail', '__return_false');
     \array_unshift($class, 'no-js', 'custom');

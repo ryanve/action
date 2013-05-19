@@ -17,7 +17,8 @@ namespace theme;
                 $desc = apply_filters('@tagline', get_bloginfo('description'));
                 if ( ! $desc) return;
                 $type = 80 > \mb_strlen(\strip_tags($desc)) ? 'tagline subline' : 'subline';
-                echo "<div class='site-description $type' itemprop='description'>$desc</div>\n";
+                echo "<div class='site-description $type' itemprop='description'>$desc</div>";
             }); ?>
+
         </div>
 
