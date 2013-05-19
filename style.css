@@ -2,7 +2,7 @@
 Theme Name: action
 Theme URI: http://actiontheme.com
 Description: Extensible HTML5 parent theme.
-Version: 1.2.8
+Version: 1.2.9
 Author: Ryan Van Etten
 Author URI: http://ryanvanetten.com
 Tags: flexible-width, microformats, custom-menu, custom-background, light, white
@@ -157,7 +157,6 @@ License URI: http://opensource.org/licenses/MIT
     
     .site-header { margin:0 auto; }
     .site-branding { margin-bottom:1.5em; }
-    .site-title {}
     .site-description { font-weight:inherit; }
     .hide-tagline .site-description { display:none; }
     .site-footer { clear:both; margin:1em auto; padding:1em; }
