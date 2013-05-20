@@ -13,11 +13,11 @@ namespace theme;
             <h1 class="site-name site-title">
                 <a itemprop="url name" rel="home" href="<?php echo home_url(); ?>"><?php bloginfo('name'); ?></a>
             </h1>
-            <?php call_user_func(function() {
-                $desc = apply_filters('@tagline', get_bloginfo('description'));
-                if ( ! $desc) return;
+            <?php echo apply_filters('@tagline', call_user_func(function() {
+                if ( !($desc = get_bloginfo('description')))
+                    return false;
                 $type = 80 > \mb_strlen(\strip_tags($desc)) ? 'tagline subline' : 'subline';
-                echo "<div class='site-description $type' itemprop='description'>$desc</div>";
-            }); ?> 
+                return "<div class='site-description $type' itemprop='description'>$desc</div>";
+            })); ?> 
         </div>
 
