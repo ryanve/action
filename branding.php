@@ -18,7 +18,6 @@ namespace theme;
                 if ( ! $desc) return;
                 $type = 80 > \mb_strlen(\strip_tags($desc)) ? 'tagline subline' : 'subline';
                 echo "<div class='site-description $type' itemprop='description'>$desc</div>";
-            }); ?>
-
+            }); ?> 
         </div>
 
