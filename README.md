@@ -8,6 +8,12 @@
 - [Demo](http://demo.actiontheme.com/)
 - [action-child](https://github.com/ryanve/action-child)
 
+## Versions
+
+- Browse/download [version releases](../../tags)
+- Compare [versions](../../tags) like [1.1.8...1.2.11](../../compare/1.1.8...1.2.11)
+- Browse [itemized commits](../../commits/master)
+
 ## License
 
 ### [action](https://github.com/ryanve/action) is available free under the [MIT license](http://en.wikipedia.org/wiki/MIT_License)
