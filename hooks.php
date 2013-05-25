@@ -479,7 +479,7 @@ add_action('wp_head', function() {
 }, -4); 
 
 # [dns-prefetch] uris
-add_action('@dns_prefetches', function($uris) {
+add_filter('@dns_prefetches', function($uris) {
     global $wp_scripts, $wp_styles;
     foreach (array($wp_scripts, $wp_styles) as $o) {
         \is_object($o)
