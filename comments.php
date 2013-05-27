@@ -10,7 +10,7 @@ if (post_password_required() || ! post_type_supports(get_post_type(), 'comments'
 	return;
 ?>
 
-<?php 
+<?php
     # github.com/ryanve/action/issues/1
     # There is currently no official microformat for comments. 
     # hcomment is used in comment.php for symmetry with hentry.
@@ -18,7 +18,8 @@ if (post_password_required() || ! post_type_supports(get_post_type(), 'comments'
     # microformats.org/wiki/xoxo
 ?>
 
-                <aside <?php echo ((is_singular() ? 'id="comments"' : '') . (' class="comments"')); ?>>
+                <aside <?php echo apply_filters('@comments_attrs', ''); ?>>
+                 
 
                     <?php if (have_comments()) { ?>
                     

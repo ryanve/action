@@ -547,6 +547,16 @@ add_filter('@list_comments', function($arr) {
     ));
 }, 0);
 
+# comments container
+add_filter('@comments_attrs', function($attrs = '') {
+    $able = comments_open() ? 'open' : 'closed';
+    $some = have_comments() ? 'has' : 'lacks';
+    $atts = "class='comments comments-$able $some-comments'";
+    # [id] is for jumps. Use [class] for style.
+    return is_singular() ? "id='comments' $atts" : $atts;
+}, 0);
+
+# each comment
 add_filter('@comment_attrs', function() {
     $attrs = array('itemscope'); 
     $id = get_comment_ID();
