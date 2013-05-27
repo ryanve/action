@@ -551,7 +551,8 @@ add_filter('@list_comments', function($arr) {
 add_filter('@comments_attrs', function($attrs = '') {
     $able = comments_open() ? 'open' : 'closed';
     $some = have_comments() ? 'has' : 'lacks';
-    $atts = "class='comments comments-$able $some-comments'";
+    $used = 'open' == $able || 'has' == $some ? 'used' : 'unused';
+    $atts = "class='comments comments-$able $some-comments $used'";
     # [id] is for jumps. Use [class] for style.
     return is_singular() ? "id='comments' $atts" : $atts;
 }, 0);
