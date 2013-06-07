@@ -9,7 +9,7 @@ namespace theme;
 # - <hgroup> is obsolete | webmonkey.com/?p=61540 | html5doctor.com/?p=3208
 ?>
 
-        <div class="site-branding hgroup" itemprop="provider publisher" itemscope itemtype="http://schema.org/Organization">
+        <div class="site-branding hgroup" itemprop="provider publisher" itemscope itemtype="http://schema.org/Brand">
             <h1 class="site-name site-title">
                 <a itemprop="url name" rel="home" href="<?php echo home_url(); ?>"><?php bloginfo('name'); ?></a>
             </h1>
