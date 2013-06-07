@@ -5,6 +5,7 @@ namespace theme;
 # component in a child theme and to facilitate sequence via '@header'
 #
 # Consider
+# - Relevant: schema.org/Brand, schema.org/Person, schema.org/Organization
 # - .site-title is common in WP but .site-name would be more systematic.
 # - <hgroup> is obsolete | webmonkey.com/?p=61540 | html5doctor.com/?p=3208
 ?>
