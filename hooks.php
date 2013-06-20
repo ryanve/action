@@ -276,7 +276,7 @@ add_action('@loop_header', function() {
         $data['name'] = \implode('-', $data['name']);
         $data['description'] = __('Archives.', 'theme');
     } elseif (is_post_type_archive()) {
-        $data['name'] = post_type_archive_title();
+        $data['name'] = post_type_archive_title('', false);
         $data['description'] = get_post_type_object(get_query_var('post_type'))->description;
     }
 
