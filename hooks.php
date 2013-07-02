@@ -277,7 +277,8 @@ add_action('@loop_header', function() {
         $data['description'] = __('Archives.', 'theme');
     } elseif (is_post_type_archive()) {
         $data['name'] = post_type_archive_title('', false);
-        $data['description'] = get_post_type_object(get_query_var('post_type'))->description;
+        if ($object = get_post_type_object(get_query_var('post_type')))
+            isset($object->description) and $data['description'] = $object->description;
     }
 
     if ($data = apply_filters('@loop_data', $data)) {
