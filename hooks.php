@@ -277,8 +277,8 @@ add_action('@loop_header', function() {
         $data['description'] = __('Archives.', 'theme');
     } elseif (is_post_type_archive()) {
         $data['name'] = post_type_archive_title('', false);
-        if ($object = get_post_type_object(get_query_var('post_type')))
-            isset($object->description) and $data['description'] = $object->description;
+        if ($type = get_post_type_object(get_query_var('post_type')))
+            $type->description and $data['description'] = $type->description;
     }
 
     if ($data = apply_filters('@loop_data', $data)) {
@@ -457,6 +457,17 @@ add_filter('the_author_posts_link', function($tag) {
     return \strpos($tag, 'class=') ? $tag : \str_replace(' href=', ' class="url fn n" href=', $tag);
 });
 
+is_admin() or add_action('template_redirect', function() {
+    if (is_post_type_archive()) {
+        # Remove problematic actions until CPT archives are safer.
+        remove_action('wp_head', 'feed_links_extra', 3);
+        $type = $var = get_query_var('post_type');
+        $slug = \basename($_SERVER['REQUEST_URI']);
+        \is_array($var) and $type = \in_array($slug, $var) ? $slug : \array_shift($var);
+        $type === $var or set_query_var('post_type', $type);
+    }
+});
+
 # Urgent <head> actions:
 # meta[charset]
 add_action('wp_head', function() {
@@ -496,9 +507,10 @@ add_filter('@dns_prefetches', function($uris) {
 
 # title
 add_action('wp_head', function() {
-    $tag = ($tag = \trim(apply_filters('@title_attrs', ''))) ? "<title $tag>" : '<title>';
-    $tag = apply_filters('@title_tag', $tag . get_the_title() . '</title>');
-    if ($tag and $tag = \trim($tag))
+    # Avoid `wp_title` for CPT archives until `post_type_archive_title` is safe for array "post_type" query vars.
+    $tag = is_post_type_archive() || !\strlen($tag = \trim(wp_title('', false))) ? $_SERVER['REQUEST_URI'] : $tag;
+    $tag = apply_filters('@title_tag', "<title>$tag</title>");
+    if (\strlen($tag = \trim($tag)))
        echo "\n$tag\n\n";
 }, -3); 
 
