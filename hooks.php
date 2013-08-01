@@ -390,7 +390,7 @@ add_filter('@entry_meta', function($markup, $hook) {
         $group = \is_array($group) ? \array_diff($group, array(null)) : array(null);
         $defaults = array('label' => $name, 'value' => null);
         foreach ($defaults as $k => $v)
-            $defaults[$k . 'Atts'] = "class='$name-$k'";
+            $defaults[$k . 'Atts'] = "class='meta-$k $name-$k'";
         foreach ($group as $case) {
             $data = apply_filters("@entry_meta:$name", null, $case);
             if ($data && \is_array($data)) {
@@ -453,12 +453,12 @@ add_filter('@entry_meta:tax', function($fn, $name) {
         $type  = get_post_type($id);
         $lists = array();
         $sep = '<<<!>>>';
-        $label = sanitize_html_class(\mb_strtolower(\trim($tax->label)));
-        if (\strlen($label) && is_object_in_taxonomy($type, $name)) {
+        if (is_object_in_taxonomy($type, $name) and $label = \trim($tax->label)) {
             $data = array('label' => $label , 'types' => array('tax', $label));
             $data['value'] = \array_filter(\explode($sep, get_the_term_list($id, $name, '', $sep, '')), 'strlen');
+            $class = sanitize_html_class(\mb_strtolower($label));
             foreach (array('label', 'value') as $k)
-                $data[$k . 'Atts'] = "class='tax-$k $label-$k'";
+                $data[$k . 'Atts'] = $class ? "class='meta-$k tax-$k $class-$k'" : "class='meta-$k tax-$k";
             return $data;
         }
     }
