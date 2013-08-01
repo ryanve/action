@@ -452,10 +452,9 @@ add_filter('@entry_meta:tax', function($fn, $name) {
         $id = get_the_ID();
         $type  = get_post_type($id);
         $lists = array();
-        $sep = '<<<!>>>';
         if (is_object_in_taxonomy($type, $name) and $label = \trim($tax->label)) {
             $data = array('label' => $label , 'types' => array('tax', $label));
-            $data['value'] = \array_filter(\explode($sep, get_the_term_list($id, $name, '', $sep, '')), 'strlen');
+            $data['value'] = get_the_term_list($id, $name, '', ', ', '');
             $class = sanitize_html_class(\mb_strtolower($label));
             foreach (array('label', 'value') as $k)
                 $data[$k . 'Atts'] = $class ? "class='meta-$k tax-$k $class-$k'" : "class='meta-$k tax-$k";
