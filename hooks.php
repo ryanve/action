@@ -260,7 +260,7 @@ add_action('@loop_header', function() {
     if (is_category() || is_tag() || is_tax()) {
         $data['case'] = 'tax';
         $data['name'] = single_term_title( '', false );
-        $data['description'] = term_description( '', get_query_var( 'taxonomy' ) );
+        $data['description'] = term_description( '', get_query_var('taxonomy') );
     } elseif (is_author()) {
         $data = get_queried_object();
         $data = array('case' => 'user', 'name' => $data->display_name, 'description' => $data->user_description);
@@ -360,92 +360,109 @@ add_action('@entry_header', function() {
     echo apply_filters('@headline', $markup);
 }, 5);
 
+add_filter('@entry_meta_groups', function($arr) {
+    if (false === $arr)
+        return array();
+    $all = \array_fill_keys(array('author', 'time', 'pages', 'tax'), true);
+    $arr = \is_array($arr) ? \array_replace($all, \array_intersect_key($arr, $all)) : $all;
+    true === $arr['time'] and $arr['time'] = array('published', 'modified');
+    $all = get_taxonomies();
+    $arr['tax'] and $arr['tax'] = true === $arr['tax'] ? $all : \array_intersect_key($all, $arr['tax']);
+    return $arr;
+}, 100);
+
 add_action('@entry_header', function() {
-
-    global $authordata;
-    $markup = \trim(apply_filters('@byline_attrs', 'class="pairs meta-list byline"'));
-    $markup = $markup ? "<dl $markup>" : '<dl>';
-    
-    \is_object($authordata)
-        and ($link = get_author_posts_url($authordata->ID, $authordata->user_nicename)) # href
-        and ($link = "<a href='$link' class='url fn n' itemprop='author' rel='author'>" . get_the_author() .'</a>')
-        and ($link = apply_filters('the_author_posts_link', $link)) #wp: the_author_posts_link()
-        and $markup .= '<dt class="author-label">' . __('By', 'theme')
-            . '</dt><dd class="author-value vcard">' . $link . '</dd>';
-
-    $time_item = function($arr) {
-        \extract($arr);
-        $date = \call_user_func($fn); # Settings > General > Date Format
-        $w3c = \call_user_func($fn, DATE_W3C); # php.net/manual/en/class.datetime.php
-        $idx = get_year_link(\strtok($w3c, '-'));
-        $rel and $rel = ' rel="index"';
-        $date = "<a$rel href='$idx'>$date</a>";
-        $tag = "<time itemprop='$itemprop' class='$class' datetime='$w3c'>$date</time>";
-        $tag = apply_filters('@' . $hook . '_tag', $tag, $date);
-        $item = '<dt class="' . $hook . '-label time-label">' . $label . '</dt>';
-        return $item . '<dd class="' . $hook . '-value time-value">' . $tag . '</dd>';
-    };
-    
-    # microformats.org/wiki/hentry
-    # schema.org/Article
-    # github.com/ryanve/action/issues/1
-
-    $markup .= $time_item(array( 
-           'fn' => 'get_the_date'
-         , 'itemprop' => 'datePublished'
-         , 'label' => 'Posted'
-         , 'class' => 'published'
-         , 'hook' => 'published'
-         , 'rel' => 'index' 
-    ));
-    
-    $markup .= $time_item(array(
-        'fn' => 'get_the_modified_date'
-      , 'itemprop' => 'dateModified'
-      , 'label' => 'Updated'
-      , 'class' => 'updated'
-      , 'hook' => 'modified'
-      , 'rel' => '' 
-    ));
-        
-    $markup .= '</dl>';
-    echo apply_filters('@byline', $markup);
+    echo apply_filters('@entry_meta', '', '@entry_header');
 }, 7);
 
 add_action('@entry_footer', function() {
+    echo apply_filters('@entry_meta', '', '@entry_footer');
+}, 20);
 
-    global $wp_taxonomies;
-    $taxos = empty($wp_taxonomies) ? array() : \wp_list_pluck($wp_taxonomies, 'label');
-    $id = get_the_ID();
-    $type  = get_post_type($id);
-    $items = array('pages' => \trim(wp_link_pages(array(
-        'echo'   => 0
-      , 'before' => '<dt class="meta-label pages-label">' 
-        . __('Pages', 'theme') . '</dt><dd class="meta-value pages-value">'
-      , 'after'  => '</dd>'
-    ))));
+add_filter('@entry_meta_groups', function($groups, $hook) {
+    return '@entry_footer' === $hook;
+}, 0, 2);
 
-    foreach ($taxos as $name => $label) {
-        if (is_object_in_taxonomy($type, $name)) {
-            if ($class = sanitize_html_class(\mb_strtolower($label))) {
-                $terms = get_the_term_list($id, $name, '<li>', '</li><li>', '</li>');
-                $void = $terms ? '' : ' void';
-                $items["taxo:$class"] = (
-                    "<dt class='meta-label taxo-label $class-label$void'>$label</dt>"
-                  . "<dd class='meta-value taxo-value $class-value$void'>"
-                  . '<ul class="serial term-list">' . $terms . '</ul></dd>'
-                );
+add_filter('@entry_meta', function($markup, $hook) {
+    $items = array();
+    $groups = \array_filter(apply_filters('@entry_meta_groups', array(), $hook) ?: array());
+    foreach ($groups as $name => $group) {
+        $group = \is_array($group) ? \array_diff($group, array(null)) : array(null);
+        $defaults = array('label' => $name, 'value' => null);
+        foreach ($defaults as $k => $v)
+            $defaults[$k . 'Atts'] = "class='$name-$k'";
+        foreach ($group as $case) {
+            $data = apply_filters("@entry_meta:$name", null, $case);
+            if ($data && \is_array($data)) {
+                $data = \array_replace($defaults, \array_intersect_key($data, $defaults));
+                \extract($data);
+                if ($value) {
+                    $value = (array) $value;
+                    $dt = "<dt $labelAtts>";
+                    $dd = "<dd $valueAtts>";
+                    $value = $dd . \implode("</dd>$dd", $value) . '</dd>';
+                    $items[\is_string($case) ? $case : $name] = $dt . $label . '</dt>' . $value;
+                }
             }
         }
     }
-
-    $terms = $class = null;
-    $items = apply_filters('@entry_meta_items', $items, $taxos) ?: array(); # allow array or falsey
-    $markup = \implode('', $items);
+    $items = \apply_filters('@entry_meta_items', $items, $groups);
     $void = $items ? '' : ' void';
-    $markup = "<dl class='pairs meta-list entry-meta$void' role='navigation'>$markup</dl>";
-    echo apply_filters('@entry_meta', $markup, $items, $taxos);
-}, 20);
+    return "<dl class='pairs meta-list entry-meta$void'>" . \implode('', $items) . '</dl>';
+}, 0, 2);
+
+add_filter('@entry_meta:author', function() {
+    global $authordata;
+    return \is_object($authordata)
+        && ($link = get_author_posts_url($authordata->ID, $authordata->user_nicename)) # href
+        && ($link = "<a href='$link' itemprop='author' rel='author'>" . get_the_author() .'</a>')
+        && ($link = apply_filters('the_author_posts_link', $link)) #wp: the_author_posts_link()
+        ? array('label' => __('By', 'theme'), 'value' => $link) : array();
+}, 0);
+
+add_filter('@entry_meta:time', function($fn, $case) {
+    $case = \array_search($case, array('modified', 'published'), true);
+    if ($case || 0 === $case) {
+        # microformats.org/wiki/hentry
+        # schema.org/Article
+        # github.com/ryanve/action/issues/1
+        $fn       = $case ? 'get_the_date'  : 'get_the_modified_date';
+        $rel      = $case ? 'index'         : '';
+        $label    = $case ? 'Posted'        : 'Updated';
+        $class    = $case ? 'published'     : 'updated';
+        $itemprop = $case ? 'datePublished' : 'dateModified';
+        $hook     = $case ? 'published'     :  'modified';
+        $date = \call_user_func($fn); # Settings > General > Date Format
+        $w3c = \call_user_func($fn, DATE_W3C); # php.net/manual/en/class.datetime.php
+        $idx = get_year_link(\strtok($w3c, '-'));
+        $rel and $rel = " rel='$rel'";
+        $date = "<a$rel href='$idx'>$date</a>";
+        $tag = "<time itemprop='$itemprop' class='$class' datetime='$w3c'>$date</time>";
+        return array('label' => $label, 'value' => apply_filters('@' . $hook . '_tag', $tag, $date));
+    }
+}, 0, 2);
+
+add_filter('@entry_meta:pages', function() {
+    $pages = \trim(wp_link_pages(array('echo' => 0, 'before' => ' ', 'after'  => ' ')));
+    return \strlen($pages) ? array('label' => __('Pages', 'theme'), 'value' => $pages) : array();
+}, 0);
+
+add_filter('@entry_meta:tax', function($fn, $name) {
+    if ($tax = get_taxonomy($name)) {
+        $id = get_the_ID();
+        $type  = get_post_type($id);
+        $lists = array();
+        $sep = '<<<!>>>';
+        $label = sanitize_html_class(\mb_strtolower(\trim($tax->label)));
+        if (\strlen($label) && is_object_in_taxonomy($type, $name)) {
+            $data = array('label' => $label , 'types' => array('tax', $label));
+            $data['value'] = \array_filter(\explode($sep, get_the_term_list($id, $name, '', $sep, '')), 'strlen');
+            foreach (array('label', 'value') as $k)
+                $data[$k . 'Atts'] = "class='tax-$k $label-$k'";
+            return $data;
+        }
+    }
+}, 0, 2);
 
 # Clean excerpt whitespace
 add_filter('the_excerpt', 'normalize_whitespace'); # wp
