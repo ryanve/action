@@ -388,8 +388,8 @@ add_filter('@entry_meta', function($markup, $hook) {
     $groups = \array_filter(apply_filters('@entry_meta_groups', array(), $hook) ?: array());
     foreach ($groups as $name => $group) {
         $group = \is_array($group) ? \array_diff($group, array(null)) : array(null);
-        $defaults = array('label' => $name, 'value' => null);
-        foreach ($defaults as $k => $v)
+        $defaults = array('label' => $name, 'value' => null, 'sep' => null);
+        foreach (array('label', 'value') as $k)
             $defaults[$k . 'Atts'] = "class='meta-$k $name-$k'";
         foreach ($group as $case) {
             $data = apply_filters("@entry_meta:$name", null, $case);
@@ -400,7 +400,7 @@ add_filter('@entry_meta', function($markup, $hook) {
                     $value = (array) $value;
                     $dt = "<dt $labelAtts>";
                     $dd = "<dd $valueAtts>";
-                    $value = $dd . \implode("</dd>$dd", $value) . '</dd>';
+                    $value = $dd . \implode(null === $sep ? "</dd>$dd" : $sep, $value) . '</dd>';
                     $items[\is_string($case) ? $case : $name] = $dt . $label . '</dt>' . $value;
                 }
             }
@@ -420,7 +420,7 @@ add_filter('@entry_meta:author', function() {
         ? array('label' => __('By', 'theme'), 'value' => $link) : array();
 }, 0);
 
-add_filter('@entry_meta:time', function($fn, $case) {
+add_filter('@entry_meta:time', function($void, $case) {
     $case = \array_search($case, array('modified', 'published'), true);
     if ($case || 0 === $case) {
         # microformats.org/wiki/hentry
@@ -447,14 +447,15 @@ add_filter('@entry_meta:pages', function() {
     return \strlen($pages) ? array('label' => __('Pages', 'theme'), 'value' => $pages) : array();
 }, 0);
 
-add_filter('@entry_meta:tax', function($fn, $name) {
+add_filter('@entry_meta:tax', function($void, $name) {
     if ($tax = get_taxonomy($name)) {
         $id = get_the_ID();
         $type  = get_post_type($id);
         $lists = array();
+        $sep = '<<<!>>>';
         if (is_object_in_taxonomy($type, $name) and $label = \trim($tax->label)) {
-            $data = array('label' => $label , 'types' => array('tax', $label));
-            $data['value'] = get_the_term_list($id, $name, '', ', ', '');
+            $data = array('label' => $label , 'types' => array('tax', $label), 'sep' => ', ');
+            $data['value'] = \array_filter(\explode($sep, get_the_term_list($id, $name, '', $sep, '')));
             $class = sanitize_html_class(\mb_strtolower($label));
             foreach (array('label', 'value') as $k)
                 $data[$k . 'Atts'] = $class ? "class='meta-$k tax-$k $class-$k'" : "class='meta-$k tax-$k";
