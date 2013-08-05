@@ -155,6 +155,7 @@ add_action('@footer', function() {
     is_active_sidebar('footer') and get_sidebar('footer');
 });
 
+# Register sidebars
 add_action('widgets_init', function() {
     $areas = (array) apply_filters('@widget_areas', array(
         # Correlate names to CSS selectors:
@@ -170,6 +171,17 @@ add_action('widgets_init', function() {
         ), $a));
     }
 });
+
+# Display sidebars
+add_action('get_sidebar', apply_filters('@sidebar_actions', function($name) {
+    if (\is_string($name) && \strlen($name) && is_active_sidebar($name)) {
+        if ( ! locate_template(array("sidebar-$name.php"), false)) {
+            echo "<ul class='widget-area $name-widget-area'>";
+            dynamic_sidebar($name);
+            echo "</ul>\n\n";
+        }
+    }
+}));
 
 # CPTs/taxos/menus/js/css should register on init.
 # Early-priority init actions:
