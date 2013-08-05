@@ -97,7 +97,7 @@ add_filter('@html_tag', function() {
     add_filter('body_class', '__return_empty_array'); #wp
     $attrs .= " class='$class'";
     $attrs .= ' itemscope'; # implied http://schema.org/WebPage
-    $attrs = apply_filters('@html_attrs', $attrs);
+    $attrs = apply_filters('@html_atts', $attrs);
     return "<html $attrs>";
 }, 0);
 
@@ -133,7 +133,7 @@ add_action(apply_filters('@menu_location', '@header'), function() {
     }, 10, 2);
 
     $items = apply_filters('@menu_items', '%3$s'); # for li pre-/appends
-    $menu = apply_filters('@menu_attrs', 'id="menu" role="navigation" class="site-nav arrestive"');
+    $menu = apply_filters('@menu_atts', 'id="menu" role="navigation" class="site-nav arrestive"');
     $menu = "<nav $menu><h2 class='assistive menu-toggle'>Menu</h2>";
     $menu .= wp_nav_menu(array(
         'theme_location' => 'menu'
@@ -337,7 +337,7 @@ add_action('@entry', apply_filters('@entry_actions', function() {
     }, 20);
 }), 0);
 
-add_filter('@entry_attrs', function($attrs = '') {
+add_filter('@entry_atts', function($attrs = '') {
     $class = \implode(' ', get_post_class());
     return "class='$class' itemscope itemtype='http://schema.org/Article'";
 }, 0);
@@ -569,7 +569,7 @@ add_filter('@list_comments', function($arr) {
       , 'callback' => function($comment, $arr, $depth) {
             $GLOBALS['comment'] = $comment;
             $GLOBALS['comment_depth'] = $depth;
-            $attrs = apply_filters('@comment_attrs', null);
+            $attrs = apply_filters('@comment_atts', null);
             echo "<li><article $attrs>"; 
             do_action('@comment');
             echo '</article>'; 
@@ -578,7 +578,7 @@ add_filter('@list_comments', function($arr) {
 }, 0);
 
 # comments container
-add_filter('@comments_attrs', function($attrs = '') {
+add_filter('@comments_atts', function($attrs = '') {
     $able = comments_open() ? 'open' : 'closed';
     $some = have_comments() ? 'has' : 'lacks';
     $used = 'open' == $able || 'has' == $some ? 'used' : 'unused';
@@ -588,7 +588,7 @@ add_filter('@comments_attrs', function($attrs = '') {
 }, 0);
 
 # each comment
-add_filter('@comment_attrs', function() {
+add_filter('@comment_atts', function() {
     $attrs = array('itemscope'); 
     $id = get_comment_ID();
     is_singular() and $attrs[] = "id='comment-$id'";

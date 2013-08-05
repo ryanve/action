@@ -1,4 +1,7 @@
-<?php namespace theme; ?>
+<?php 
+namespace theme; 
+# [id] is included for jumps (not CSS)
+?>
 
 
     <footer id="footer" class="site-footer">
