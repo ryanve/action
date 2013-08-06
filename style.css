@@ -2,7 +2,7 @@
 Theme Name: action
 Theme URI: http://actiontheme.com
 Description: Extensible HTML5 parent theme.
-Version: 1.4.0-1
+Version: 1.4.0-2
 Author: Ryan Van Etten
 Author URI: http://ryanve.com
 Tags: flexible-width, microformats, custom-menu, custom-background, light, white
@@ -155,7 +155,6 @@ License URI: http://opensource.org/licenses/MIT
 /* =layout
    --------------------------------------------------------------------- */
     body { margin:0 auto; width:96%; } /* implies 2% padding */
-    .widget-area { max-width:40em; }
     
     .site-header { margin:0 auto; }
     .site-branding { margin-bottom:1.5em; }
@@ -164,12 +163,17 @@ License URI: http://opensource.org/licenses/MIT
     .site-footer { clear:both; margin:1em auto; padding:1em; }
     .header-widget-area { clear:left; }
     
-    .widget-area > ul { list-style-type:square; padding-left:0; }
+    .widget-area { max-width:40em; }
+    .widget-area, .widget-area > ul { list-style-type:none; padding-left:0; }
     .widgettitle { margin:.4em 0; }
     li.widget { display:block; margin:2em 0; }
     li.widget:first-child { margin-top:inherit; }
     li.widget:last-child { margin-bottom:inherit; }
+    
+    main { display:block; clear:left; float:left; width:100%; max-width:100%; margin:1em auto; padding:0; }
+    main:after { display:table; content:" "; clear:both; }
 
+    .loop { padding:0; }
     .loop-header:not(:empty) { margin-bottom:2em; }
     .loop-header h1 { margin-top:inherit; }
     .loop-nav { clear:both; margin-top:2em; margin-bottom:1em; font-weight:bold; }
@@ -177,35 +181,65 @@ License URI: http://opensource.org/licenses/MIT
     .singular .loop-nav a { display:block; clear:both; margin-bottom:2px; }
     .plural .loop-nav [rel~="prev"]:before { content:"< "; }
     .plural .loop-nav [rel~="next"]:after { content:" >"; }
-    
-    main { clear:left; float:left; margin:1em auto; max-width:100%; }
-    main + * { clear:both; }
-    
+
     /* =layout=modifiers */
-    @media (min-width:60em) {
+    
+    @media (min-width:53em) {
         .l-lheader body { width:100%; }
+        .l-lheader main { float:left; clear:right; max-width:36em; }
         .l-lheader .site-header h1 { margin-top:0; }
         .l-lheader .site-header { float:left; width:12.5em; margin:0 1em 0 0; padding:1em; }
-        .l-lheader main { clear:none; float:left; padding:0 1em; width:66.6666em; max-width:40em; }
         .l-lheader.full-width main, .l-lmenu.attachment main { max-width:50em; }
+    }
+    
+    @media (min-width:58em) {
+        .l-lheader main { max-width:40em; }
+    
+        .l-rsidebar body { max-width:55em; }
+        .l-rsidebar.l-lheader main { float:left; clear:right; }
+        .l-rsidebar .loop { width:100%; max-width:36em; float:left; }
+        .l-rsidebar .major-widget-area, 
+        .l-rsidebar .minor-widget-area { width:32%; max-width:18.75em; margin:0; float:right; clear:right; }
+        
+        .l-lsidebar body { max-width:55em; }
+        .l-lsidebar.l-lheader main { float:right; clear:left; }
+        .l-lsidebar .loop { width:100%; max-width:35em; float:right; }
+        .l-lsidebar .major-widget-area, 
+        .l-lsidebar .minor-widget-area { width:32%; max-width:18.75em; margin:0; float:left; clear:left; }
+    }
 
+    @media (min-width:62.5em) {
+        .l-lheader main { max-width:45em; }
         .l-rmenu  body { width:96%; max-width:60em; }
         .l-rmenu .site-header { float:none; width:100%; padding:0; margin-top:.618em; }
         .l-rmenu .site-branding { float:left; }
         .l-rmenu .site-nav { float:right; margin:0 0 2em 4%; }
-        .l-rmenu main { clear:left; float:none; width:100%; max-width:100%; padding:0; } 
+        .l-rmenu main { clear:both; float:none; width:100%; max-width:100%; padding:0; } 
         .l-rmenu .site-footer { padding-left:0; padding-right:0; }
-
-        .l-rsidebar body { max-width:64em; }
-        .l-rsidebar.l-lheader body { max-width:100%; }
-        .l-rsidebar.l-lheader main { max-width:64em; }
-        .l-rsidebar.l-rmenu:not(.full-width) .site-nav { width:18.75em; }
-        .l-rsidebar:not(.full-width) .loop { width:62.5%; float:left; padding:0; }
-        .l-rsidebar:not(.full-width) .minor-widget-area {
-            width:29.296875%; max-width:18.75em; margin:0; float:right; clear:right; 
-         }
+        
+        .l-rsidebar body, .l-lsidebar body { max-width:60em; }
+        .l-rsidebar .loop, .l-lsidebar .loop { max-width:40em; }
     }
 
-    @media (min-width:80em) {
+    @media (min-width:68em) {
+        .l-lheader main { max-width:50em; }
         .l-lheader.full-width main { max-width:60em; }
+        .l-rsidebar body, .l-lsidebar body { max-width:64em; }
+        .l-rsidebar .loop, .l-lsidebar .loop { max-width:43.75em; }
+    }
+    
+    @media (min-width:75em) {
+        .l-rsidebar body, .l-lsidebar body { max-width:67.5em; }
+        .l-rsidebar .loop, .l-lsidebar .loop { max-width:45em; }
+        .l-rsidebar .major-widget-area, .l-rsidebar .minor-widget-area { max-width:20em; }
+    }
+    
+    /* clearfix */
+    .l-lsidebar .loop:after, 
+    .l-lsidebar .minor-widget-area:after { display:table; content:" "; clear:both; }
+    
+    /* overrides */
+    .l-lheader body { max-width:100%; }
+    .full-width .loop, .full-width .major-widget-area, .full-width .minor-widget-area {
+        width:100%; max-width:100%; clear:both; padding-left:0; padding-right:0; margin-bottom:1em;
     }
