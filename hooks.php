@@ -157,27 +157,20 @@ add_action('@footer', function() {
 
 # Register sidebars
 add_action('widgets_init', function() {
-    $areas = (array) apply_filters('@widget_areas', array(
-        # Correlate names to CSS selectors:
-        array('id' => 'main'   , 'name' => '.main-widget-area')
-      , array('id' => 'header' , 'name' => '.header-widget-area')
-      , array('id' => 'footer' , 'name' => '.footer-widget-area')
-    ));
-    # codex.wordpress.org/Function_Reference/register_sidebar
-    # Merge in sensible defaults:
-    foreach ($areas as $a) {
-        $a and register_sidebar(\array_merge(array(
-            'before_widget' => '<li class="widget %2$s">'
-        ), $a));
-    }
+    $areas = (array) apply_filters('@widget_areas', \array_map(function($id) {
+        return array('id' => $id, 'name' => ".$id-widget-area"); # Correlate names to CSS selectors.
+    }, array('header', 'major', 'minor', 'footer')));
+    foreach ($areas as $a)
+        # Merge sensible defaults into codex.wordpress.org/Function_Reference/register_sidebar
+        $a and register_sidebar(\array_merge(array('before_widget' => '<li class="widget %2$s">'), $a));
 });
 
 # Display sidebars
-add_action('get_sidebar', apply_filters('@sidebar_actions', function($name) {
-    if (\is_string($name) && \strlen($name) && is_active_sidebar($name)) {
-        if ( ! locate_template(array("sidebar-$name.php"), false)) {
-            echo "<ul class='widget-area $name-widget-area'>";
-            dynamic_sidebar($name);
+add_action('get_sidebar', apply_filters('@sidebar_actions', function($id) {
+    if (\is_string($id) && \strlen($id) && is_active_sidebar($id)) {
+        if ( ! locate_template(array("sidebar-$id.php"), false)) {
+            echo "<ul class='widget-area $id-widget-area'>";
+            dynamic_sidebar($id);
             echo "</ul>\n\n";
         }
     }
@@ -219,8 +212,9 @@ is_admin() or add_action('init', function() {
 });
 
 add_action('@main', apply_filters('@main_actions', function() {
+    is_active_sidebar('major') and get_sidebar('major');
     get_template_part('loop', is_singular() ? 'singular' : 'plural');
-    is_active_sidebar('main') and get_sidebar('main');
+    is_active_sidebar('minor') and get_sidebar('minor');
 }));
 
 \array_reduce(array('previous', 'next'), function($void, $rel) {
