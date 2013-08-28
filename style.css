@@ -2,7 +2,7 @@
 Theme Name: action
 Theme URI: http://actiontheme.com
 Description: Extensible HTML5 parent theme.
-Version: 1.4.0-3
+Version: 1.4.0
 Author: Ryan Van Etten
 Author URI: http://ryanve.com
 Tags: flexible-width, microformats, custom-menu, custom-background, light, white
@@ -72,7 +72,7 @@ License URI: http://opensource.org/licenses/MIT
     ::-moz-selection { background:#f5f533; color:#080808; }
          ::selection { background:#f5f533; color:#080808; }
          
-    html { color:#333; background:#fafafa; } /* off-white */
+    html { color:#1c1c1c; background:#fafafa; }
     .skin-dark { background:#111; color:#efefef; }
 
     .reduce-color a:not(:hover) { border-color:#efefef; }
@@ -86,11 +86,10 @@ License URI: http://opensource.org/licenses/MIT
     .skin-dark a:link, .skin-dark a:visited { color:#9c9d9e; }
     .skin-dark a:hover { border-color:#efefef; }
     .skin-dark a:focus:hover { border-color:#efefef; }
-    
-    .void-color a:link, .void-color a:visited { color:#111; }
-    .void-color a:hover { border-color:#111; }
+    .void-color a:link, .void-color a:visited { color:#1c1c1c; }
+    .void-color a:hover { border-color:#1c1c1c; }
     .void-color.skin-dark a:hover { border-color:#efefef; }
-         
+
 /* =menu
    --------------------------------------------------------------------- */    
     .site-nav { font-weight:bold; margin:1.5em 0; }
