@@ -30,9 +30,10 @@ License URI: http://opensource.org/licenses/MIT
     label { margin-right:.6em; }
 
     /* =modifiers */
-    .dot-anchors a:link  { text-decoration:none; border-bottom-width:1px; border-bottom-style:dotted; }
-    .dash-anchors a:link { text-decoration:none; border-bottom-width:1px; border-bottom-style:dashed; }
-    .solid-anchors a:link { text-decoration:none; border-bottom-width:1px; border-bottom-style:solid; }
+    .dot-anchors a:link, .dash-anchors a:link, .solid-anchors a:link { text-decoration:none; border-bottom-width:1px; }
+    .dash-anchors a:link { border-bottom-style:dashed; }
+    .dot-anchors a:link  { border-bottom-style:dotted; }
+    .solid-anchors a:link, .dash-anchors a:hover, .dot-anchors a:hover { border-bottom-style:solid; }
     .void-anchor-border a { border:0!important; }
     .void-anchor-decor a { text-decoration:none; }
     
