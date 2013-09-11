@@ -123,29 +123,30 @@ add_action('@header', function() {
     locate_template('branding.php', true, false);
 }, apply_filters('@branding_priority', 10));
 
-add_action(apply_filters('@menu_location', '@header'), function() {
-    # Favor classes over IDs.
-    add_filter('nav_menu_item_id', '__return_false');
-    add_filter('nav_menu_css_class', function($arr, $item = null) {
-        if (\is_array($arr) && \is_object($item) && isset($item->ID))
-            \in_array($item = 'menu-item-' . $item->ID, $arr) or $arr[] = $item;
-        return $arr;
-    }, 10, 2);
 
-    $items = apply_filters('@menu_items', '%3$s'); # for li pre-/appends
-    $menu = apply_filters('@menu_atts', 'id="menu" role="navigation" class="site-nav arrestive"');
-    $menu = "<nav $menu><h2 class='assistive menu-toggle'>Menu</h2>";
-    $menu .= wp_nav_menu(array(
-        'theme_location' => 'menu'
-      , 'container' => false
-      , 'echo' => false
-      , 'menu_class' => 'nav'
-      , 'items_wrap' => '<ul class="menu-list">' . $items . '</ul>'
-    ));
-    $menu .= '</nav>';
-    $menu = \str_repeat(' ', 8) . $menu . "\n\n";
-    echo apply_filters('@menu', $menu);
-}, apply_filters('@menu_priority', 10));
+# Favor classes over IDs.
+add_filter('nav_menu_item_id', '__return_false');
+add_filter('nav_menu_css_class', function($arr, $item = null) {
+    if (\is_array($arr) && \is_object($item) && isset($item->ID))
+        \in_array($item = 'menu-item-' . $item->ID, $arr) or $arr[] = $item;
+    return $arr;
+}, 10, 2);
+
+call_user_func(function() {
+    # Child themes can add a menu by setting '@menu_location'
+    $location = apply_filters('@menu_location', null);
+    $location and add_action($location, function() {
+        $items = apply_filters('@menu_items', '%3$s'); # for li pre-/appends
+        $menu = apply_filters('@menu_atts', 'id="menu" role="navigation" class="site-nav arrestive"');
+        $menu = "<nav $menu><h2 class='assistive menu-toggle'>Menu</h2>";
+        $menu .= wp_nav_menu(array(
+            'container' => false, 'echo' => false,
+            'menu_class' => 'nav', 'theme_location' => 'menu', 
+            'items_wrap' => "<ul class='menu-list'>$items</ul>"
+        )) . '</nav>';
+        echo apply_filters('@menu', \str_repeat(' ', 8) . $menu . "\n\n");
+    }, apply_filters('@menu_priority', 10));
+});
 
 add_action('@header', function() {
     is_active_sidebar('header') and get_sidebar('header');
@@ -179,8 +180,9 @@ add_action('get_sidebar', apply_filters('@sidebar_actions', function($id) {
 # CPTs/taxos/menus/js/css should register on init.
 # Early-priority init actions:
 add_action('init', function() {
-    # Register menus
-    register_nav_menus(array('menu' => 'Menu'));
+    # Register menu if it was defined.
+    # github.com/ryanve/action/issues/6
+    apply_filters('@menu_location', null) and register_nav_menus(array('menu' => 'Menu'));
     
     # Register CSS
     # handle, uri, deps, ver, media
