@@ -132,20 +132,20 @@ add_filter('nav_menu_css_class', function($arr, $item = null) {
     return $arr;
 }, 10, 2);
 
-call_user_func(function() {
-    # Child themes can add a menu by setting '@menu_location'
+add_action('init', function() {
+    # Child themes may add a menu via '@menu_location'
+    # github.com/ryanve/action/issues/6
     $location = apply_filters('@menu_location', null);
     $location and add_action($location, function() {
         $items = apply_filters('@menu_items', '%3$s'); # for li pre-/appends
         $menu = apply_filters('@menu_atts', 'id="menu" role="navigation" class="site-nav arrestive"');
-        $menu = "<nav $menu><h2 class='assistive menu-toggle'>Menu</h2>";
-        $menu .= wp_nav_menu(array(
+        $menu = "<nav $menu><h2 class='assistive menu-toggle'>Menu</h2>" . wp_nav_menu(array(
             'container' => false, 'echo' => false,
             'menu_class' => 'nav', 'theme_location' => 'menu', 
             'items_wrap' => "<ul class='menu-list'>$items</ul>"
         )) . '</nav>';
         echo apply_filters('@menu', \str_repeat(' ', 8) . $menu . "\n\n");
-    }, apply_filters('@menu_priority', 10));
+    }, apply_filters('@menu_priority', 10)) and register_nav_menus(array('menu' => 'Menu'));
 });
 
 add_action('@header', function() {
@@ -177,22 +177,14 @@ add_action('get_sidebar', apply_filters('@sidebar_actions', function($id) {
     }
 }));
 
-# CPTs/taxos/menus/js/css should register on init.
 # Early-priority init actions:
 add_action('init', function() {
-    # Register menu if it was defined.
-    # github.com/ryanve/action/issues/6
-    apply_filters('@menu_location', null) and register_nav_menus(array('menu' => 'Menu'));
-    
-    # Register CSS
-    # handle, uri, deps, ver, media
+    # Define CSS (handle, uri, deps, ver, media)
     # github.com/ryanve/action/issues/2
     # github.com/ryanve/action/issues/5
     $index = trailingslashit(get_template_directory_uri());
     wp_register_style('parent-base', $index . 'base.css', array(), null, null);
     wp_register_style('parent-style', $index . 'style.css', array('parent-base'), null, 'screen,projection');
-
-    # Enqueue CSS
     is_child_theme() || is_admin() or wp_enqueue_style('parent-style');
 }, 1);
 
