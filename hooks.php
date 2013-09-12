@@ -140,9 +140,8 @@ add_action('init', function() {
         $items = apply_filters('@menu_items', '%3$s'); # for li pre-/appends
         $menu = apply_filters('@menu_atts', 'id="menu" role="navigation" class="site-nav arrestive"');
         $menu = "<nav $menu><h2 class='assistive menu-toggle'>Menu</h2>" . wp_nav_menu(array(
-            'container' => false, 'echo' => false,
-            'menu_class' => 'nav', 'theme_location' => 'menu', 
-            'items_wrap' => "<ul class='menu-list'>$items</ul>"
+            'container' => false, 'echo' => false, 'menu_class' => 'nav', 'theme_location' => 'menu',
+            'fallback_cb' => '__return_false', 'items_wrap' => "<ul class='menu-list'>$items</ul>"
         )) . '</nav>';
         echo apply_filters('@menu', \str_repeat(' ', 8) . $menu . "\n\n");
     }, apply_filters('@menu_priority', 10)) and register_nav_menus(array('menu' => 'Menu'));
