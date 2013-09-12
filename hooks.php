@@ -102,21 +102,16 @@ add_filter('@html_tag', function() {
 }, 0);
 
 add_action('@body', apply_filters('@body_actions', function() {
-
     # github.com/ryanve/action/issues/4
     $skip = '<a class="assistive" href="#main">' . __('skip', 'theme') . '</a>';
     $skip = apply_filters('@skip_anchor', $skip);
-    if ($skip and $skip = \trim(\strip_tags($skip, '<a>'))) {
+    if ($skip and $skip = \trim(\strip_tags($skip, '<a>')))
         echo "\n" . \str_repeat(' ', 4) . $skip . "\n\n";
-    }
-
     foreach (array(
         array(5, 'get_header')
       , array(10, function() { locate_template('main.php', true, false); })
       , array(30, 'get_footer')
-    ) as $fn) {
-        has_action('@body', $fn[1]) or add_action('@body', $fn[1], $fn[0]);
-    }
+    ) as $fn) has_action('@body', $fn[1]) or add_action('@body', $fn[1], $fn[0]);
 }), 0);
 
 add_action('@header', function() {
@@ -304,7 +299,6 @@ add_action('@loop_header', function() {
 }, 5);
 
 add_action('@entry', apply_filters('@entry_actions', function() {
-
     static $ran, $content_mode; 
     # allow the '@content_mode' to be changed between iterations
     # truthy => content | falsey => excerpt
