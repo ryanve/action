@@ -2,7 +2,7 @@
 Theme Name: action
 Theme URI: http://actiontheme.com
 Description: Extensible HTML5 parent theme.
-Version: 1.5.0-0
+Version: 1.5.0-1
 Author: Ryan Van Etten
 Author URI: http://ryanve.com
 Tags: flexible-width, microformats, custom-menu, custom-background, light, white
@@ -146,7 +146,7 @@ License URI: http://opensource.org/licenses/MIT
 
 /* =layout
    --------------------------------------------------------------------- */
-    body { margin:0 auto; width:96%; } /* implies 2% padding */
+    body { margin:0 auto; width:96%; }
     
     .site-header { margin:0 auto; }
     .site-branding { margin-bottom:1.5em; }
@@ -177,10 +177,10 @@ License URI: http://opensource.org/licenses/MIT
     /* =layout=modifiers */
     
     @media (min-width:53em) {
-        .l-lheader body { width:100%; }
-        .l-lheader main { float:left; clear:right; max-width:36em; }
+        /**, *:before, *:after { -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; }*/
+        .l-lheader main { float:left; clear:right; }
         .l-lheader .site-header h1 { margin-top:0; }
-        .l-lheader .site-header { float:left; width:12.5em; margin:0 1em 0 0; padding:1em; }
+        .l-lheader .site-header { float:left; margin:0 1em 0 -1%; padding:1em; }
         .l-lheader.full-width main, .l-lmenu.attachment main { max-width:50em; }
     }
     
@@ -202,7 +202,8 @@ License URI: http://opensource.org/licenses/MIT
 
     @media (min-width:62.5em) {
         .l-lheader main { max-width:45em; }
-        .l-rmenu  body { width:96%; max-width:60em; }
+
+        .l-rmenu  body { max-width:60em; }
         .l-rmenu .site-header { float:none; width:100%; padding:0; margin-top:.618em; }
         .l-rmenu .site-branding { float:left; }
         .l-rmenu .site-nav { float:right; margin:0 0 2em 4%; }
@@ -231,7 +232,6 @@ License URI: http://opensource.org/licenses/MIT
     .l-lsidebar .minor-widget-area:after { display:table; content:" "; clear:both; }
     
     /* overrides */
-    .l-lheader body { max-width:100%; }
     .full-width .loop, .full-width .major-widget-area, .full-width .minor-widget-area {
         width:100%; max-width:100%; clear:both; padding-left:0; padding-right:0; margin-bottom:1em;
     }
