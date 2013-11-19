@@ -154,8 +154,7 @@ License URI: http://opensource.org/licenses/MIT
     .hide-tagline .site-description { display:none; }
     .site-footer { clear:both; margin:1em auto; padding:1em; }
     .header-widget-area { clear:left; }
-    
-    .widget-area { max-width:40em; }
+
     .widget-area, .widget-area > ul { list-style-type:none; padding-left:0; }
     .widgettitle { margin:.4em 0; }
     li.widget { display:block; margin:2em 0; }
