@@ -174,7 +174,7 @@ License URI: http://opensource.org/licenses/MIT
     .plural .loop-nav [rel~="next"]:after { content:" >"; }
 
     /* =layout=modifiers */
-    
+
     @media (min-width:53em) {
         /**, *:before, *:after { -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; }*/
         .l-lheader main { float:left; clear:right; }
@@ -210,12 +210,6 @@ License URI: http://opensource.org/licenses/MIT
         .l-lheader.full-width main { max-width:60em; }
         .l-rsidebar body, .l-lsidebar body { max-width:64em; }
         .l-rsidebar .loop, .l-lsidebar .loop { max-width:43.75em; }
-    }
-    
-    @media (min-width:75em) {
-        .l-rsidebar body, .l-lsidebar body { max-width:67.5em; }
-        .l-rsidebar .loop, .l-lsidebar .loop { max-width:45em; }
-        .l-rsidebar .major-widget-area, .l-rsidebar .minor-widget-area { max-width:20em; }
     }
     
     /* clearfix */
