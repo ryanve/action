@@ -174,33 +174,28 @@ License URI: http://opensource.org/licenses/MIT
     .plural .loop-nav [rel~="next"]:after { content:" >"; }
 
     /* =layout=modifiers */
-
+    
     @media (min-width:53em) {
-        /**, *:before, *:after { -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; }*/
-        .l-lheader main { float:left; clear:right; }
+        .l-lheader main { float:left; clear:right; max-width:40em; }
         .l-lheader .site-header h1 { margin-top:0; }
         .l-lheader .site-header { float:left; margin:0 1em 0 -1%; padding:1em; }
-        .l-lheader.full-width main, .l-lmenu.attachment main { max-width:50em; }
-    }
+        .l-lheader.full-width main, .l-lheader.attachment main { max-width:50em; }
     
-    @media (min-width:58em) {
-        .l-lheader main { max-width:40em; }
-    
-        .l-rsidebar body { max-width:55em; }
+        .l-rsidebar body { max-width:50em; }
         .l-rsidebar.l-lheader main { float:left; clear:right; }
-        .l-rsidebar .loop { width:100%; max-width:36em; float:left; }
+        .l-rsidebar .loop { width:100%; max-width:31em; float:left; }
         .l-rsidebar .major-widget-area, 
         .l-rsidebar .minor-widget-area { width:32%; max-width:18.75em; margin:0; float:right; clear:right; }
         
-        .l-lsidebar body { max-width:55em; }
+        .l-lsidebar body { max-width:50em; }
         .l-lsidebar.l-lheader main { float:right; clear:left; }
-        .l-lsidebar .loop { width:100%; max-width:35em; float:right; }
+        .l-lsidebar .loop { width:100%; max-width:30em; float:right; }
         .l-lsidebar .major-widget-area, 
         .l-lsidebar .minor-widget-area { width:32%; max-width:18.75em; margin:0; float:left; clear:left; }
     }
 
     @media (min-width:62.5em) {
-        .l-lheader main { max-width:45em; }        
+        .l-lheader main { max-width:45em; }
         .l-rsidebar body, .l-lsidebar body { max-width:60em; }
         .l-rsidebar .loop, .l-lsidebar .loop { max-width:40em; }
     }
@@ -211,7 +206,7 @@ License URI: http://opensource.org/licenses/MIT
         .l-rsidebar body, .l-lsidebar body { max-width:64em; }
         .l-rsidebar .loop, .l-lsidebar .loop { max-width:43.75em; }
     }
-    
+
     /* clearfix */
     .l-lsidebar .loop:after, 
     .l-lsidebar .minor-widget-area:after { display:table; content:" "; clear:both; }
