@@ -19,7 +19,7 @@ namespace theme;
 </head>
 
 <body <?php 
-    # Re: github.com/ryanve/action/commit/ee589a0bc03f5720e3e28404a6118d9934755805
+    # Re: http://github.com/ryanve/action/commit/ee589a0bc03f5720e3e28404a6118d9934755805
     echo apply_filters('@body_atts', 'class="' . \implode(' ', get_body_class()) . '"');
 ?>>
 

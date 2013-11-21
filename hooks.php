@@ -86,9 +86,9 @@ add_filter('body_class', function($arr) {
 add_filter('@html_tag', function() {
     # Emulate language_attributes() b/c it has no "get" version.
     # Include its 'language_attributes' filter for plugin usage.
-    $attrs = 'dir="' . (is_rtl() ? 'rtl' : 'ltr') . '" lang="' . get_bloginfo('language') . '"';
-    $attrs = array(\trim(apply_filters('language_attributes', $attrs)));
-    $attrs[] = 'id="start"'; # for jumps 
+    $atts = 'dir="' . (is_rtl() ? 'rtl' : 'ltr') . '" lang="' . get_bloginfo('language') . '"';
+    $atts = array(\trim(apply_filters('language_attributes', $atts)));
+    $atts[] = 'id="start"';
     $class = get_body_class();
     \in_array('void-tagline', $class) and add_filter('@tagline', '__return_false');
     \in_array('void-avatars', $class) and add_filter('@comment_avatar', '__return_false');
@@ -96,10 +96,10 @@ add_filter('@html_tag', function() {
     \array_unshift($class, 'no-js', 'custom');
     $class = \implode(' ', \array_unique($class));
     add_filter('body_class', '__return_empty_array'); #wp
-    $attrs[] = "class='$class'";
-    $attrs[] = 'itemscope'; # implies http://schema.org/WebPage
-    $attrs = \trim(apply_filters('@html_atts', \implode(' ', $attrs)));
-    return "<html $attrs>";
+    $atts[] = "class='$class'";
+    $atts[] = 'itemscope'; # implies http://schema.org/WebPage
+    $atts = \trim(apply_filters('@html_atts', \implode(' ', $atts)));
+    return "<html $atts>";
 }, 0);
 
 add_action('@body', apply_filters('@body_actions', function() {
@@ -209,9 +209,9 @@ add_action('@main', apply_filters('@main_actions', function() {
 \array_reduce(array('previous', 'next'), function($void, $rel) {
     $hook = $rel . '_posts_link_attributes';
     $rel = \substr($rel, 0, 4);
-    add_filter($hook, function($attrs = '') use ($rel) {
-        $attrs or $attrs = '';
-        return \is_string($attrs) ? \ltrim($attrs . " rel='$rel' class='$rel'") : $attrs;
+    add_filter($hook, function($atts = '') use ($rel) {
+        $atts or $atts = '';
+        return \is_string($atts) ? \ltrim($atts . " rel='$rel' class='$rel'") : $atts;
     });
 }, null);
 
@@ -331,7 +331,7 @@ add_action('@entry', apply_filters('@entry_actions', function() {
     }, 20);
 }), 0);
 
-add_filter('@entry_atts', function($attrs = '') {
+add_filter('@entry_atts', function($atts = '') {
     $class = \implode(' ', get_post_class());
     return "class='$class' itemscope itemtype='http://schema.org/Article'";
 }, 0);
@@ -533,13 +533,13 @@ add_action('wp_head', function() {
         if (\is_string($tag)) {
             $tag = \strip_tags($tag, '<meta>');
         } elseif ($tag && isset($tag['content'])) {
-            $attrs = array();
+            $atts = array();
             foreach($tag as $k => $v) {
                 if (false !== $v && \is_scalar($v))
-                    $attrs[] = true === $v || '' === ($v = $v ? esc_attr($v) : $v) ? $k : "$k='$v'";
+                    $atts[] = true === $v || '' === ($v = $v ? esc_attr($v) : $v) ? $k : "$k='$v'";
             }
-            $attrs = \implode(' ', $attrs);
-            $tag = $attrs ? "<meta $attrs>" : null;
+            $atts = \implode(' ', $atts);
+            $tag = $atts ? "<meta $atts>" : null;
         } else {
             continue;
         }
@@ -563,8 +563,8 @@ add_filter('@list_comments', function($arr) {
       , 'callback' => function($comment, $arr, $depth) {
             $GLOBALS['comment'] = $comment;
             $GLOBALS['comment_depth'] = $depth;
-            $attrs = apply_filters('@comment_atts', null);
-            echo "<li><article $attrs>"; 
+            $atts = apply_filters('@comment_atts', null);
+            echo "<li><article $atts>"; 
             do_action('@comment');
             echo '</article>'; 
         }
@@ -572,7 +572,7 @@ add_filter('@list_comments', function($arr) {
 }, 0);
 
 # comments container
-add_filter('@comments_atts', function($attrs = '') {
+add_filter('@comments_atts', function($atts = '') {
     $able = comments_open() ? 'open' : 'closed';
     $some = have_comments() ? 'has' : 'lacks';
     $used = 'open' == $able || 'has' == $some ? 'used' : 'unused';
@@ -583,14 +583,14 @@ add_filter('@comments_atts', function($attrs = '') {
 
 # each comment
 add_filter('@comment_atts', function() {
-    $attrs = array('itemscope'); 
+    $atts = array('itemscope'); 
     $id = get_comment_ID();
-    is_singular() and $attrs[] = "id='comment-$id'";
+    is_singular() and $atts[] = "id='comment-$id'";
     $class = \implode(' ', get_comment_class('', $id));
-    $class and $attrs[] = "class='$class'";
+    $class and $atts[] = "class='$class'";
     if ('comment' === get_comment_type($id))
-        \array_push($attrs, 'itemprop="comment"', 'itemtype="http://schema.org/UserComments"');
-    return \implode(' ', $attrs);
+        \array_push($atts, 'itemprop="comment"', 'itemtype="http://schema.org/UserComments"');
+    return \implode(' ', $atts);
 }, 1);
 
 add_action('@comment', apply_filters('@comment_actions', function() {
