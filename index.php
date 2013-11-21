@@ -20,7 +20,7 @@ namespace theme;
 
 <body <?php 
     # Re: github.com/ryanve/action/commit/ee589a0bc03f5720e3e28404a6118d9934755805
-    echo apply_filters('@body_atts', 'id="start" class="' . \implode(' ', get_body_class()) . '"'); 
+    echo apply_filters('@body_atts', 'class="' . \implode(' ', get_body_class()) . '"');
 ?>>
 
 <?php do_action('@body'); # Load all body parts via this hook. ?>

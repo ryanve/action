@@ -87,7 +87,8 @@ add_filter('@html_tag', function() {
     # Emulate language_attributes() b/c it has no "get" version.
     # Include its 'language_attributes' filter for plugin usage.
     $attrs = 'dir="' . (is_rtl() ? 'rtl' : 'ltr') . '" lang="' . get_bloginfo('language') . '"';
-    $attrs = apply_filters('language_attributes', $attrs);
+    $attrs = array(\trim(apply_filters('language_attributes', $attrs)));
+    $attrs[] = 'id="start"'; # for jumps 
     $class = get_body_class();
     \in_array('void-tagline', $class) and add_filter('@tagline', '__return_false');
     \in_array('void-avatars', $class) and add_filter('@comment_avatar', '__return_false');
@@ -95,9 +96,9 @@ add_filter('@html_tag', function() {
     \array_unshift($class, 'no-js', 'custom');
     $class = \implode(' ', \array_unique($class));
     add_filter('body_class', '__return_empty_array'); #wp
-    $attrs .= " class='$class'";
-    $attrs .= ' itemscope'; # implied http://schema.org/WebPage
-    $attrs = apply_filters('@html_atts', $attrs);
+    $attrs[] = "class='$class'";
+    $attrs[] = 'itemscope'; # implies http://schema.org/WebPage
+    $attrs = \trim(apply_filters('@html_atts', \implode(' ', $attrs)));
     return "<html $attrs>";
 }, 0);
 
