@@ -1,6 +1,5 @@
-# [action](http://actiontheme.com/)
-
-**[action](http://actiontheme.com/)** is a [WordPress](http://wordpress.org/) theme designed heavily around [action](http://codex.wordpress.org/Plugin_API#Actions) and [filter](http://codex.wordpress.org/Plugin_API#Filters) hooks such that it is minimal yet extremely extendable.
+# [action](../../)
+#### HTML5 WordPress theme built on [hooks](http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters) to be <b>minimal</b> yet <b>extensible</b>
 
 ## Resources
 
@@ -10,12 +9,10 @@
 
 ## Versions
 
-- Browse/download [version releases](../../tags)
-- Compare [versions](../../tags) like [1.1.8...1.2.11](../../compare/1.1.8...1.2.11)
+- Browse/download [version releases](../../releases)
+- Compare version [tags](../../tags) like [1.1.8...1.2.11](../../compare/1.1.8...1.2.11)
 - Browse [itemized commits](../../commits/master)
 
 ## License
 
-### [action](https://github.com/ryanve/action) is available free under the [MIT license](http://en.wikipedia.org/wiki/MIT_License)
-
-Copyright (C) 2012 by [Ryan Van Etten](https://github.com/ryanve)
+[MIT](http://opensource.org/licenses/MIT)
