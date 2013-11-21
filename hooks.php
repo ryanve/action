@@ -1,11 +1,12 @@
 <?php
 /**
- * @link     actiontheme.com
- * @author   Ryan Van Etten
- * @license  MIT
+ * @link http://actiontheme.com
+ * @link http://github.com/ryanve/action
+ * @author Ryan Van Etten
+ * @license MIT
  */
 
-# Loads via functions.php
+# This file loads via functions.php
 # All functions defined in this file (and theme) are anonymous.
 # Use the generic namespace "theme" as redundant protection
 # against name conflicts with WP core, plugins, or native PHP.
@@ -13,22 +14,19 @@ namespace theme;
 
 # Hooks created by the theme are prefixed with the '@' symbol 
 # as to not conflict with hooks created by the WordPress core.
-# @link  codex.wordpress.org/Plugin_API/Action_Reference
-# @link  codex.wordpress.org/Function_Reference/add_action
-# @link  codex.wordpress.org/Function_Reference/add_filter
+# http://codex.wordpress.org/Plugin_API/Action_Reference
 
-# $content_width is required per codex.wordpress.org/Theme_Review
-# codex.wordpress.org/Content_Width
-# bit.ly/content-width-zero
+# $content_width is required per http://codex.wordpress.org/Theme_Review
+# http://bit.ly/content-width-zero
 # Use WP -> Settings -> Media
 isset($content_width) or $content_width = get_option('large_size_w');
 \is_numeric($content_width) or $content_width = 1024;
 
 # Use the generic 'theme' as the textdomain such that it is easier to 
 # repurpose code in other themes. Few translations are needed here.
-# @link  codex.wordpress.org/I18n_for_WordPress_Developers
-# @link  ottopress.com/2012/internationalization-youre-probably-doing-it-wrong/
-# @link  markjaquith.wordpress.com/2011/10/06/translating-wordpress-plugins-and-themes-dont-get-clever/
+# http://codex.wordpress.org/I18n_for_WordPress_Developers
+# http://ottopress.com/2012/internationalization-youre-probably-doing-it-wrong/
+# http://markjaquith.wordpress.com/2011/10/06/translating-wordpress-plugins-and-themes-dont-get-clever/
 
 # Actions to be run on the 'after_setup_theme' hook:
 add_action('after_setup_theme', function() {
@@ -103,7 +101,7 @@ add_filter('@html_tag', function() {
 }, 0);
 
 add_action('@body', apply_filters('@body_actions', function() {
-    # github.com/ryanve/action/issues/4
+    # http://github.com/ryanve/action/issues/4
     $skip = '<a class="assistive" href="#main">' . __('skip', 'theme') . '</a>';
     $skip = apply_filters('@skip_anchor', $skip);
     if ($skip and $skip = \trim(\strip_tags($skip, '<a>')))
@@ -130,7 +128,7 @@ add_filter('nav_menu_css_class', function($arr, $item = null) {
 
 add_action('init', function() {
     # Child themes may add a menu via '@menu_location'
-    # github.com/ryanve/action/issues/6
+    # http://github.com/ryanve/action/issues/6
     $location = apply_filters('@menu_location', null);
     $location and add_action($location, function() {
         $items = apply_filters('@menu_items', '%3$s'); # for li pre-/appends
@@ -175,8 +173,8 @@ add_action('get_sidebar', apply_filters('@sidebar_actions', function($id) {
 # Early-priority init actions:
 add_action('init', function() {
     # Define CSS (handle, uri, deps, ver, media)
-    # github.com/ryanve/action/issues/2
-    # github.com/ryanve/action/issues/5
+    # http://github.com/ryanve/action/issues/2
+    # http://github.com/ryanve/action/issues/5
     $index = trailingslashit(get_template_directory_uri());
     wp_register_style('parent-base', $index . 'base.css', array(), null, null);
     wp_register_style('parent-style', $index . 'style.css', array('parent-base'), null, 'screen,projection');
@@ -417,9 +415,7 @@ add_filter('@entry_meta:author', function() {
 add_filter('@entry_meta:time', function($void, $case) {
     $case = \array_search($case, array('modified', 'published'), true);
     if ($case || 0 === $case) {
-        # microformats.org/wiki/hentry
-        # schema.org/Article
-        # github.com/ryanve/action/issues/1
+        # http://github.com/ryanve/action/issues/1
         $fn       = $case ? 'get_the_date'  : 'get_the_modified_date';
         $rel      = $case ? 'index'         : '';
         $label    = $case ? 'Posted'        : 'Updated';
@@ -462,8 +458,8 @@ add_filter('@entry_meta:tax', function($void, $name) {
 add_filter('the_excerpt', 'normalize_whitespace'); # wp
 add_filter('the_excerpt', 'trim');
 
-# @link github.com/ryanve/action/issues/1
-# add hcard classes to the link if there's not already any classes
+# http://github.com/ryanve/action/issues/1
+# Add hcard classes to the link if there's not already any classes
 add_filter('the_author_posts_link', function($tag) {
     return \strpos($tag, 'class=') ? $tag : \str_replace(' href=', ' class="url fn n" href=', $tag);
 });
@@ -516,7 +512,7 @@ add_filter('@dns_prefetches', function($uris) {
     return $uris;
 });
 
-# title
+# Title
 add_action('wp_head', function() {
     # Avoid `wp_title` for CPT archives until `post_type_archive_title` is safe for array "post_type" query vars.
     $tag = is_post_type_archive() || !\strlen($tag = \trim(wp_title('', false))) ? $_SERVER['REQUEST_URI'] : $tag;
@@ -525,7 +521,7 @@ add_action('wp_head', function() {
        echo "\n$tag\n\n";
 }, -3); 
 
-# meta
+# Meta
 add_action('wp_head', function() {
     foreach (apply_filters('@meta', array(
         'viewport' => array('name' => 'viewport', 'content' => 'width=device-width,initial-scale=1.0')
@@ -554,8 +550,8 @@ add_filter('use_default_gallery_style', '__return_false');
 # Remove WP embedded .recentcomments style. (wp-includes/default-widgets.php)
 add_filter('show_recent_comments_widget_style', '__return_false');
 
-# see comments.php
-# codex.wordpress.org/Function_Reference/wp_list_comments
+# See comments.php
+# http://codex.wordpress.org/Function_Reference/wp_list_comments
 add_filter('@list_comments', function($arr) {
     return wp_parse_args($arr, array(
         'style' => 'ol'
@@ -571,7 +567,7 @@ add_filter('@list_comments', function($arr) {
     ));
 }, 0);
 
-# comments container
+# Comments container
 add_filter('@comments_atts', function($atts = '') {
     $able = comments_open() ? 'open' : 'closed';
     $some = have_comments() ? 'has' : 'lacks';
@@ -581,7 +577,7 @@ add_filter('@comments_atts', function($atts = '') {
     return is_singular() ? "id='comments' $atts" : $atts;
 }, 0);
 
-# each comment
+# Each comment
 add_filter('@comment_atts', function() {
     $atts = array('itemscope'); 
     $id = get_comment_ID();
