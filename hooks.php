@@ -117,7 +117,6 @@ add_action('@header', function() {
     locate_template('branding.php', true, false);
 }, apply_filters('@branding_priority', 10));
 
-
 # Favor classes over IDs.
 add_filter('nav_menu_item_id', '__return_false');
 add_filter('nav_menu_css_class', function($arr, $item = null) {
@@ -183,8 +182,7 @@ add_action('init', function() {
 
 # Frontend-only normal-priority init actions:
 is_admin() or add_action('init', function() {
-
-    # codex.wordpress.org/Migrating_Plugins_and_Themes_to_2.7/Enhanced_Comment_Display
+    # http://codex.wordpress.org/Migrating_Plugins_and_Themes_to_2.7/Enhanced_Comment_Display
     is_singular() and wp_enqueue_script('comment-reply');
     
     # near plugin territory / useful to child themes / has no effect by default
@@ -299,7 +297,7 @@ add_action('@loop_header', function() {
 
 add_action('@entry', apply_filters('@entry_actions', function() {
     static $ran, $content_mode; 
-    # allow the '@content_mode' to be changed between iterations
+    # Allow the '@content_mode' to be changed between iterations.
     # truthy => content | falsey => excerpt
     $content_mode = (bool) apply_filters('@content_mode', is_singular());
     if ($ran = null !== $ran)
