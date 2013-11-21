@@ -38,8 +38,8 @@ add_action('after_setup_theme', function() {
     add_theme_support('automatic-feed-links'); # required
     add_theme_support('post-thumbnails'); # "featured image"
 
-    # codex.wordpress.org/Custom_Backgrounds
-    # see _custom_background_cb in wp-includes/theme.php
+    # http://codex.wordpress.org/Custom_Backgrounds
+    # See _custom_background_cb in wp-includes/theme.php
     add_theme_support('custom-background', array(
         'wp-head-callback' => function() {
             $image = get_background_image();

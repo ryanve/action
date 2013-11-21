@@ -1,6 +1,6 @@
 <?php
 namespace theme;
-# adapted from @link bit.ly/github-twentytwelve
+# Adapted from http://bit.ly/github-twentytwelve
 # Try to be as simple and semantic as possible.
 
 if ('comments.php' === \basename($_SERVER['SCRIPT_FILENAME']))
