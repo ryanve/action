@@ -125,7 +125,8 @@ License URI: http://opensource.org/licenses/MIT
     .hentry { clear:left; }
     .hentry + .hentry { margin-top:2em; }
     
-    .entry-title { margin:0 0 .2em; }
+    .entry-title { margin-bottom:.2em; }
+    .entry-title:first-child { margin-top:0; }
     .byline { margin:.5em 0; }
     .entry-summary { clear:none; }
     .entry-summary p:first-child { margin-top:0; }
