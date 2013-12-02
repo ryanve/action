@@ -310,8 +310,8 @@ add_action('@entry', apply_filters('@entry_actions', function() {
                     : "<a class='$size-anchor image-anchor' itemprop='url' rel='bookmark' href='$url'>$img</a>";
     }, 0);
 
-    add_action('@entry', function() {
-        locate_template('entry-header.php', true, false);
+    add_action('@entry', function() use (&$content_mode) {
+        $content_mode ? locate_template('entry-header.php', true, false) : do_action('@entry_header');
     }, 5);
 
     add_action('@entry', function() use (&$content_mode) {
