@@ -351,8 +351,7 @@ add_action('@entry_header', function() {
 }, 5);
 
 add_filter('@entry_meta_groups', function($arr) {
-    if (false === $arr)
-        return array();
+    if (false === $arr) return array();
     $all = \array_fill_keys(array('author', 'time', 'pages', 'tax'), true);
     $arr = \is_array($arr) ? \array_replace($all, \array_intersect_key($arr, $all)) : $all;
     true === $arr['time'] and $arr['time'] = array('published', 'modified');
