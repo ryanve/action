@@ -12,13 +12,14 @@ namespace theme;
 
         <div class="site-branding hgroup" itemprop="provider publisher" itemscope itemtype="http://schema.org/Brand">
             <h1 class="site-name site-title">
-                <a itemprop="url name" rel="home" href="<?php echo home_url(); ?>"><?php bloginfo('name'); ?></a>
+                <a itemprop="url" rel="home" href="<?php echo home_url(); ?>">
+                    <span itemprop="name"><?php bloginfo('name'); ?></span>
+                </a>
             </h1>
             <?php echo apply_filters('@tagline', call_user_func(function() {
-                if ( !($desc = get_bloginfo('description')))
-                    return false;
+                if ( !($desc = get_bloginfo('description'))) return false;
                 $type = 80 > \mb_strlen(\strip_tags($desc)) ? 'tagline subline' : 'subline';
                 return "<div class='site-description $type' itemprop='description'>$desc</div>";
-            })); ?> 
+            })); ?>
         </div>
 
