@@ -311,15 +311,25 @@ add_action('@entry', apply_filters('@entry_actions', function() {
     }, 0);
 
     add_action('@entry', function() use (&$content_mode) {
-        $content_mode ? locate_template('entry-header.php', true, false) : do_action('@entry_header');
+        $full = $content_mode;
+        if ($full) echo '<header class="entry-header">';
+        do_action('@entry_header'); 
+        if ($full) echo "</header>\n\n";
     }, 5);
 
     add_action('@entry', function() use (&$content_mode) {
-        locate_template($content_mode ? 'entry-content.php' : 'entry-summary.php', true, false);
+        echo $content_mode 
+            ? '<div class="entry-content" itemprop="articleBody">'
+            : '<div class="entry-summary" itemprop="description">';
+        $content_mode ? the_content() : the_excerpt();
+        echo "</div>\n\n";
     }, 10);
 
     add_action('@entry', function() use (&$content_mode) {
-        $content_mode and locate_template('entry-footer.php', true, false);
+        if ( ! $content_mode) return;
+        echo '<footer class="entry-footer" role="contentinfo">';
+        do_action('@entry_footer'); 
+        echo '</footer>';
     }, 15);
     
     is_singular() and add_action('@entry', function() {
