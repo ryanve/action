@@ -13,8 +13,7 @@ if (post_password_required() || ! post_type_supports(get_post_type(), 'comments'
 # http://microformats.org/wiki/xoxo
 ?>
 
-                <aside <?php echo apply_filters('@comments_attrs', ''); ?>>
-                 
+                <aside <?php echo apply_filters('@comments_atts', ''); ?>>                 
 
                     <?php if (have_comments()) { ?>
                     
