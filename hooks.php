@@ -216,17 +216,20 @@ add_action('@loop', apply_filters('@loop_actions', function() {
     if ($ran = null !== $ran)
         return; # prevent from running more than once
     
-    add_action('@loop', function() {
-        is_singular() or locate_template('loop-header.php', true, false);
+    is_singular() or add_action('@loop', function() {
+        locate_template('loop-header.php', true, false);
     }, 5);
 
     add_action('@loop', function() {
         # the actual loop
         if ( ! have_posts())
             locate_template('loop-empty.php', true, false);
-        else for ($path = locate_template('entry.php', false); have_posts();) {
+        else while (have_posts()) {
             the_post();
-            require $path;
+            $atts = apply_filters('@entry_atts', '');
+            echo "<article $atts>";
+            do_action('@entry'); # all entry parts load via this hook
+            echo "</article>\n\n";
         }
     }, 10);
 
@@ -245,7 +248,6 @@ add_action('@loop', apply_filters('@loop_actions', function() {
 }), 0);
 
 add_action('@loop_header', function() {
-
     $data = array();
 
     if (is_category() || is_tag() || is_tax()) {
@@ -311,15 +313,25 @@ add_action('@entry', apply_filters('@entry_actions', function() {
     }, 0);
 
     add_action('@entry', function() use (&$content_mode) {
-        $content_mode ? locate_template('entry-header.php', true, false) : do_action('@entry_header');
+        $full = $content_mode;
+        if ($full) echo '<header class="entry-header">';
+        do_action('@entry_header'); 
+        if ($full) echo "</header>\n\n";
     }, 5);
 
     add_action('@entry', function() use (&$content_mode) {
-        locate_template($content_mode ? 'entry-content.php' : 'entry-summary.php', true, false);
+        echo $content_mode 
+            ? '<div class="entry-content" itemprop="articleBody">'
+            : '<div class="entry-summary" itemprop="description">';
+        $content_mode ? the_content() : the_excerpt();
+        echo "</div>\n\n";
     }, 10);
 
     add_action('@entry', function() use (&$content_mode) {
-        $content_mode and locate_template('entry-footer.php', true, false);
+        if ( ! $content_mode) return;
+        echo '<footer class="entry-footer" role="contentinfo">';
+        do_action('@entry_footer'); 
+        echo '</footer>';
     }, 15);
     
     is_singular() and add_action('@entry', function() {
@@ -527,15 +539,12 @@ add_action('wp_head', function() {
             $tag = \strip_tags($tag, '<meta>');
         } elseif ($tag && isset($tag['content'])) {
             $atts = array();
-            foreach($tag as $k => $v) {
+            foreach ($tag as $k => $v)
                 if (false !== $v && \is_scalar($v))
                     $atts[] = true === $v || '' === ($v = $v ? esc_attr($v) : $v) ? $k : "$k='$v'";
-            }
             $atts = \implode(' ', $atts);
             $tag = $atts ? "<meta $atts>" : null;
-        } else {
-            continue;
-        }
+        } else continue; 
         if ($tag)
             echo "$tag\n";
     }
