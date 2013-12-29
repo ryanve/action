@@ -536,15 +536,12 @@ add_action('wp_head', function() {
             $tag = \strip_tags($tag, '<meta>');
         } elseif ($tag && isset($tag['content'])) {
             $atts = array();
-            foreach($tag as $k => $v) {
+            foreach ($tag as $k => $v)
                 if (false !== $v && \is_scalar($v))
                     $atts[] = true === $v || '' === ($v = $v ? esc_attr($v) : $v) ? $k : "$k='$v'";
-            }
             $atts = \implode(' ', $atts);
             $tag = $atts ? "<meta $atts>" : null;
-        } else {
-            continue;
-        }
+        } else continue; 
         if ($tag)
             echo "$tag\n";
     }
