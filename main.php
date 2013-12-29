@@ -1,11 +1,8 @@
-<?php 
-namespace theme; 
-# [id] is included for jumps (not CSS)
-?>
+<?php
+namespace theme;
 
-
-    <main id="main" role="main" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebPageElement">
-    
-        <?php do_action('@main'); ?>
-
-    </main>
+call_user_func(function($hook, $tagname, $handler = 'do_action') {
+    echo "<$tagname" . \rtrim(' ' . apply_filters($hook . '_atts', '')) . '>';
+    $handler($hook);
+    echo "</$tagname>\n\n";
+}, '@main', 'main');

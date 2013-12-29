@@ -1,12 +1,8 @@
-<?php 
-namespace theme; 
-# [id] is included for jumps (not CSS)
-?>
+<?php
+namespace theme;
 
-
-    <header id="header" class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader">
-
-        <?php do_action('@header'); ?>
-
-    </header>
-
+    call_user_func(function($hook, $tagname, $handler = 'do_action') {
+        echo "<$tagname" . \rtrim(' ' . apply_filters($hook . '_atts', '')) . '>';
+        $handler($hook);
+        echo "</$tagname>\n\n";
+    }, '@header', 'header');

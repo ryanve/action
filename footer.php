@@ -1,12 +1,8 @@
-<?php 
-namespace theme; 
-# [id] is included for jumps (not CSS)
-?>
+<?php
+namespace theme;
 
-
-    <footer id="footer" class="site-footer">
-
-        <?php do_action('@footer'); ?>
-
-    </footer>
-    
+    call_user_func(function($hook, $tagname, $handler = 'do_action') {
+        echo "<$tagname" . \rtrim(' ' . apply_filters($hook . '_atts', '')) . '>';
+        $handler($hook);
+        echo "</$tagname>\n\n";
+    }, '@footer', 'footer');

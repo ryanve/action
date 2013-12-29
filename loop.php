@@ -1,9 +1,8 @@
-<?php namespace theme; ?>
+<?php
+namespace theme;
 
-        <!-- http://github.com/ryanve/action/issues/1 -->
-        <div class="loop hfeed" itemscope>
-            
-            <?php do_action('@loop'); ?>
-
-        </div>
-        
+call_user_func(function($hook, $tagname, $handler = 'do_action') {
+    echo "<$tagname" . \rtrim(' ' . apply_filters($hook . '_atts', '')) . '>';
+    $handler($hook);
+    echo "</$tagname>\n\n";
+}, '@loop', 'div');

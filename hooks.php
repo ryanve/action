@@ -335,13 +335,34 @@ add_action('@entry', apply_filters('@entry_actions', function() {
         if ( ! $content_mode) return;
         echo '<footer class="entry-footer" role="contentinfo">';
         do_action('@entry_footer'); 
-        echo '</footer>';
+        echo "</footer>\n\n";
     }, 15);
     
     is_singular() and add_action('@entry', function() {
         comments_template('/comments.php', true);
     }, 20);
 }), 0);
+
+# [id] is included for jumps (not CSS)
+add_filter('@header_atts', function($atts = '') {
+    return 'id="header" class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader"';
+}, 0);
+
+add_filter('@footer_atts', function($atts = '') {
+    return 'id="footer" class="site-footer"';
+}, 0);
+
+add_filter('@branding_atts', function($atts = '') {
+    return 'class="site-branding hgroup" itemprop="provider publisher" itemscope itemtype="http://schema.org/Brand"';
+}, 0);
+
+add_filter('@main_atts', function($atts = '') {
+    return 'id="main" role="main" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebPageElement"';
+}, 0);
+
+add_filter('@loop_atts', function($atts = '') {
+    return 'class="loop hfeed" itemscope';
+}, 0);
 
 add_filter('@entry_atts', function($atts = '') {
     $class = \implode(' ', get_post_class());
