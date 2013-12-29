@@ -216,8 +216,8 @@ add_action('@loop', apply_filters('@loop_actions', function() {
     if ($ran = null !== $ran)
         return; # prevent from running more than once
     
-    add_action('@loop', function() {
-        is_singular() or locate_template('loop-header.php', true, false);
+    is_singular() or add_action('@loop', function() {
+        locate_template('loop-header.php', true, false);
     }, 5);
 
     add_action('@loop', function() {
@@ -245,7 +245,6 @@ add_action('@loop', apply_filters('@loop_actions', function() {
 }), 0);
 
 add_action('@loop_header', function() {
-
     $data = array();
 
     if (is_category() || is_tag() || is_tax()) {
