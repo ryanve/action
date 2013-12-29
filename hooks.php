@@ -224,9 +224,12 @@ add_action('@loop', apply_filters('@loop_actions', function() {
         # the actual loop
         if ( ! have_posts())
             locate_template('loop-empty.php', true, false);
-        else for ($path = locate_template('entry.php', false); have_posts();) {
+        else while (have_posts()) {
             the_post();
-            require $path;
+            $atts = apply_filters('@entry_atts', '');
+            echo "<article $atts>";
+            do_action('@entry'); # all entry parts load via this hook
+            echo "</article>\n\n";
         }
     }, 10);
 
