@@ -1,0 +1,1 @@
+<?php namespace theme; ?>                <div class="entry-content" itemprop="articleBody"><?php                     the_content();                ?></div>
