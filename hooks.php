@@ -343,26 +343,19 @@ add_action('@entry', apply_filters('@entry_actions', function() {
     }, 20);
 }), 0);
 
-# [id] is included for jumps (not CSS)
-add_filter('@header_atts', function($atts = '') {
-    return 'id="header" class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader"';
-}, 0);
-
-add_filter('@footer_atts', function($atts = '') {
-    return 'id="footer" class="site-footer"';
-}, 0);
-
-add_filter('@branding_atts', function($atts = '') {
-    return 'class="site-branding hgroup" itemprop="provider publisher" itemscope itemtype="http://schema.org/Brand"';
-}, 0);
-
-add_filter('@main_atts', function($atts = '') {
-    return 'id="main" role="main" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebPageElement"';
-}, 0);
-
-add_filter('@loop_atts', function($atts = '') {
-    return 'class="loop hfeed" itemscope';
-}, 0);
+array_reduce(array(
+    # [id] is included for jumps (not CSS)
+    array('header', 'id="header" class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader"')
+  , array('footer', 'id="footer" class="site-footer"')
+  , array('branding', 'class="site-branding hgroup" itemprop="provider publisher" itemscope itemtype="http://schema.org/Brand"')
+  , array('main', 'id="main" role="main" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebPageElement"')
+  , array('loop', 'class="loop hfeed" itemscope')
+), function($void, $a) {
+    $defaults = $a[1];
+    add_filter('@' . $a[0] . '_atts', function($atts = '') use ($defaults) {
+        return $defaults;
+    }, 0);
+}, null);
 
 add_filter('@entry_atts', function($atts = '') {
     $class = \implode(' ', get_post_class());
