@@ -217,7 +217,9 @@ add_action('@loop', apply_filters('@loop_actions', function() {
         return; # prevent from running more than once
     
     is_singular() or add_action('@loop', function() {
-        locate_template('loop-header.php', true, false);
+        echo '<header class="loop-header">';
+        do_action('@loop_header'); 
+        echo "</header>\n\n";
     }, 5);
 
     add_action('@loop', function() {
@@ -234,7 +236,9 @@ add_action('@loop', apply_filters('@loop_actions', function() {
     }, 10);
 
     add_action('@loop', function() {
-        locate_template('loop-nav.php', true, false);
+        echo '<nav class="loop-nav arrestive">';
+        do_action('@loop_nav'); 
+        echo "</nav>\n\n";
     }, 20);
     
     add_action('@loop_nav', apply_filters('@loop_nav_actions', is_singular() ? function() {
