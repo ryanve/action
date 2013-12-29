@@ -343,7 +343,8 @@ add_action('@entry', apply_filters('@entry_actions', function() {
     }, 20);
 }), 0);
 
-array_reduce(array(
+# Default attributes
+\array_reduce(array(
     # [id] is included for jumps (not CSS)
     array('header', 'id="header" class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader"')
   , array('footer', 'id="footer" class="site-footer"')
@@ -351,9 +352,9 @@ array_reduce(array(
   , array('main', 'id="main" role="main" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebPageElement"')
   , array('loop', 'class="loop hfeed" itemscope')
 ), function($void, $a) {
-    $defaults = $a[1];
-    add_filter('@' . $a[0] . '_atts', function($atts = '') use ($defaults) {
-        return $defaults;
+    $atts = $a[1];
+    add_filter('@' . $a[0] . '_atts', function() use ($atts) {
+        return $atts;
     }, 0);
 }, null);
 
