@@ -196,6 +196,16 @@ is_admin() or add_action('init', function() {
     }
 });
 
+# Hooks to activate via corresponding template file:
+\array_reduce(array('@header', '@main', '@loop', '@entry', '@comments', '@footer'), function($void, $hook) {
+    add_action("$hook.php", function($tagname = null) use ($hook) {
+        $tagname = $tagname ?: 'div';
+        echo \rtrim("<$tagname " . apply_filters($hook . '_atts', '')) . '><div class="container">';
+        do_action($hook);
+        echo "</div></$tagname>\n\n";    
+    });
+}, null);
+
 add_action('@main', apply_filters('@main_actions', function() {
     is_active_sidebar('major') and get_sidebar('major');
     get_template_part('loop', is_singular() ? 'singular' : 'plural');
