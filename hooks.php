@@ -213,8 +213,7 @@ add_action('@main', apply_filters('@main_actions', function() {
 
 add_action('@loop', apply_filters('@loop_actions', function() {
     static $ran; 
-    if ($ran = null !== $ran)
-        return; # prevent from running more than once
+    if ($ran = null !== $ran) return; # only run once
     
     is_singular() or add_action('@loop', function() {
         echo '<header class="loop-header">';
@@ -303,8 +302,7 @@ add_action('@entry', apply_filters('@entry_actions', function() {
     # Allow the '@content_mode' to be changed between iterations.
     # truthy => content | falsey => excerpt
     $content_mode = (bool) apply_filters('@content_mode', is_singular());
-    if ($ran = null !== $ran)
-        return; # prevent adding the hooks more than once
+    if ($ran = null !== $ran) return; # only run once
 
     current_theme_supports('post-thumbnails') and add_filter('@thumbnail', function() use (&$content_mode) {
         if ( ! $content_mode and $size = apply_filters('@thumbnail_size', 'thumbnail'))
@@ -589,6 +587,37 @@ add_filter('@list_comments', function($arr) {
     ));
 }, 0);
 
+# Comments logic adapted from http://bit.ly/github-twentytwelve
+add_action('@comments', apply_filters('@comments_actions', function() {
+    static $ran; 
+    if ($ran = null !== $ran) return; # only run once
+    if (post_password_required() || !post_type_supports(get_post_type(), 'comments')) return;
+
+    $have = have_comments();
+    $have and add_action('@comments', function() {
+        echo '<h2 class="loop-title comments-title">' . comments_number() . '</h2>';
+    }, 5);
+    
+    $have and add_action('@comments', function() {
+        # http://microformats.org/wiki/xoxo
+        echo '<ol class="xoxo comments clearfix">';
+        wp_list_comments(apply_filters('@list_comments', array())); 
+        echo '</ol>';
+    }, 10);
+    
+    $have and 1 < get_comment_pages_count() and get_option('page_comments') and add_action('@comments', function() {
+        echo '<nav><h3 class="assistive">' . __('Comment navigation', 'theme') . '</h3>';
+        previous_comments_link(apply_filters('@comments_older', __('&laquo; Older', 'theme')));
+        next_comments_link(apply_filters('@comments_newer', __('Newer &raquo;', 'theme')));
+        echo '</nav>';
+    }, 15);
+    
+    add_action('@comments', function() {
+        if (comments_open()) comment_form(apply_filters('@comment_form', array()));
+        else echo '<p class="status">' . __('Comments are closed.', 'theme') . '</p>';
+    }, 20);
+}), 0);
+
 # Comments container
 add_filter('@comments_atts', function($atts = '') {
     $able = comments_open() ? 'open' : 'closed';
@@ -613,8 +642,7 @@ add_filter('@comment_atts', function() {
 
 add_action('@comment', apply_filters('@comment_actions', function() {
     static $ran; 
-    if ($ran = null !== $ran)
-        return; # prevent from running more than once
+    if ($ran = null !== $ran) return; # only run once
 
     add_action('@comment', function() {
         global $comment;
