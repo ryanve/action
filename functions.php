@@ -13,4 +13,4 @@ if (0 < version_compare('5.3.0', phpversion())) {
     , '<a href="' . admin_url('themes.php') . '">' . __('Or, switch themes.', 'theme') . "</a>"
   )) . '<hr>', E_USER_WARNING);
   echo '</strong>';
-} else require 'hooks.php';
+} else require 'setup.php';
