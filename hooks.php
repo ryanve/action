@@ -96,7 +96,6 @@ add_filter('@html_tag', function() {
   $class = \implode(' ', \array_unique($class));
   add_filter('body_class', '__return_empty_array'); #wp
   $atts[] = "class='$class'";
-  $atts[] = 'itemscope'; # implies http://schema.org/WebPage
   $atts = \trim(apply_filters('@html_atts', \implode(' ', $atts)));
   return "<html $atts>";
 }, 0);
@@ -265,12 +264,12 @@ add_action('@loop_header', function() {
     ($markup = $data['image'] = $data['image'] ?: '')
       and \ctype_graph($src = \strip_tags($data['image']))
       and ($alt = \htmlentities(\strip_tags($data['name']), ENT_QUOTES, null, false))
-      and $markup = '<img itemprop="image" class="' . $makeClass('image') . "\" src='$src' alt='$alt'>";
+      and $markup = '<img class="' . $makeClass('image') . "\" src='$src' alt='$alt'>";
 
     foreach (array('name' => 'h1', 'description' => 'div') as $prop => $tagname) {
       if (isset($data[$prop])) {
         $class = $makeClass($prop);
-        $markup .= "<$tagname itemprop='$prop' class='$class'>" . $data[$prop] . "</$tagname>";
+        $markup .= "<$tagname class='$class'>" . $data[$prop] . "</$tagname>";
       }
     }
     echo $markup;
@@ -284,9 +283,9 @@ add_action('@entry', apply_filters('@entry_actions', function() {
 
   current_theme_supports('post-thumbnails') and add_filter('@thumbnail', function() use (&$content_mode) {
     if (!$content_mode and $size = apply_filters('@thumbnail_size', 'thumbnail'))
-      if ($img = get_the_post_thumbnail(null, $size, array('itemprop' => 'image')))
+      if ($img = get_the_post_thumbnail(null, $size))
         return !($url = get_permalink()) || \strip_tags($img, '<img>') !== $img ? $img
-          : "<a class='$size-anchor image-anchor' itemprop='url' rel='bookmark' href='$url'>$img</a>";
+          : "<a class='$size-anchor image-anchor' rel='bookmark' href='$url'>$img</a>";
   }, 0);
 
   add_action('@entry', function() use (&$content_mode) {
@@ -297,9 +296,7 @@ add_action('@entry', apply_filters('@entry_actions', function() {
   }, 5);
 
   add_action('@entry', function() use (&$content_mode) {
-    echo $content_mode 
-      ? '<div class="entry-content" itemprop="articleBody">'
-      : '<div class="entry-summary" itemprop="description">';
+    echo $content_mode ? '<div class="entry-content">': '<div class="entry-summary">';
     $content_mode ? the_content() : the_excerpt();
     echo "</div>\n\n";
   }, 10);
@@ -319,11 +316,11 @@ add_action('@entry', apply_filters('@entry_actions', function() {
 # Default attributes
 \array_reduce(array(
   # [id] is included for jumps (not CSS)
-  array('header', 'id="header" class="site-header" role="banner" itemscope itemtype="http://schema.org/WPHeader"'),
+  array('header', 'id="header" class="site-header" role="banner"'),
   array('footer', 'id="footer" class="site-footer"'),
-  array('branding', 'class="site-branding hgroup" itemprop="provider publisher" itemscope itemtype="http://schema.org/Brand"'),
-  array('main', 'id="main" role="main" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebPageElement"'),
-  array('loop', 'class="loop hfeed" itemscope')
+  array('branding', 'class="site-branding hgroup"'),
+  array('main', 'id="main" role="main"'),
+  array('loop', 'class="loop hfeed"')
 ), function($void, $a) {
   $atts = $a[1];
   add_filter('@' . $a[0] . '_atts', function() use ($atts) {
@@ -333,7 +330,7 @@ add_action('@entry', apply_filters('@entry_actions', function() {
 
 add_filter('@entry_atts', function($atts = '') {
   $class = \implode(' ', get_post_class());
-  return "class='$class' itemscope itemtype='http://schema.org/Article'";
+  return "class='$class'";
 }, 0);
 
 add_filter('post_class', function($arr = array()) {
@@ -349,8 +346,8 @@ add_filter('post_class', function($arr = array()) {
 add_action('@entry_header', function() {
   echo apply_filters('@thumbnail', null);
   $markup = '<h1 class="entry-title">';
-  $markup .= '<a itemprop="url" rel="bookmark" href="' . get_permalink() . '">';
-  $markup .= '<span class="headline name">' . get_the_title() . '</span></a></h1>';
+  $markup .= '<a rel="bookmark" href="' . get_permalink() . '">';
+  $markup .= '<span class="headline">' . get_the_title() . '</span></a></h1>';
   echo apply_filters('@headline', $markup);
 }, 5);
 
@@ -382,9 +379,9 @@ add_filter('@entry_meta', function($markup, $hook) {
   foreach ($groups as $name => $group) {
     $group = \is_array($group) ? \array_diff($group, array(null)) : array(null);
     $defaults = array('label' => $name, 'value' => null, 'sep' => null);
-    foreach (array('label', 'value') as $k)
-      $defaults[$k . 'Atts'] = "class='meta-$k $name-$k'";
     foreach ($group as $case) {
+      foreach (array('label', 'value') as $k)
+        $defaults[$k . 'Atts'] = "class='meta-$k $name-$k $name-$case-$k'";
       $data = apply_filters("@entry_meta:$name", null, $case);
       if ($data && \is_array($data)) {
         $data = \array_replace($defaults, \array_intersect_key($data, $defaults));
@@ -404,32 +401,31 @@ add_filter('@entry_meta', function($markup, $hook) {
   return "<dl class='pairs meta-list entry-meta$void'>" . \implode('', $items) . '</dl>';
 }, 0, 2);
 
+# http://microformats.org/wiki/hcard
 add_filter('@entry_meta:author', function() {
   global $authordata;
-  return \is_object($authordata)
-    && ($link = get_author_posts_url($authordata->ID, $authordata->user_nicename)) # href
-    && ($link = "<a href='$link' itemprop='author' rel='author'>" . get_the_author() .'</a>')
-    && ($link = apply_filters('the_author_posts_link', $link)) #wp: the_author_posts_link()
-    ? array('label' => __('By', 'theme'), 'value' => $link) : array();
+  $a = array();
+  if (\is_object($authordata) and $href = get_author_posts_url($authordata->ID)) {
+    $name = get_the_author();
+    $a['value'] = "<span class='vcard'><a class='url fn n' href='$href' rel='author'>$name</a></span>";
+    $a['label'] = __('By', 'theme');
+  }
+  return $a;
 }, 0);
 
 add_filter('@entry_meta:time', function($void, $case) {
   $case = \array_search($case, array('modified', 'published'), true);
   if ($case || 0 === $case) {
-    # http://github.com/ryanve/action/issues/1
     $fn = $case ? 'get_the_date' : 'get_the_modified_date';
     $rel = $case ? 'index' : '';
     $label = $case ? 'Posted' : 'Updated';
     $class = $case ? 'published' : 'updated';
-    $itemprop = $case ? 'datePublished' : 'dateModified';
-    $hook = $case ? 'published' :  'modified';
     $date = \call_user_func($fn); # Settings > General > Date Format
-    $w3c = \call_user_func($fn, DATE_W3C); # php.net/manual/en/class.datetime.php
+    $w3c = \call_user_func($fn, DATE_W3C); # PHP DateTime
     $idx = get_year_link(\strtok($w3c, '-'));
     $rel and $rel = " rel='$rel'";
     $date = "<a$rel href='$idx'>$date</a>";
-    $tag = "<time itemprop='$itemprop' class='$class' datetime='$w3c'>$date</time>";
-    return array('label' => $label, 'value' => apply_filters('@' . $hook . '_tag', $tag, $date));
+    return array('label' => $label, 'value' => "<time class='$class' datetime='$w3c'>$date</time>");
   }
 }, 0, 2);
 
@@ -458,12 +454,6 @@ add_filter('@entry_meta:tax', function($void, $name) {
 # Clean excerpt whitespace
 add_filter('the_excerpt', 'normalize_whitespace'); # wp
 add_filter('the_excerpt', 'trim');
-
-# http://github.com/ryanve/action/issues/1
-# Add hcard classes to the link if there's not already any classes
-add_filter('the_author_posts_link', function($tag) {
-  return \strpos($tag, 'class=') ? $tag : \str_replace(' href=', ' class="url fn n" href=', $tag);
-});
 
 is_admin() or add_action('template_redirect', function() {
   # Remove problematic CPT archive actions.
@@ -510,7 +500,7 @@ add_filter('@dns_prefetches', function($uris) {
   return $uris;
 });
 
-# Title
+# <title>
 add_action('wp_head', function() {
   # Avoid `wp_title` for CPT archives until `post_type_archive_title` is safe for array "post_type" query vars.
   $tag = is_post_type_archive() || !\strlen($tag = \trim(wp_title('', false))) ? $_SERVER['REQUEST_URI'] : $tag;
@@ -518,7 +508,7 @@ add_action('wp_head', function() {
   if (\strlen($tag = \trim($tag))) echo "$tag\n";
 }, -3); 
 
-# Meta
+# <meta>
 add_action('wp_head', function() {
   foreach (apply_filters('@meta', array(
     'viewport' => array('name' => 'viewport', 'content' => 'width=device-width,initial-scale=1.0')
@@ -601,13 +591,11 @@ add_filter('@comments_atts', function($atts = '') {
 
 # Each comment
 add_filter('@comment_atts', function() {
-  $atts = array('itemscope'); 
+  $atts = array(); 
   $id = get_comment_ID();
   is_singular() and $atts[] = "id='comment-$id'";
   $class = \implode(' ', get_comment_class('', $id));
   $class and $atts[] = "class='$class'";
-  if ('comment' === get_comment_type($id))
-    \array_push($atts, 'itemprop="comment"', 'itemtype="http://schema.org/UserComments"');
   return \implode(' ', $atts);
 }, 1);
 
@@ -624,15 +612,14 @@ add_action('@comment', apply_filters('@comment_actions', function() {
     $avatar = "<a$href class='avatar-anchor image-anchor'>$avatar</a>";
     $markup = '<header class="comment-header">' . $avatar;
     $markup .= '<hgroup class="comment-meta">'; 
-    $markup .= '<h3 class="meta-value" itemprop="author">' . get_comment_author_link() . '</h3>';
-    $markup .= '<h4 class="meta-value published-value time-value" itemprop="commentTime">';
+    $markup .= '<h3 class="meta-value">' . get_comment_author_link() . '</h3>';
+    $markup .= '<h4 class="meta-value published-value time-value">';
     $markup .= get_comment_date() . '</h4></hgroup></header>';
     echo apply_filters('@comment_header', $markup);
   }, 5);
   
   add_action('@comment', function() {
-    $markup = get_comment_text(get_comment_ID());
-    echo '<div class="comment-content" itemprop="commentText">' . $markup . '</div>';
+    echo '<div class="comment-content">' . get_comment_text(get_comment_ID()) . '</div>';
   }, 10);
   
   add_action('@comment', function() {

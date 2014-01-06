@@ -14,14 +14,13 @@ call_user_func(function($hook, $tagname, $handler = 'do_action') {
   $handler($hook);
   echo "</$tagname>\n\n";
 }, '@branding', 'div', function() {
-  echo '<h1 class="site-name site-title">';
-  echo '<a itemprop="url" rel="home" href="' . home_url() . '">';
-  echo '<span itemprop="name">' . get_bloginfo('name') . '</span>';
-  echo '</a></h1>';
+  $name = get_bloginfo('name');
+  $home = home_url();
+  echo "<h1 class='site-name site-title'><a rel=home href=''><span>$name</span></a></h1>";
   echo apply_filters('@tagline', call_user_func(function() {
-    if ( !($desc = get_bloginfo('description'))) return false;
+    if (!($desc = get_bloginfo('description'))) return false;
     $type = 80 > \mb_strlen(\strip_tags($desc)) ? 'tagline subline' : 'subline';
-    return "<div class='site-description $type' itemprop='description'>$desc</div>";
+    return "<div class='site-description $type'>$desc</div>";
   }));
 });
 

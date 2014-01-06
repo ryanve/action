@@ -2,7 +2,7 @@
 Theme Name: action
 Theme URI: http://actiontheme.com
 Description: Extensible HTML5 parent theme.
-Version: 2.0.0-10
+Version: 2.0.0-11
 Author: Ryan Van Etten
 Author URI: http://ryanve.com
 Tags: accessibility-ready, microformats, responsive-layout, flexible-layout, custom-menu, custom-background, light, white
@@ -118,8 +118,7 @@ dd.gallery-caption { margin-left:0; }
 .byline { margin:.5em 0; }
 .entry-summary { clear:none; }
 .entry-summary p:first-child { margin-top:0; }
-.hide-unused .unused, .plural .byline, .hide-excerpts .entry-summary, .entry-summary ~ .entry-meta,
-article.unrevised .byline [class*="modified-"] { display:none; }
+.hide-unused .unused, .hide-excerpts .entry-summary, .entry-summary ~ .entry-meta { display:none; }
 
 .meta-label { font-size:inherit; font-weight:600; }
 .entry-footer, .entry-meta, .comments, article.comment, #disqus_thread, #respond { clear:both; }
