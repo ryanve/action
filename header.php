@@ -1,3 +1,3 @@
 <?php
 namespace theme;
-do_action('@' . basename(__FILE__), 'header');
+do_action('@' . \basename(__FILE__), 'header');

@@ -9,7 +9,7 @@ namespace theme;
 # - .site-title is common in WP but .site-name would be more systematic.
 # - <hgroup> is obsolete | webmonkey.com/?p=61540 | html5doctor.com/?p=3208
 
-call_user_func(function($hook, $tagname, $handler = 'do_action') {
+\call_user_func(function($hook, $tagname, $handler = 'do_action') {
   echo "<$tagname" . \rtrim(' ' . apply_filters($hook . '_atts', '')) . '>';
   $handler($hook);
   echo "</$tagname>\n\n";
