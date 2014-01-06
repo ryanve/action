@@ -318,7 +318,7 @@ add_action('@entry', apply_filters('@entry_actions', function() {
   # [id] is included for jumps (not CSS)
   array('header', 'id="header" class="site-header" role="banner"'),
   array('footer', 'id="footer" class="site-footer"'),
-  array('branding', 'class="site-branding hgroup"'),
+  array('branding', 'class="site-branding"'),
   array('main', 'id="main" role="main"'),
   array('loop', 'class="loop hfeed"')
 ), function($void, $a) {
@@ -381,7 +381,7 @@ add_filter('@entry_meta', function($markup, $hook) {
     $defaults = array('label' => $name, 'value' => null, 'sep' => null);
     foreach ($group as $case) {
       foreach (array('label', 'value') as $k)
-        $defaults[$k . 'Atts'] = "class='meta-$k $name-$k $name-$case-$k'";
+        $defaults[$k . 'Atts'] = "class='meta-$k $name-$k $name-$case'";
       $data = apply_filters("@entry_meta:$name", null, $case);
       if ($data && \is_array($data)) {
         $data = \array_replace($defaults, \array_intersect_key($data, $defaults));
@@ -611,10 +611,10 @@ add_action('@comment', apply_filters('@comment_actions', function() {
     $href = $href ? ' href="' . $href . '"' : '';
     $avatar = "<a$href class='avatar-anchor image-anchor'>$avatar</a>";
     $markup = '<header class="comment-header">' . $avatar;
-    $markup .= '<hgroup class="comment-meta">'; 
+    $markup .= '<div class="comment-meta">'; 
     $markup .= '<h3 class="meta-value">' . get_comment_author_link() . '</h3>';
-    $markup .= '<h4 class="meta-value published-value time-value">';
-    $markup .= get_comment_date() . '</h4></hgroup></header>';
+    $markup .= '<h4 class="meta-value time-value time-published">';
+    $markup .= get_comment_date() . '</h4></div></header>';
     echo apply_filters('@comment_header', $markup);
   }, 5);
   
