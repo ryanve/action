@@ -2,9 +2,9 @@
 namespace theme;
 
 \ob_start(function($markup) {
-    # The outbut buffer usage here is experimental and powerful.
-    # All content must go between ob_start and ob_get_flush.
-    return apply_filters('@output', $markup);
+  # The outbut buffer usage here is experimental and powerful.
+  # All content must go between ob_start and ob_get_flush.
+  return apply_filters('@output', $markup);
 }); 
 
 echo "<!DOCTYPE html>\n";
@@ -20,4 +20,5 @@ echo \rtrim('<body ' . apply_filters('@body_atts', 'class="' . \implode(' ', get
 do_action('@body'); # Load all body parts via this hook.
 
 wp_footer(); # Ensure that this is last.
+
 \ob_get_flush();

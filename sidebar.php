@@ -1,2 +1,1 @@
-<?php
-# See '@sidebar_actions' in hooks.php
+<?php # See '@sidebar_actions' in hooks.php
