@@ -125,21 +125,6 @@ add_filter('nav_menu_css_class', function($arr, $item = null) {
   return $arr;
 }, 10, 2);
 
-add_action('init', function() {
-  # Child themes may add a menu via '@menu_location'
-  # http://github.com/ryanve/action/issues/6
-  $location = apply_filters('@menu_location', null);
-  $location and add_action($location, function() {
-    $items = apply_filters('@menu_items', '%3$s'); # for li pre-/appends
-    $menu = apply_filters('@menu_atts', 'id="menu" role="navigation" class="site-nav arrestive"');
-    echo apply_filters('@menu', "<nav $menu><h2 class='assistive menu-toggle'>Menu</h2>" . wp_nav_menu(array(
-      'container' => false, 'echo' => false, 'fallback_cb' => '__return_false', 
-      'menu_class' => 'nav', 'theme_location' => 'menu',
-      'items_wrap' => "<ul class='menu-list'>$items</ul>"
-    )) . "</nav>\n\n");
-  }, apply_filters('@menu_priority', 10)) and register_nav_menus(array('menu' => 'Menu'));
-});
-
 add_action('@header', function() {
   is_active_sidebar('header') and get_sidebar('header');
 });
