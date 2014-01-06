@@ -51,6 +51,18 @@ ul, ol { padding-left:2em; } /* vs. 40px default from bit.ly/css2sample */
 article figure + figure { margin-top:1.5em; }
 figcaption { padding-top:.5em; padding-bottom:.5em; }
 figcaption:first-child { padding-top:0; padding-bottom:0; } /* revert if caption is on top */
+
+h1, h2 { margin-top:.618em; margin-bottom:.618em; }
+h3, h4, h5, h6 { margin-top:1.146em; margin-bottom:1em; }
+h1, h2, h3 { line-height:1.236; font-size:1.236em; }
+h1 { font-size:1.618em; }
+h4 {font-size:1.146em; }
+h5 { font-size:1em; }
+h6 { font-size:.944em; }
+@media (min-width:30em) {
+  h1 { font-size:2em; }
+  h2 { font-size:1.5em; }
+}
  
 @media (min-width:30em) and (min-height:20em) {
   .upsize .entry-content,    /* Upsize content when applied to any ancestor. */
@@ -138,7 +150,9 @@ body { margin:0 auto; width:96%; }
 
 .site-header { margin:0 auto; }
 .site-branding { margin-bottom:1.5em; }
-.site-description { font-weight:inherit; }
+.site-title { margin:.146em 0; }
+.site-description { font-weight:bold; font-size:1em; }
+.site-title + .site-description { margin-top:0; }
 .hide-tagline .site-description { display:none; }
 .site-footer { clear:both; margin:1em auto; padding:1em; }
 .header-widget-area { clear:left; }
