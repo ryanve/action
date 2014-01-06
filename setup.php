@@ -93,7 +93,6 @@ add_filter('@html_tag', function() {
   \in_array('void-thumbnails', $class) and add_filter('@thumbnail', '__return_false');
   \array_unshift($class, 'no-js', 'custom');
   $class = \implode(' ', \array_unique($class));
-  add_filter('body_class', '__return_empty_array'); #wp
   $atts[] = "class='$class'";
   $atts = \trim(apply_filters('@html_atts', \implode(' ', $atts)));
   return "<html $atts>\n";
