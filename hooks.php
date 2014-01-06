@@ -168,16 +168,6 @@ add_action('init', function() {
 is_admin() or add_action('init', function() {
   # http://codex.wordpress.org/Migrating_Plugins_and_Themes_to_2.7/Enhanced_Comment_Display
   is_singular() and wp_enqueue_script('comment-reply');
-  
-  # near plugin territory / useful to child themes / has no effect by default
-  if ($gaq = apply_filters('@gaq', array())) {
-    if ($gaq = \is_scalar($gaq) ? \json_decode($gaq) : $gaq) {
-      if ($ga_uri = apply_filters('@ga_uri', 'http://www.google-analytics.com/ga.js')) {
-        wp_enqueue_script('ga', $ga_uri, array(), null, true);
-        wp_localize_script('ga', '_gaq', $gaq); # wp_localize_script will json_encode
-      }
-    }
-  }
 });
 
 # Hooks to activate via corresponding template file:
