@@ -104,8 +104,7 @@ add_action('@body', apply_filters('@body_actions', function() {
     # http://github.com/ryanve/action/issues/4
     $skip = '<a class="assistive" href="#main">' . __('skip', 'theme') . '</a>';
     $skip = apply_filters('@skip_anchor', $skip);
-    if ($skip and $skip = \trim(\strip_tags($skip, '<a>')))
-        echo "\n" . \str_repeat(' ', 4) . $skip . "\n\n";
+    if ($skip = \trim(\strip_tags($skip, '<a>'))) echo "$skip\n\n";
     foreach (array(
         array(5, 'get_header')
       , array(10, function() { locate_template('main.php', true, false); })
@@ -550,8 +549,7 @@ add_action('wp_head', function() {
     # Avoid `wp_title` for CPT archives until `post_type_archive_title` is safe for array "post_type" query vars.
     $tag = is_post_type_archive() || !\strlen($tag = \trim(wp_title('', false))) ? $_SERVER['REQUEST_URI'] : $tag;
     $tag = apply_filters('@title_tag', "<title>$tag</title>");
-    if (\strlen($tag = \trim($tag)))
-       echo "\n$tag\n\n";
+    if (\strlen($tag = \trim($tag))) echo "$tag\n";
 }, -3); 
 
 # Meta
