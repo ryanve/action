@@ -293,7 +293,7 @@ add_action('@entry', apply_filters('@entry_actions', function() {
   if ($ran = null !== $ran) return; # only run once
 
   current_theme_supports('post-thumbnails') and add_filter('@thumbnail', function() use (&$content_mode) {
-    if ( ! $content_mode and $size = apply_filters('@thumbnail_size', 'thumbnail'))
+    if (!$content_mode and $size = apply_filters('@thumbnail_size', 'thumbnail'))
       if ($img = get_the_post_thumbnail(null, $size, array('itemprop' => 'image')))
         return !($url = get_permalink()) || \strip_tags($img, '<img>') !== $img ? $img
           : "<a class='$size-anchor image-anchor' itemprop='url' rel='bookmark' href='$url'>$img</a>";
@@ -315,7 +315,7 @@ add_action('@entry', apply_filters('@entry_actions', function() {
   }, 10);
 
   add_action('@entry', function() use (&$content_mode) {
-    if ( ! $content_mode) return;
+    if (!$content_mode) return;
     echo '<footer class="entry-footer" role="contentinfo">';
     do_action('@entry_footer'); 
     echo "</footer>\n\n";
@@ -502,7 +502,7 @@ add_action('wp_head', function() {
       and isset($uri[1]) # only deal with full uris
       and ($uri = \strtok($uri[1], '/')) # strip to authority
       and (false === \strpos($uri, $_SERVER['SERVER_NAME'])) # don't prefetch self
-      and ! \preg_match('#[^\w@:_.-]#', $uri) # ensure remaining uri is entirely safe
+      and !\preg_match('#[^\w@:_.-]#', $uri) # ensure remaining uri is entirely safe
       and $result[$uri] = "<link rel='dns-prefetch' href='//$uri'>\n";
     return $result;
   }, array()));
