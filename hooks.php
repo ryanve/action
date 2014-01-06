@@ -545,7 +545,18 @@ add_action('@comments', apply_filters('@comments_actions', function() {
   $have and add_action('@comments', function() {
     # http://microformats.org/wiki/xoxo
     echo '<ol class="xoxo comments clearfix">';
-    wp_list_comments(apply_filters('@list_comments', array())); 
+    wp_list_comments(apply_filters('@list_comments', array(
+      'style' => 'ol',
+      'avatar_size' => 60 ,
+      'callback' => function($comment, $arr, $depth) {
+        $GLOBALS['comment'] = $comment;
+        $GLOBALS['comment_depth'] = $depth;
+        $atts = \rtrim(' ' . apply_filters('@comment_atts', ''));
+        echo "<li><article$atts>"; 
+        do_action('@comment');
+        echo '</article>'; 
+      }
+    )));
     echo '</ol>';
   }, 10);
   
@@ -561,22 +572,6 @@ add_action('@comments', apply_filters('@comments_actions', function() {
     else echo '<p class="status">' . __('Comments are closed.', 'theme') . '</p>';
   }, 20);
 }), 0);
-
-# http://codex.wordpress.org/Function_Reference/wp_list_comments
-add_filter('@list_comments', function($arr) {
-  return wp_parse_args($arr, array(
-    'style' => 'ol',
-    'avatar_size' => 60 ,
-    'callback' => function($comment, $arr, $depth) {
-      $GLOBALS['comment'] = $comment;
-      $GLOBALS['comment_depth'] = $depth;
-      $atts = apply_filters('@comment_atts', null);
-      echo "<li><article $atts>"; 
-      do_action('@comment');
-      echo '</article>'; 
-    }
-  ));
-}, 0);
 
 # Comments container
 add_filter('@comments_atts', function($atts = '') {
