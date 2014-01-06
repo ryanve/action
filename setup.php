@@ -96,7 +96,12 @@ add_filter('@html_tag', function() {
   add_filter('body_class', '__return_empty_array'); #wp
   $atts[] = "class='$class'";
   $atts = \trim(apply_filters('@html_atts', \implode(' ', $atts)));
-  return "<html $atts>";
+  return "<html $atts>\n";
+}, 0);
+
+add_filter('@body_tag', function() {
+  $atts = \trim(apply_filters('@body_atts', ''));
+  return $atts ? "<body $atts>\n" : '';
 }, 0);
 
 add_action('@body', apply_filters('@body_actions', function() {
