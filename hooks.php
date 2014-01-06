@@ -7,9 +7,8 @@
  */
 
 # This file loads via functions.php
-# All functions defined in this file (and theme) are anonymous.
-# Use the generic namespace "theme" as redundant protection
-# against name conflicts with WP core, plugins, or native PHP.
+# All functions in the theme are anonymous. Nothing is exposed.
+# The namespace allows devs to overload in the \theme context.
 namespace theme;
 
 # Hooks created by the theme are prefixed with the '@' symbol 

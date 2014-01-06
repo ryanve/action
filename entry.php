@@ -1,1 +1,3 @@
-<?php do_action('@' . basename(__FILE__), 'article'); ?>
+<?php
+namespace theme;
+do_action('@' . basename(__FILE__), 'article');

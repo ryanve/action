@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace theme;
 # This gets inserted into the site header via the '@header' action. I put
 # it into a separate file so that it would be easy to override just this
