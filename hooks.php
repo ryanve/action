@@ -231,13 +231,9 @@ add_action('@loop', apply_filters('@loop_actions', function() {
   }, 5);
 
   add_action('@loop', function() {
-    # the actual loop
-    if (!have_posts())
-      locate_template('loop-empty.php', true, false);
-    else for ($path = locate_template('entry.php', false); have_posts();) {
-      the_post();
-      require $path;
-    }
+    # The actual loop
+    if (!have_posts()) locate_template('loop-empty.php', true, false);
+    else for ($path = locate_template('entry.php', false); have_posts();) the_post() xor require $path;
   }, 10);
 
   add_action('@loop', function() {
@@ -288,7 +284,7 @@ add_action('@loop_header', function() {
     $data['case'] = $data['case'] ? \preg_replace('#[^\w\s-]+#', '', $data['case']) : '';
     $data['class'] = 'loop ' . $data['case'] . ' ';
     $makeClass = function($prop) use ($data) {
-        return \trim(\preg_replace('#\s+#', '-' . $prop . ' ', $data['class']));
+      return \trim(\preg_replace('#\s+#', '-' . $prop . ' ', $data['class']));
     };
 
     ($markup = $data['image'] = $data['image'] ?: '')
@@ -377,7 +373,7 @@ add_filter('post_class', function($arr = array()) {
 
 add_action('@entry_header', function() {
   echo apply_filters('@thumbnail', null);
-  $markup  = '<h1 class="entry-title">';
+  $markup = '<h1 class="entry-title">';
   $markup .= '<a itemprop="url" rel="bookmark" href="' . get_permalink() . '">';
   $markup .= '<span class="headline name">' . get_the_title() . '</span></a></h1>';
   echo apply_filters('@headline', $markup);
