@@ -90,18 +90,6 @@ a:hover:focus { border-color:#05a; }
 .void-color a:hover { border-color:#1c1c1c; }
 .void-color.skin-dark a:hover { border-color:#efefef; }
 
-/* =menu
---------------------------------------------------------------------- */    
-.site-nav { font-weight:bold; margin:1.5em 0; }
-.site-nav ul { padding-left:0; }
-.site-nav li { display:block; max-width:20em; }
-.site-nav li ul { display:block; margin:2px 0; }
-.invert-anchors .site-nav li + li { margin-top:2px; }
-.site-nav a { display:block; padding:.5em; }
-@media (max-height:15em) {
-  .site-nav a { padding:.3em .5em; }
-}
-
 /* =editor
 bit.ly/wp-theme-review#WordPress-Generated_CSS_Classes
 --------------------------------------------------------------------- */
