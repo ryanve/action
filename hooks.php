@@ -466,14 +466,13 @@ add_filter('the_author_posts_link', function($tag) {
 });
 
 is_admin() or add_action('template_redirect', function() {
-  if (is_post_type_archive()) {
-    # Remove problematic actions until CPT archives are safer.
-    remove_action('wp_head', 'feed_links_extra', 3);
-    $type = $var = get_query_var('post_type');
-    $slug = \basename($_SERVER['REQUEST_URI']);
-    \is_array($var) and $type = \in_array($slug, $var) ? $slug : \array_shift($var);
-    $type === $var or set_query_var('post_type', $type);
-  }
+  # Remove problematic CPT archive actions.
+  if (!is_post_type_archive()) return;
+  remove_action('wp_head', 'feed_links_extra', 3);
+  $type = $var = get_query_var('post_type');
+  $slug = \basename($_SERVER['REQUEST_URI']);
+  \is_array($var) and $type = \in_array($slug, $var) ? $slug : \array_shift($var);
+  $type === $var or set_query_var('post_type', $type);
 });
 
 # Urgent <head> actions:
@@ -526,16 +525,14 @@ add_action('wp_head', function() {
   )) as $tag) {
     if (\is_string($tag)) {
       $tag = \strip_tags($tag, '<meta>');
-    } elseif ($tag && isset($tag['content'])) {
+    } elseif (\is_array($tag) and $tag = \array_diff($tag, array(null, false))) {
       $atts = array();
       foreach ($tag as $k => $v)
-        if (false !== $v && \is_scalar($v))
-          $atts[] = true === $v || '' === ($v = $v ? esc_attr($v) : $v) ? $k : "$k='$v'";
+        ($v = $v ? true === $v ? '' : esc_attr($v) : $v) xor $atts[] = "$k='$v'";
       $atts = \implode(' ', $atts);
-      $tag = $atts ? "<meta $atts>" : null;
+      $tag = $atts ? "<meta $atts>" : '';
     } else continue;
-    if ($tag)
-      echo "$tag\n";
+    echo \ltrim("$tag\n");
   }
 }, -1); 
 
@@ -544,23 +541,6 @@ add_filter('use_default_gallery_style', '__return_false');
 
 # Remove WP embedded .recentcomments style. (wp-includes/default-widgets.php)
 add_filter('show_recent_comments_widget_style', '__return_false');
-
-# See comments.php
-# http://codex.wordpress.org/Function_Reference/wp_list_comments
-add_filter('@list_comments', function($arr) {
-  return wp_parse_args($arr, array(
-    'style' => 'ol',
-    'avatar_size' => 60 ,
-    'callback' => function($comment, $arr, $depth) {
-      $GLOBALS['comment'] = $comment;
-      $GLOBALS['comment_depth'] = $depth;
-      $atts = apply_filters('@comment_atts', null);
-      echo "<li><article $atts>"; 
-      do_action('@comment');
-      echo '</article>'; 
-    }
-  ));
-}, 0);
 
 # Comments logic adapted from http://bit.ly/github-twentytwelve
 add_action('@comments', apply_filters('@comments_actions', function() {
@@ -592,6 +572,22 @@ add_action('@comments', apply_filters('@comments_actions', function() {
     else echo '<p class="status">' . __('Comments are closed.', 'theme') . '</p>';
   }, 20);
 }), 0);
+
+# http://codex.wordpress.org/Function_Reference/wp_list_comments
+add_filter('@list_comments', function($arr) {
+  return wp_parse_args($arr, array(
+    'style' => 'ol',
+    'avatar_size' => 60 ,
+    'callback' => function($comment, $arr, $depth) {
+      $GLOBALS['comment'] = $comment;
+      $GLOBALS['comment_depth'] = $depth;
+      $atts = apply_filters('@comment_atts', null);
+      echo "<li><article $atts>"; 
+      do_action('@comment');
+      echo '</article>'; 
+    }
+  ));
+}, 0);
 
 # Comments container
 add_filter('@comments_atts', function($atts = '') {
