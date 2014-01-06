@@ -67,6 +67,18 @@ add_action('after_setup_theme', function() {
   ));
 }, 0);
 
+# Hooks to activate via corresponding template file:
+\array_filter(array(
+  '@header', '@footer', '@branding', '@main', '@loop', '@entry', '@comments'
+  ), function($hook) {
+  add_action("$hook.php", function($tagname = null) use ($hook) {
+    $tagname = $tagname ?: 'div';
+    echo \rtrim("<$tagname " . apply_filters($hook . '_atts', '')) . '><div class="container">';
+    do_action($hook);
+    echo "</div></$tagname>\n\n";    
+  });
+});
+
 # Basic contextual support.
 add_filter('body_class', function($arr) {
   global $wp_registered_sidebars;
@@ -115,24 +127,21 @@ add_action('@body', apply_filters('@body_actions', function() {
   ) as $fn) has_action('@body', $fn[1]) or add_action('@body', $fn[1], $fn[0]);
 }), 0);
 
-add_action('@header', function() {
-  locate_template('branding.php', true, false);
-}, apply_filters('@branding_priority', 10));
+# Early-priority init actions:
+add_action('init', function() {
+  # Define CSS (handle, uri, deps, ver, media)
+  # http://github.com/ryanve/action/issues/2
+  # http://github.com/ryanve/action/issues/5
+  $index = trailingslashit(get_template_directory_uri());
+  wp_register_style('parent-base', $index . 'base.css', array(), null, null);
+  wp_register_style('parent-style', $index . 'style.css', array('parent-base'), null, 'screen,projection');
+  is_child_theme() || is_admin() or wp_enqueue_style('parent-style');
+}, 1);
 
-# Favor classes over IDs.
-add_filter('nav_menu_item_id', '__return_false');
-add_filter('nav_menu_css_class', function($arr, $item = null) {
-  if (\is_array($arr) && \is_object($item) && isset($item->ID))
-    \in_array($item = 'menu-item-' . $item->ID, $arr) or $arr[] = $item;
-  return $arr;
-}, 10, 2);
-
-add_action('@header', function() {
-  is_active_sidebar('header') and get_sidebar('header');
-});
-
-add_action('@footer', function() {
-  is_active_sidebar('footer') and get_sidebar('footer');
+# Frontend-only normal-priority init actions:
+is_admin() or add_action('init', function() {
+  # http://codex.wordpress.org/Migrating_Plugins_and_Themes_to_2.7/Enhanced_Comment_Display
+  is_singular() and wp_enqueue_script('comment-reply');
 });
 
 # Register sidebars
@@ -155,32 +164,36 @@ add_action('get_sidebar', apply_filters('@sidebar_actions', function($id) {
   echo "</ul>\n\n";
 }));
 
-# Early-priority init actions:
-add_action('init', function() {
-  # Define CSS (handle, uri, deps, ver, media)
-  # http://github.com/ryanve/action/issues/2
-  # http://github.com/ryanve/action/issues/5
-  $index = trailingslashit(get_template_directory_uri());
-  wp_register_style('parent-base', $index . 'base.css', array(), null, null);
-  wp_register_style('parent-style', $index . 'style.css', array('parent-base'), null, 'screen,projection');
-  is_child_theme() || is_admin() or wp_enqueue_style('parent-style');
-}, 1);
-
-# Frontend-only normal-priority init actions:
-is_admin() or add_action('init', function() {
-  # http://codex.wordpress.org/Migrating_Plugins_and_Themes_to_2.7/Enhanced_Comment_Display
-  is_singular() and wp_enqueue_script('comment-reply');
+add_action('@header', function() {
+  is_active_sidebar('header') and get_sidebar('header');
 });
 
-# Hooks to activate via corresponding template file:
-\array_reduce(array('@header', '@main', '@loop', '@entry', '@comments', '@footer'), function($void, $hook) {
-  add_action("$hook.php", function($tagname = null) use ($hook) {
-    $tagname = $tagname ?: 'div';
-    echo \rtrim("<$tagname " . apply_filters($hook . '_atts', '')) . '><div class="container">';
-    do_action($hook);
-    echo "</div></$tagname>\n\n";    
-  });
-}, null);
+add_action('@footer', function() {
+  is_active_sidebar('footer') and get_sidebar('footer');
+});
+
+# Favor classes over IDs.
+add_filter('nav_menu_item_id', '__return_false');
+add_filter('nav_menu_css_class', function($arr, $item = null) {
+  if (\is_array($arr) && \is_object($item) && isset($item->ID))
+    \in_array($item = 'menu-item-' . $item->ID, $arr) or $arr[] = $item;
+  return $arr;
+}, 10, 2);
+
+add_action('@header', function() {
+  locate_template('branding.php', true, false);
+}, apply_filters('@branding_priority', 10));
+
+add_action('@branding', function() {
+  $name = get_bloginfo('name');
+  $home = home_url();
+  echo "<h1 class='site-name site-title'><a rel=home href='$home'><span>$name</span></a></h1>";
+  echo apply_filters('@tagline', \call_user_func(function() {
+    if (!($desc = get_bloginfo('description'))) return '';
+    $type = 80 > \mb_strlen(\strip_tags($desc)) ? 'tagline subline' : 'subline';
+    return "<div class='site-description $type'>$desc</div>";
+  }));
+});
 
 add_action('@main', apply_filters('@main_actions', function() {
   is_active_sidebar('major') and get_sidebar('major');
@@ -188,14 +201,14 @@ add_action('@main', apply_filters('@main_actions', function() {
   is_active_sidebar('minor') and get_sidebar('minor');
 }));
 
-\array_reduce(array('previous', 'next'), function($void, $rel) {
+\array_filter(array('previous', 'next'), function($rel) {
   $hook = $rel . '_posts_link_attributes';
   $rel = \substr($rel, 0, 4);
   add_filter($hook, function($atts = '') use ($rel) {
     $atts or $atts = '';
     return \is_string($atts) ? \ltrim($atts . " rel='$rel' class='$rel'") : $atts;
   });
-}, null);
+});
 
 add_action('@loop', apply_filters('@loop_actions', function() {
   static $ran; 
@@ -317,24 +330,36 @@ add_action('@entry', apply_filters('@entry_actions', function() {
 }), 0);
 
 # Default attributes
-\array_reduce(array(
-  # [id] is included for jumps (not CSS)
-  array('header', 'id="header" class="site-header" role="banner"'),
-  array('footer', 'id="footer" class="site-footer"'),
-  array('branding', 'class="site-branding"'),
-  array('main', 'id="main" role="main"'),
-  array('loop', 'class="loop hfeed"')
-), function($void, $a) {
-  $atts = $a[1];
-  add_filter('@' . $a[0] . '_atts', function() use ($atts) {
+# [id] is for jumps (not CSS)
+\call_user_func(function() {
+  foreach(array(
+    '@header' => 'id="header" class="site-header" role="banner"',
+    '@footer' => 'id="footer" class="site-footer"',
+    '@branding' => 'class="site-branding"',
+    '@main' => 'id="main" role="main"',
+    '@loop' => 'class="loop hfeed"',
+    '@entry' => function() {
+      $class = \implode(' ', get_post_class());
+      return $class ? "class='$class'" : '';
+    },
+    '@comments' => function() {
+      $able = comments_open() ? 'open' : 'closed';
+      $some = have_comments() ? 'has' : 'lacks';
+      $used = 'open' == $able || 'has' == $some ? 'used' : 'unused';
+      $atts = "class='comments comments-$able $some-comments $used'";
+      return is_singular() ? "id='comments' $atts" : $atts;
+    },
+    '@comment' => function() {
+      $id = get_comment_ID();
+      $atts = is_singular() ? array("id='comment-$id'") : array(); 
+      $class = \implode(' ', get_comment_class('', $id));
+      $class and $atts[] = "class='$class'";
+      return \implode(' ', $atts);
+    }
+  ) as $hook => $atts) add_filter($hook . '_atts', \is_scalar($atts) ? function() use ($atts) {
     return $atts;
-  }, 0);
-}, null);
-
-add_filter('@entry_atts', function($atts = '') {
-  $class = \implode(' ', get_post_class());
-  return "class='$class'";
-}, 0);
+  } : $atts, 0);
+});
 
 add_filter('post_class', function($arr = array()) {
   # This compares using the format from: Settings > General > Date Format
@@ -576,26 +601,6 @@ add_action('@comments', apply_filters('@comments_actions', function() {
     else echo '<p class="status">' . __('Comments are closed.', 'theme') . '</p>';
   }, 20);
 }), 0);
-
-# Comments container
-add_filter('@comments_atts', function($atts = '') {
-  $able = comments_open() ? 'open' : 'closed';
-  $some = have_comments() ? 'has' : 'lacks';
-  $used = 'open' == $able || 'has' == $some ? 'used' : 'unused';
-  $atts = "class='comments comments-$able $some-comments $used'";
-  # [id] is for jumps. Use [class] for style.
-  return is_singular() ? "id='comments' $atts" : $atts;
-}, 0);
-
-# Each comment
-add_filter('@comment_atts', function() {
-  $atts = array(); 
-  $id = get_comment_ID();
-  is_singular() and $atts[] = "id='comment-$id'";
-  $class = \implode(' ', get_comment_class('', $id));
-  $class and $atts[] = "class='$class'";
-  return \implode(' ', $atts);
-}, 1);
 
 add_action('@comment', apply_filters('@comment_actions', function() {
   static $ran; 
