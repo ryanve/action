@@ -73,9 +73,9 @@ add_action('after_setup_theme', function() {
   ), function($hook) {
   add_action("$hook.php", function($tagname = null) use ($hook) {
     $tagname && \is_string($tagname) or $tagname = 'div';
-    echo \rtrim("<$tagname " . apply_filters($hook . '_atts', '')) . '><div class="container">';
+    echo \rtrim("<$tagname " . apply_filters($hook . '_atts', '')) . "><div class='container'>\n";
     do_action($hook);
-    echo "</div></$tagname>\n\n";    
+    echo "\n</div></$tagname>\n\n";
   });
 });
 
