@@ -72,7 +72,7 @@ add_action('after_setup_theme', function() {
   '@header', '@footer', '@branding', '@main', '@loop', '@entry', '@comments'
   ), function($hook) {
   add_action("$hook.php", function($tagname = null) use ($hook) {
-    $tagname = $tagname ?: 'div';
+    $tagname && \is_string($tagname) or $tagname = 'div';
     echo \rtrim("<$tagname " . apply_filters($hook . '_atts', '')) . '><div class="container">';
     do_action($hook);
     echo "</div></$tagname>\n\n";    
@@ -247,8 +247,8 @@ add_action('@loop_header', function() {
 
   if (is_category() || is_tag() || is_tax()) {
     $data['case'] = 'tax';
-    $data['name'] = single_term_title( '', false );
-    $data['description'] = term_description( '', get_query_var('taxonomy') );
+    $data['name'] = single_term_title('', false);
+    $data['description'] = term_description('', get_query_var('taxonomy'));
   } elseif (is_author()) {
     $data = get_queried_object();
     $data = array('case' => 'user', 'name' => $data->display_name, 'description' => $data->user_description);
