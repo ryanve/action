@@ -100,15 +100,22 @@ add_filter('@html_tag', function() {
   $atts = array(\trim(apply_filters('language_attributes', $atts)));
   $atts[] = 'id="start"';
   $class = get_body_class();
-  \in_array('void-tagline', $class) and add_filter('@tagline', '__return_false');
-  \in_array('void-avatars', $class) and add_filter('@comment_avatar', '__return_false');
-  \in_array('void-thumbnails', $class) and add_filter('@thumbnail', '__return_false');
+  \in_array('void-tagline', $class) and do_action('@void', '@tagline');
+  \in_array('void-avatars', $class) and do_action('@void', '@comment_avatar');
+  \in_array('void-thumbnails', $class) and do_action('@void', '@thumbnail');
+  \in_array('void-excerpts', $class) and do_action('@void', 'the_excerpt');
   \array_unshift($class, 'no-js', 'custom');
   $class = \implode(' ', \array_unique($class));
   $atts[] = "class='$class'";
   $atts = \trim(apply_filters('@html_atts', \implode(' ', $atts)));
   return "<html $atts>\n";
 }, 0);
+
+#!
+add_action('@void', function($hook, $fn = null, $at = null,  $use = null) {
+  remove_all_filters($hook);
+  add_filter($hook, $fn ?: '__return_null', null === $at ? 10 : $at, null === $use ? 1 : $use);
+}, 0, 4);
 
 add_filter('@body_tag', function() {
   $atts = \trim(apply_filters('@body_atts', ''));
