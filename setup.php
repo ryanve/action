@@ -100,7 +100,6 @@ add_filter('@html_tag', function() {
   $atts = array(\trim(apply_filters('language_attributes', $atts)));
   $atts[] = 'id="start"';
   $class = get_body_class();
-  \in_array('void-tagline', $class) and do_action('@void', '@tagline');
   \in_array('void-avatars', $class) and do_action('@void', '@comment_avatar');
   \in_array('void-thumbnails', $class) and do_action('@void', '@thumbnail');
   \in_array('void-excerpts', $class) and do_action('@void', 'the_excerpt');
@@ -195,11 +194,7 @@ add_action('@branding', function() {
   $name = get_bloginfo('name');
   $home = home_url();
   echo "<h1 class='site-name site-title'><a rel=home href='$home'><span>$name</span></a></h1>";
-  echo apply_filters('@tagline', \call_user_func(function() {
-    if (!($desc = get_bloginfo('description'))) return '';
-    $type = 80 > \mb_strlen(\strip_tags($desc)) ? 'tagline subline' : 'subline';
-    return "<div class='site-description $type'>$desc</div>";
-  }));
+  echo apply_filters('@tagline', '');
 });
 
 add_action('@main', apply_filters('@main_actions', function() {
