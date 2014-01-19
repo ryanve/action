@@ -5,7 +5,7 @@
 
 - [Documentation](http://actiontheme.com/)
 - [Demo](http://demo.actiontheme.com/)
-- [action-child](https://github.com/ryanve/action-child)
+- [subaction](https://github.com/ryanve/subaction): child theme base for use with [action](#action)
 
 ## Versions
 
