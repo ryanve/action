@@ -537,7 +537,8 @@ add_filter('@dns_prefetches', function($uris) {
 
 # <title>
 add_action('wp_head', function() {
-  $tag = \trim(is_front_page() ? get_bloginfo('name') : wp_title('', false)) ?: $_SERVER['REQUEST_URI'];
+  $tag = \trim(is_front_page() ? get_bloginfo('name') : wp_title('', false));
+  if ($tag === '') $tag = $_SERVER['REQUEST_URI'];
   if ($tag = \trim(apply_filters('@title_tag', "<title>$tag</title>"))) echo "$tag\n";
 }, -3);
 
