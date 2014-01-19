@@ -537,11 +537,9 @@ add_filter('@dns_prefetches', function($uris) {
 
 # <title>
 add_action('wp_head', function() {
-  # Avoid `wp_title` for CPT archives until `post_type_archive_title` is safe for array "post_type" query vars.
-  $tag = is_post_type_archive() || !\strlen($tag = \trim(wp_title('', false))) ? $_SERVER['REQUEST_URI'] : $tag;
-  $tag = apply_filters('@title_tag', "<title>$tag</title>");
-  if (\strlen($tag = \trim($tag))) echo "$tag\n";
-}, -3); 
+  $tag = \trim(is_front_page() ? get_bloginfo('name') : wp_title('', false)) ?: $_SERVER['REQUEST_URI'];
+  if ($tag = \trim(apply_filters('@title_tag', "<title>$tag</title>"))) echo "$tag\n";
+}, -3);
 
 # <meta>
 add_action('wp_head', function() {
