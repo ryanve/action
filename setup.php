@@ -172,6 +172,7 @@ add_action('get_sidebar', apply_filters('@sidebar_actions', function($id) {
 
 add_action('@header', function() {
   is_active_sidebar('header') and get_sidebar('header');
+  locate_template('branding.php', true, false);
 });
 
 add_action('@footer', function() {
@@ -185,10 +186,6 @@ add_filter('nav_menu_css_class', function($arr, $item = null) {
     \in_array($item = 'menu-item-' . $item->ID, $arr) or $arr[] = $item;
   return $arr;
 }, 10, 2);
-
-add_action('@header', function() {
-  locate_template('branding.php', true, false);
-}, apply_filters('@branding_priority', 10));
 
 add_action('@branding', function() {
   $name = get_bloginfo('name');
